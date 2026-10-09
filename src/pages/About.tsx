@@ -76,6 +76,109 @@ export function About() {
 
       <section
         style={{
+          borderTop: '1px solid rgba(227,180,74,0.22)',
+          borderBottom: '1px solid rgba(242,241,238,0.08)',
+          background: 'linear-gradient(180deg, rgba(227,180,74,0.06), transparent 40%), var(--ink)',
+        }}
+      >
+        <div
+          className="shell"
+          style={{ paddingTop: 'clamp(72px, 9vw, 120px)', paddingBottom: 'clamp(72px, 9vw, 120px)' }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 24, flexWrap: 'wrap' }}>
+            <div>
+              <div className="eyebrow">Credentials</div>
+              <h2
+                className="display"
+                style={{ fontSize: 'clamp(36px, 5vw, 72px)', letterSpacing: '0.02em', marginTop: 18 }}
+              >
+                Where I&apos;ve
+                <br />
+                <span style={{ color: 'var(--gold)' }}>sat the desk.</span>
+              </h2>
+            </div>
+            <p style={{ fontSize: 18, lineHeight: 1.5, color: 'var(--muted)', maxWidth: '26em', margin: 0 }}>
+              Before TraderSveezy, I worked as an analyst inside trading academies and private groups — sharing setups,
+              levels, and the reasoning behind them.
+            </p>
+          </div>
+
+          <div style={{ marginTop: 56, borderTop: '1px solid rgba(242,241,238,0.14)' }}>
+            {[
+              {
+                n: '01',
+                org: 'Unity Academy',
+                role: 'Leading Analyst',
+                desc: 'Former leading analyst — market reads, education, and high-signal setup work for the desk.',
+              },
+              {
+                n: '02',
+                org: 'CB Trading Academy',
+                role: 'Trading Analyst',
+                desc: 'Analyst covering ideas, structure, and process for traders building consistency.',
+              },
+              {
+                n: '03',
+                org: 'Wealth Group',
+                role: 'Ideas & Setups',
+                desc: 'Shared live ideas and setups with the group — entry, risk, and the why, not just the call.',
+              },
+            ].map((item) => (
+              <div
+                key={item.n}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '72px minmax(0, 1.1fr) minmax(0, 1.4fr)',
+                  gap: 'clamp(16px, 3vw, 40px)',
+                  alignItems: 'baseline',
+                  padding: 'clamp(28px, 3.4vw, 44px) 0',
+                  borderBottom: '1px solid rgba(242,241,238,0.14)',
+                }}
+                className="about-cred-row"
+              >
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 14,
+                    letterSpacing: '0.16em',
+                    color: 'var(--gold)',
+                  }}
+                >
+                  {item.n}
+                </span>
+                <div>
+                  <div
+                    className="display"
+                    style={{ fontSize: 'clamp(24px, 3vw, 40px)', letterSpacing: '0.02em', lineHeight: 1 }}
+                  >
+                    {item.org}
+                  </div>
+                  <div
+                    style={{
+                      marginTop: 12,
+                      display: 'inline-block',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 12,
+                      fontWeight: 600,
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      color: 'var(--ink)',
+                      background: 'var(--gold)',
+                      padding: '8px 12px',
+                    }}
+                  >
+                    {item.role}
+                  </div>
+                </div>
+                <p style={{ fontSize: 18, lineHeight: 1.55, color: 'var(--soft)', margin: 0 }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section
+        style={{
           background: 'var(--panel)',
           borderTop: '1px solid rgba(242,241,238,0.08)',
           borderBottom: '1px solid rgba(242,241,238,0.08)',

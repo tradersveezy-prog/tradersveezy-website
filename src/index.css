@@ -195,6 +195,14 @@ img {
     grid-column: 2;
   }
 
+  .about-cred-row {
+    grid-template-columns: 48px 1fr !important;
+  }
+
+  .about-cred-row p {
+    grid-column: 2;
+  }
+
   .mint-features-grid {
     grid-template-columns: 1fr !important;
   }

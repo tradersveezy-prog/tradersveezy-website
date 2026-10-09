@@ -1,5 +1,5 @@
-import { TradeCard } from '../components/TradeCard'
-import { HERO_CARD, LINKS, OFFERS, RECENT_CARDS } from '../data'
+import { PositionCalculator } from '../components/PositionCalculator'
+import { LINKS, OFFERS } from '../data'
 
 export function Home() {
   return (
@@ -47,11 +47,12 @@ export function Home() {
               <a href="#coaching" className="btn btn-primary">
                 Learn 1-on-1
               </a>
-              <a href={LINKS.discord} className="btn btn-ghost" target={LINKS.discord.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer">
+              <a href={LINKS.discord} className="btn btn-ghost" target="_blank" rel="noopener noreferrer">
                 Join free Discord
               </a>
             </div>
           </div>
+
           <div style={{ position: 'relative', maxWidth: 520, justifySelf: 'end', width: '100%' }}>
             <div
               style={{
@@ -60,23 +61,60 @@ export function Home() {
                 border: '1px solid rgba(227,180,74,0.35)',
               }}
             />
-            <div style={{ position: 'relative', boxShadow: '0 40px 90px rgba(0,0,0,0.6)' }}>
-              <TradeCard {...HERO_CARD} eyebrow={HERO_CARD.eyebrow} />
-            </div>
             <div
               style={{
+                position: 'relative',
+                aspectRatio: '4 / 5',
+                background: 'var(--panel)',
                 display: 'flex',
-                justifyContent: 'space-between',
-                marginTop: 16,
-                fontFamily: 'var(--font-mono)',
-                fontSize: 12,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'var(--muted)',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
               }}
             >
-              <span>Latest card · XAU/USD</span>
-              <span style={{ color: 'var(--gold)' }}>{HERO_CARD.rr}</span>
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background:
+                    'repeating-linear-gradient(0deg,rgba(242,241,238,0.035) 0 1px,transparent 1px 64px),repeating-linear-gradient(90deg,rgba(242,241,238,0.035) 0 1px,transparent 1px 64px)',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'radial-gradient(circle at 50% 45%, rgba(227,180,74,0.22), transparent 55%)',
+                }}
+              />
+              <img
+                src="/assets/ts-mark-gold.svg"
+                alt="TraderSveezy mark"
+                style={{
+                  position: 'relative',
+                  width: '62%',
+                  height: 'auto',
+                  filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.6))',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 24,
+                  right: 24,
+                  bottom: 22,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 12,
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: 'var(--muted)',
+                }}
+              >
+                <span>Plan · Risk · Execute</span>
+                <span style={{ color: 'var(--gold)' }}>Review</span>
+              </div>
             </div>
           </div>
         </div>
@@ -99,52 +137,55 @@ export function Home() {
               color: 'var(--muted)',
             }}
           >
-            04 ways in
+            05 ways in
           </div>
         </div>
         <div style={{ marginTop: 56, borderTop: '1px solid rgba(242,241,238,0.14)' }}>
-          {OFFERS.map((o) => (
-            <a
-              key={o.n}
-              href={o.href}
-              className="offers-row"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '72px minmax(0, 1.3fr) minmax(0, 1fr) auto',
-                gap: 'clamp(16px, 3vw, 40px)',
-                alignItems: 'center',
-                padding: 'clamp(28px, 3.4vw, 44px) 0',
-                borderBottom: '1px solid rgba(242,241,238,0.14)',
-                color: 'var(--bone)',
-              }}
-            >
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, letterSpacing: '0.16em', color: 'var(--gold)' }}>
-                {o.n}
-              </span>
-              <span
-                className="display"
-                style={{ fontSize: 'clamp(24px, 3.2vw, 46px)', letterSpacing: '0.02em', lineHeight: 1 }}
-              >
-                {o.title}
-              </span>
-              <span className="offers-desc" style={{ fontSize: 18, lineHeight: 1.45, color: 'var(--muted)' }}>
-                {o.desc}
-              </span>
-              <span
-                className="offers-price"
+          {OFFERS.map((o) => {
+            const accent = o.accent === 'mint' ? 'var(--mint)' : 'var(--gold)'
+            return (
+              <a
+                key={o.n}
+                href={o.href}
+                className="offers-row"
                 style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 15,
-                  fontWeight: 600,
-                  letterSpacing: '0.08em',
+                  display: 'grid',
+                  gridTemplateColumns: '72px minmax(0, 1.3fr) minmax(0, 1fr) auto',
+                  gap: 'clamp(16px, 3vw, 40px)',
+                  alignItems: 'center',
+                  padding: 'clamp(28px, 3.4vw, 44px) 0',
+                  borderBottom: '1px solid rgba(242,241,238,0.14)',
                   color: 'var(--bone)',
-                  whiteSpace: 'nowrap',
                 }}
               >
-                {o.price} <span style={{ color: 'var(--gold)' }}>→</span>
-              </span>
-            </a>
-          ))}
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, letterSpacing: '0.16em', color: accent }}>
+                  {o.n}
+                </span>
+                <span
+                  className="display"
+                  style={{ fontSize: 'clamp(24px, 3.2vw, 46px)', letterSpacing: '0.02em', lineHeight: 1 }}
+                >
+                  {o.title}
+                </span>
+                <span className="offers-desc" style={{ fontSize: 18, lineHeight: 1.45, color: 'var(--muted)' }}>
+                  {o.desc}
+                </span>
+                <span
+                  className="offers-price"
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 15,
+                    fontWeight: 600,
+                    letterSpacing: '0.08em',
+                    color: 'var(--bone)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {o.price} <span style={{ color: accent }}>→</span>
+                </span>
+              </a>
+            )
+          })}
         </div>
       </section>
 
@@ -159,79 +200,212 @@ export function Home() {
           className="shell"
           style={{ paddingTop: 'clamp(80px, 10vw, 130px)', paddingBottom: 'clamp(80px, 10vw, 130px)' }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 24, flexWrap: 'wrap' }}>
-            <div>
-              <div className="eyebrow">On the record</div>
-              <h2
-                className="display"
-                style={{ fontSize: 'clamp(36px, 5vw, 72px)', letterSpacing: '0.02em', marginTop: 18 }}
-              >
-                Recent trade cards
-              </h2>
-            </div>
-            <p style={{ fontSize: 18, lineHeight: 1.5, color: 'var(--muted)', maxWidth: '26em', margin: 0 }}>
-              Entry, stop, target and reasoning, posted before the outcome. Wins and losses both.
-            </p>
-          </div>
           <div
             style={{
-              marginTop: 56,
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
-              gap: 20,
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
+              gap: 'clamp(48px, 6vw, 96px)',
+              alignItems: 'center',
             }}
           >
-            {RECENT_CARDS.map((card) => (
-              <TradeCard key={card.pair} {...card} compact />
-            ))}
+            <div>
+              <div className="eyebrow">Try the math</div>
+              <h2
+                className="display"
+                style={{ fontSize: 'clamp(44px, 6.4vw, 96px)', letterSpacing: '0.01em', marginTop: 22, lineHeight: 0.92 }}
+              >
+                Risk first.
+                <br />
+                <span style={{ color: 'var(--gold)' }}>Then reward.</span>
+              </h2>
+              <p
+                style={{
+                  fontSize: 'clamp(18px, 1.5vw, 21px)',
+                  lineHeight: 1.55,
+                  color: 'var(--soft)',
+                  maxWidth: '28em',
+                  margin: '30px 0 0',
+                }}
+              >
+                Before any trade I know three numbers: where I get in, where I&apos;m wrong, and where I take profit. Put
+                in yours and see what the trade is actually worth, and how big to size it.
+              </p>
+              <div
+                style={{
+                  marginTop: 36,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 14,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 13,
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  color: 'var(--muted)',
+                }}
+              >
+                {['The stop decides the size', 'Under 1 : 2, I usually pass', 'Same risk on every trade'].map((line) => (
+                  <div key={line} style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+                    <span style={{ width: 8, height: 8, background: 'var(--gold)', flex: 'none' }} />
+                    {line}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <PositionCalculator />
           </div>
         </div>
       </section>
 
       <section
-        className="shell"
         style={{
-          paddingTop: 'clamp(80px, 10vw, 130px)',
-          paddingBottom: 'clamp(80px, 10vw, 130px)',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
-          gap: 'clamp(40px, 6vw, 96px)',
-          alignItems: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          background: 'var(--mint-ink)',
+          borderBottom: '1px solid rgba(20,230,164,0.18)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 28, flexWrap: 'wrap' }}>
-          <img src="/assets/ts-mark-gold.svg" alt="TraderSveezy" style={{ height: 84 }} />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 28, color: 'var(--muted)' }}>×</span>
-          <img src="/assets/mintscript-logo.png" alt="MintScript" style={{ height: 64 }} />
-        </div>
-        <div>
-          <div className="eyebrow">Collab · MintScript</div>
-          <h3
-            className="display"
-            style={{ fontSize: 'clamp(28px, 3.4vw, 48px)', lineHeight: 1, letterSpacing: '0.02em', marginTop: 18 }}
-          >
-            30-minute 1-on-1 workshops
-          </h3>
-          <p style={{ fontSize: 19, lineHeight: 1.5, color: 'var(--soft)', margin: '20px 0 0', maxWidth: '30em' }}>
-            Exclusive to MintScript subscribers. Pro members get a follow-up workshop included.
-          </p>
-          <a
-            href="#collabs"
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'radial-gradient(circle at 0% 0%, rgba(20,230,164,0.14), transparent 45%)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          className="shell"
+          style={{
+            position: 'relative',
+            paddingTop: 'clamp(80px, 10vw, 140px)',
+            paddingBottom: 'clamp(80px, 10vw, 140px)',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
+            gap: 'clamp(48px, 6vw, 96px)',
+            alignItems: 'center',
+          }}
+        >
+          <div>
+            <div className="eyebrow" style={{ color: 'var(--mint)' }}>
+              The desk
+            </div>
+            <img
+              src="/assets/mintscript-logo.png"
+              alt="MintScript"
+              style={{ height: 'clamp(44px, 5vw, 72px)', width: 'auto', marginTop: 28 }}
+            />
+            <p
+              style={{
+                fontSize: 'clamp(19px, 1.6vw, 23px)',
+                lineHeight: 1.5,
+                color: '#D9DAE0',
+                maxWidth: '28em',
+                margin: '32px 0 0',
+              }}
+            >
+              Selective swing setups that fill — then move — so you can manage the trade. Market Radar, charts, and a
+              paced desk in one place.
+            </p>
+            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 40 }}>
+              <a href="#mintscript" className="btn btn-mint">
+                Explore MintScript
+              </a>
+              <a
+                href={LINKS.discord}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost"
+                style={{ borderColor: 'rgba(244,244,246,0.28)', color: '#F4F4F6' }}
+              >
+                Free Discord
+              </a>
+            </div>
+          </div>
+          <div
             style={{
-              display: 'inline-block',
-              marginTop: 26,
-              fontFamily: 'var(--font-mono)',
-              fontSize: 13,
-              fontWeight: 600,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              color: 'var(--gold)',
-              borderBottom: '1px solid rgba(227,180,74,0.5)',
-              paddingBottom: 6,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: 1,
+              background: 'rgba(244,244,246,0.1)',
+              border: '1px solid rgba(244,244,246,0.1)',
             }}
           >
-            Pitch a collab →
-          </a>
+            <div style={{ background: 'var(--mint-ink)', padding: '32px 28px' }}>
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 12,
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: '#A6A8B3',
+                }}
+              >
+                Subs from
+              </div>
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 700,
+                  fontSize: 'clamp(36px, 4vw, 52px)',
+                  color: '#F4F4F6',
+                  marginTop: 12,
+                }}
+              >
+                $19<span style={{ fontSize: 18, color: '#A6A8B3' }}>/mo</span>
+              </div>
+            </div>
+            <div style={{ background: 'var(--mint-ink)', padding: '32px 28px' }}>
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 12,
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: '#A6A8B3',
+                }}
+              >
+                Flagship
+              </div>
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 700,
+                  fontSize: 'clamp(36px, 4vw, 52px)',
+                  color: '#F4F4F6',
+                  marginTop: 12,
+                }}
+              >
+                $69<span style={{ fontSize: 18, color: '#A6A8B3' }}>/mo</span>
+              </div>
+            </div>
+            <div style={{ background: 'var(--mint-ink)', padding: '32px 28px', gridColumn: '1 / 3' }}>
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 12,
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: 'var(--mint)',
+                }}
+              >
+                Subscriber perk
+              </div>
+              <div
+                className="display"
+                style={{
+                  fontSize: 'clamp(22px, 2.2vw, 30px)',
+                  letterSpacing: '0.02em',
+                  lineHeight: 1.1,
+                  marginTop: 12,
+                  color: '#F4F4F6',
+                }}
+              >
+                30-min 1-on-1 workshop with me
+              </div>
+              <div style={{ fontSize: 17, lineHeight: 1.5, color: '#A6A8B3', marginTop: 10 }}>
+                Pro members get a follow-up workshop included.
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -268,10 +442,15 @@ export function Home() {
               margin: '32px auto 0',
             }}
           >
-            Setups as I take them, plus the Market Radar feeds I watch every day: volume, funding, EMA reclaims and key
-            levels.
+            Start free with Market Radar and charts. Upgrade when you want selective setups already framed for you.
           </p>
-          <a href={LINKS.discord} className="btn btn-primary" style={{ marginTop: 44, padding: '22px 34px' }}>
+          <a
+            href={LINKS.discord}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary"
+            style={{ marginTop: 44, padding: '22px 34px' }}
+          >
             Join the Discord
           </a>
         </div>

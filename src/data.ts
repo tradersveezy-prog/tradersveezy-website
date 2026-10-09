@@ -1,9 +1,10 @@
-export type PageId = 'home' | 'coaching' | 'courses' | 'tools' | 'collabs' | 'about'
+export type PageId = 'home' | 'mintscript' | 'coaching' | 'courses' | 'tools' | 'collabs' | 'about'
 
-export const PAGES: PageId[] = ['home', 'coaching', 'courses', 'tools', 'collabs', 'about']
+export const PAGES: PageId[] = ['home', 'mintscript', 'coaching', 'courses', 'tools', 'collabs', 'about']
 
 export const PAGE_LABELS: Record<PageId, string> = {
   home: 'Home',
+  mintscript: 'MintScript',
   coaching: '1-on-1',
   courses: 'Courses',
   tools: 'Tools',
@@ -15,38 +16,54 @@ export const PAGE_LABELS: Record<PageId, string> = {
 export const LINKS = {
   booking: '#coaching',
   courses: '#courses',
-  discord: '#tools',
+  discord: 'https://build.mintscript.io/join',
+  mintscript: 'https://build.mintscript.io/join',
+  mintscriptPlans: 'https://mintscript.io/#plans',
+  mintscriptApp: 'https://build.mintscript.io',
   x: 'https://x.com/tradersveezy',
+  mintX: 'https://x.com/MintScript_io',
 }
 
 export const OFFERS = [
   {
     n: '01',
+    href: '#mintscript' as const,
+    title: 'MintScript',
+    desc: 'The desk I trade from: selective setups, charts, and Market Radar.',
+    price: 'From $19/mo',
+    accent: 'mint' as const,
+  },
+  {
+    n: '02',
     href: '#coaching' as const,
     title: '1-on-1 Sessions',
     desc: 'Live sessions on your trades, your risk and your process.',
     price: 'From $300',
+    accent: 'gold' as const,
   },
   {
-    n: '02',
+    n: '03',
     href: '#courses' as const,
     title: 'Prerecorded Courses',
     desc: 'Five courses, from market structure to trade review.',
     price: '$300 · All 5',
-  },
-  {
-    n: '03',
-    href: '#tools' as const,
-    title: 'Trading Tools',
-    desc: 'Market Radar feeds, strategy checklists and a loss log.',
-    price: 'In Discord',
+    accent: 'gold' as const,
   },
   {
     n: '04',
+    href: '#tools' as const,
+    title: 'Trading Tools',
+    desc: 'Market Radar feeds, strategy checklists and a loss log.',
+    price: 'In MintScript',
+    accent: 'gold' as const,
+  },
+  {
+    n: '05',
     href: '#collabs' as const,
     title: 'Collaborations',
     desc: 'Workshops, tools and content with brands that teach.',
     price: 'Request',
+    accent: 'gold' as const,
   },
 ]
 
@@ -93,57 +110,103 @@ export const FEEDS = [
   { ch: 'sup-res', desc: 'Support and resistance touches and breaks as they happen.' },
 ]
 
-export const RECENT_CARDS = [
+export const MINT_FEATURES = [
   {
-    pair: 'BTC / USDT',
-    type: 'SWING',
-    direction: 'LONG' as const,
-    rr: '1 : 3.1',
-    chart: '/assets/btc-4h-poc-retest.png',
-    entry: '85,554',
-    stop: '83,200',
-    target: '92,800',
+    n: '01',
+    title: 'Selective desk setups',
+    desc: 'Framed swing ideas on liquid names — entry, stop, targets, grade and risk on every card. Paced on purpose, not a spam feed.',
   },
   {
-    pair: 'HYPE / USDT',
-    type: 'SCALP',
-    direction: 'LONG' as const,
-    rr: '1 : 2.4',
-    chart: '/assets/hype-15m-scalp.png',
-    entry: '87.40',
-    stop: '85.10',
-    target: '92.90',
+    n: '02',
+    title: 'Draw the plan on chart',
+    desc: 'Open the coin and paint entry, stop and targets on the live candles. Pro overlays sit beside the plan — not homework in another tab.',
   },
   {
-    pair: 'XMR / USDT',
-    type: 'SWING',
-    direction: 'LONG' as const,
-    rr: '1 : 2.6',
-    chart: '/assets/xmr-12h-chart.png',
-    entry: '552',
-    stop: '528',
-    target: '614',
+    n: '03',
+    title: 'Web Feed + Telegram',
+    desc: 'Same plan on the desk and on your phone the second it prints. You still take the trade — we stop you from hunting blank charts.',
   },
   {
-    pair: 'ZEC / USDT',
-    type: 'SCALP',
-    direction: 'SHORT' as const,
-    rr: '1 : 2.1',
-    chart: '/assets/zec-2h-scalp.png',
-    entry: '1,305',
-    stop: '1,348',
-    target: '1,215',
+    n: '04',
+    title: 'Markets & desk tools',
+    desc: 'Screener, watchlist, Global Flow, BTC Station and more — confirm structure before you size.',
+  },
+  {
+    n: '05',
+    title: 'Market Radar',
+    desc: 'Gainers, volume, funding, key levels and more — the feeds that build the free habit before you subscribe.',
+  },
+  {
+    n: '06',
+    title: '1-on-1 with me',
+    desc: 'Subscribers get a 30-minute workshop on your process. Pro includes a follow-up.',
   },
 ]
 
-export const HERO_CARD = {
-  pair: 'XAU / USD',
-  type: 'SWING',
-  direction: 'LONG' as const,
-  rr: '1 : 2.84',
-  chart: '/assets/xauusd-1d-oct09-b.png',
-  entry: '4,190',
-  stop: '4,085',
-  target: '4,488',
-  eyebrow: 'LONG SETUP · SPOT · 1D',
-}
+export const MINT_PLANS = [
+  {
+    id: 'free',
+    label: 'Habit',
+    title: 'Free Discord',
+    price: '$0',
+    rate: 'Apply · same-day if approved',
+    tagline: 'See how we trade before you pay for anything.',
+    features: ['Market Radar feeds', 'Charts & screeners', 'Trader chat & desk notes'],
+    cta: 'Join free',
+    href: 'discord' as const,
+    featured: false,
+  },
+  {
+    id: 'starter',
+    label: 'On-ramp',
+    title: 'Starter',
+    price: '$19',
+    rate: '/ mo',
+    tagline: 'One high-bar setup every other day — already framed.',
+    features: [
+      'Max 1 primary alert / 48h',
+      'Full plan: Entry, SL, TP, grade & risk',
+      'Telegram the second it prints',
+      'Markets screener + charts',
+    ],
+    cta: 'Start Starter',
+    href: 'mintscript' as const,
+    featured: false,
+  },
+  {
+    id: 'core',
+    label: 'Flagship',
+    title: 'Core',
+    price: '$69',
+    rate: '/ mo',
+    tagline: 'The full primary desk — plus tools to hunt, watch, and act.',
+    features: [
+      '~1–2 primary alerts / day',
+      'Watchlist · up to 10 coins',
+      'Global Flow + Indicator Builder',
+      'Web + Telegram on every print',
+      '30-min 1-on-1 workshop with me',
+    ],
+    cta: 'Get Core',
+    href: 'mintscript' as const,
+    featured: true,
+  },
+  {
+    id: 'pro',
+    label: 'Full desk',
+    title: 'Pro',
+    price: '$199',
+    rate: '/ mo',
+    tagline: 'Full desk — primary plus secondary on 4H, 6H, and 12H.',
+    features: [
+      '~3–4 alerts / day',
+      'Primary + secondary setup types',
+      'Station + every tool unlocked',
+      'Mozzie AI · highest usage tier',
+      'Workshop + follow-up included',
+    ],
+    cta: 'Go Pro',
+    href: 'mintscript' as const,
+    featured: false,
+  },
+]

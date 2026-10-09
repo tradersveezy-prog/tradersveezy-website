@@ -7,6 +7,7 @@ import { Coaching } from './pages/Coaching'
 import { Collabs } from './pages/Collabs'
 import { Courses } from './pages/Courses'
 import { Home } from './pages/Home'
+import { MintScript } from './pages/MintScript'
 import { Tools } from './pages/Tools'
 
 function readPage(): PageId {
@@ -30,6 +31,7 @@ export default function App() {
     <div style={{ minHeight: '100vh', background: 'var(--ink)', position: 'relative', overflowX: 'hidden' }}>
       <Header page={page} />
       {page === 'home' && <Home />}
+      {page === 'mintscript' && <MintScript />}
       {page === 'coaching' && <Coaching />}
       {page === 'courses' && <Courses />}
       {page === 'tools' && <Tools />}

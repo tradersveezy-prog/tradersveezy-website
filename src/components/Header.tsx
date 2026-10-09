@@ -5,15 +5,17 @@ type Props = {
 }
 
 export function Header({ page }: Props) {
+  const mintMode = page === 'mintscript'
+
   return (
     <header
       style={{
         position: 'sticky',
         top: 0,
         zIndex: 20,
-        background: 'rgba(6,6,6,0.88)',
+        background: mintMode ? 'rgba(11,12,16,0.92)' : 'rgba(6,6,6,0.88)',
         backdropFilter: 'blur(14px)',
-        borderBottom: '1px solid rgba(227,180,74,0.16)',
+        borderBottom: mintMode ? '1px solid rgba(20,230,164,0.18)' : '1px solid rgba(227,180,74,0.16)',
       }}
     >
       <div
@@ -43,24 +45,28 @@ export function Header({ page }: Props) {
           </span>
         </a>
         <nav style={{ display: 'flex', alignItems: 'center', gap: 'clamp(16px, 2.4vw, 34px)', flexWrap: 'wrap' }}>
-          {PAGES.map((id) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 12,
-                fontWeight: 500,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: id === page ? 'var(--gold)' : 'var(--soft)',
-                padding: '6px 0',
-                borderBottom: `1px solid ${id === page ? 'var(--gold)' : 'transparent'}`,
-              }}
-            >
-              {PAGE_LABELS[id]}
-            </a>
-          ))}
+          {PAGES.map((id) => {
+            const active = id === page
+            const accent = id === 'mintscript' ? 'var(--mint)' : 'var(--gold)'
+            return (
+              <a
+                key={id}
+                href={`#${id}`}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 12,
+                  fontWeight: 500,
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: active ? accent : 'var(--soft)',
+                  padding: '6px 0',
+                  borderBottom: `1px solid ${active ? accent : 'transparent'}`,
+                }}
+              >
+                {PAGE_LABELS[id]}
+              </a>
+            )
+          })}
           <a href={LINKS.booking} className="btn btn-primary" style={{ padding: '12px 18px', fontSize: 12 }}>
             Book 1-on-1
           </a>

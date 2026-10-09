@@ -10,6 +10,9 @@
   --gold-soft: #f6d488;
   --long: #4fb286;
   --short: #d9533b;
+  --mint: #14e6a4;
+  --mint-soft: #6ff2c6;
+  --mint-ink: #0b0c10;
   --font-display: 'Archivo', sans-serif;
   --font-body: 'Barlow', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -113,6 +116,16 @@ img {
 .btn-ghost:hover {
   border-color: var(--gold);
   color: var(--gold);
+}
+
+.btn-mint {
+  background: var(--mint);
+  color: #06140f;
+}
+
+.btn-mint:hover {
+  background: var(--mint-soft);
+  color: #06140f;
 }
 
 .shell {

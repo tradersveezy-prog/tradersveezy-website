@@ -54,8 +54,22 @@ export function About() {
               margin: '20px 0 0',
             }}
           >
-            I don&apos;t sell signals or promise returns. I teach the process: read the structure, define the risk, take
-            the trade or skip it, then review it honestly.
+            I don&apos;t promise returns. I teach the process: read the structure, define the risk, take the trade or
+            skip it, then review it honestly.
+          </p>
+          <p
+            style={{
+              fontSize: 'clamp(19px, 1.5vw, 22px)',
+              lineHeight: 1.6,
+              color: 'var(--soft)',
+              margin: '20px 0 0',
+            }}
+          >
+            I also built{' '}
+            <a href="#mintscript" style={{ color: 'var(--mint)' }}>
+              MintScript
+            </a>
+            — the desk behind selective swing setups and the tools I use every day. You still take every trade.
           </p>
         </div>
       </section>

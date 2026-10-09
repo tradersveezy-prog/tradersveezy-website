@@ -50,8 +50,11 @@ export function Coaching() {
             paddingBottom: 'clamp(56px, 7vw, 90px)',
           }}
         >
-          <div className="eyebrow">1-on-1 trading education</div>
-          <h1 className="display" style={{ fontSize: 'clamp(56px, 9vw, 140px)', marginTop: 28 }}>
+          <p className="eyebrow">1-on-1 trading education</p>
+          <h1
+            className="display"
+            style={{ fontSize: 'clamp(40px, 5.5vw, 80px)', letterSpacing: '0.02em', lineHeight: 1.02, marginTop: 28 }}
+          >
             Sit at
             <br />
             <span style={{ color: 'var(--gold)' }}>my desk.</span>

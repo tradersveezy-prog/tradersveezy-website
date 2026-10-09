@@ -13,8 +13,11 @@ export function Tools() {
             paddingBottom: 'clamp(56px, 7vw, 90px)',
           }}
         >
-          <div className="eyebrow">Trading tools</div>
-          <h1 className="display" style={{ fontSize: 'clamp(56px, 9vw, 140px)', marginTop: 28 }}>
+          <p className="eyebrow">Trading tools</p>
+          <h1
+            className="display"
+            style={{ fontSize: 'clamp(40px, 5.5vw, 80px)', letterSpacing: '0.02em', lineHeight: 1.02, marginTop: 28 }}
+          >
             Market
             <br />
             <span style={{ color: 'var(--gold)' }}>radar.</span>
@@ -76,24 +79,24 @@ export function Tools() {
           }}
         >
           <div style={{ border: '1px solid rgba(242,241,238,0.14)', padding: '44px 40px', background: 'var(--ink)' }}>
-            <div className="eyebrow" style={{ letterSpacing: '0.22em' }}>
+            <p className="eyebrow" style={{ letterSpacing: '0.22em' }}>
               Template
-            </div>
-            <div className="display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', letterSpacing: '0.02em', marginTop: 18, lineHeight: 1 }}>
+            </p>
+            <h2 className="display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', letterSpacing: '0.02em', marginTop: 18, lineHeight: 1 }}>
               Strategy checklists
-            </div>
+            </h2>
             <p style={{ fontSize: 18, lineHeight: 1.55, color: 'var(--soft)', margin: '20px 0 0' }}>
               The pre-trade checks I go through before entering: trend, level, trigger, stop, size. If a box isn&apos;t
               ticked, I don&apos;t take the trade.
             </p>
           </div>
           <div style={{ border: '1px solid rgba(242,241,238,0.14)', padding: '44px 40px', background: 'var(--ink)' }}>
-            <div className="eyebrow" style={{ letterSpacing: '0.22em' }}>
+            <p className="eyebrow" style={{ letterSpacing: '0.22em' }}>
               Review
-            </div>
-            <div className="display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', letterSpacing: '0.02em', marginTop: 18, lineHeight: 1 }}>
+            </p>
+            <h2 className="display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', letterSpacing: '0.02em', marginTop: 18, lineHeight: 1 }}>
               Loss log
-            </div>
+            </h2>
             <p style={{ fontSize: 18, lineHeight: 1.55, color: 'var(--soft)', margin: '20px 0 0' }}>
               Losses are where you learn the most. Log them: what the plan was, what happened, and whether you followed
               it.

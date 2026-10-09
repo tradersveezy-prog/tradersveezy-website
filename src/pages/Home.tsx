@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { PositionCalculator } from '../components/PositionCalculator'
 import { LINKS, OFFERS } from '../data'
 
@@ -19,7 +20,7 @@ export function Home() {
           }}
         >
           <div>
-            <div className="eyebrow">Trading education · @tradersveezy</div>
+            <p className="eyebrow">Trading education · @tradersveezy</p>
             <h1
               className="display"
               style={{
@@ -46,15 +47,15 @@ export function Home() {
               then decide.
             </p>
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 36 }}>
-              <a href="#coaching" className="btn btn-primary">
+              <Link to="/coaching" className="btn btn-primary">
                 Learn 1-on-1
-              </a>
+              </Link>
               <a href={LINKS.discord} className="btn btn-ghost" target="_blank" rel="noopener noreferrer">
                 Join free Discord
               </a>
             </div>
-            <a
-              href="#mintscript"
+            <Link
+              to="/mintscript"
               style={{
                 display: 'inline-block',
                 marginTop: 22,
@@ -69,7 +70,7 @@ export function Home() {
               }}
             >
               Or explore MintScript →
-            </a>
+            </Link>
           </div>
 
           <div style={{ position: 'relative', maxWidth: 480, justifySelf: 'end', width: '100%' }}>
@@ -163,9 +164,9 @@ export function Home() {
           {OFFERS.map((o) => {
             const accent = o.accent === 'mint' ? 'var(--mint)' : 'var(--gold)'
             return (
-              <a
+              <Link
                 key={o.n}
-                href={o.href}
+                to={o.href}
                 className="offers-row"
                 style={{
                   display: 'grid',
@@ -202,7 +203,7 @@ export function Home() {
                 >
                   {o.price} <span style={{ color: accent }}>→</span>
                 </span>
-              </a>
+              </Link>
             )
           })}
         </div>
@@ -325,9 +326,9 @@ export function Home() {
               paced desk in one place.
             </p>
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 40 }}>
-              <a href="#mintscript" className="btn btn-mint">
+              <Link to="/mintscript" className="btn btn-mint">
                 Explore MintScript
-              </a>
+              </Link>
               <a
                 href={LINKS.discord}
                 target="_blank"

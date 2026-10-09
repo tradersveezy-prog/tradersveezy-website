@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { LINKS, PAGE_LABELS, PAGES, pageHref } from '../data'
 
 export function Footer() {
@@ -16,7 +17,7 @@ export function Footer() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <img src="/assets/ts-mark-gold.svg" alt="TraderSveezy" style={{ height: 52 }} />
+          <img src="/assets/ts-mark-gold.svg" alt="TraderSveezy logo" style={{ height: 52 }} />
           <div>
             <div
               style={{
@@ -44,11 +45,11 @@ export function Footer() {
             </a>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 28, flexWrap: 'wrap' }}>
+        <nav aria-label="Footer" style={{ display: 'flex', gap: 28, flexWrap: 'wrap' }}>
           {PAGES.map((id) => (
-            <a
+            <Link
               key={id}
-              href={pageHref(id)}
+              to={pageHref(id)}
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: 12,
@@ -58,9 +59,9 @@ export function Footer() {
               }}
             >
               {PAGE_LABELS[id]}
-            </a>
+            </Link>
           ))}
-        </div>
+        </nav>
       </div>
       <div
         className="shell"

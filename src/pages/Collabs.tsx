@@ -27,8 +27,11 @@ export function Collabs() {
             paddingBottom: 'clamp(56px, 7vw, 90px)',
           }}
         >
-          <div className="eyebrow">Open to partnerships</div>
-          <h1 className="display" style={{ fontSize: 'clamp(56px, 9vw, 140px)', marginTop: 28 }}>
+          <p className="eyebrow">Open to partnerships</p>
+          <h1
+            className="display"
+            style={{ fontSize: 'clamp(40px, 5.5vw, 80px)', letterSpacing: '0.02em', lineHeight: 1.02, marginTop: 28 }}
+          >
             Build it
             <br />
             <span style={{ color: 'var(--gold)' }}>together.</span>

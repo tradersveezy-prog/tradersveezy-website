@@ -1,3 +1,4 @@
+import { Link, NavLink } from 'react-router-dom'
 import { LINKS, PAGE_LABELS, PAGES, pageHref, type PageId } from '../data'
 
 type Props = {
@@ -30,7 +31,7 @@ export function Header({ page }: Props) {
           flexWrap: 'wrap',
         }}
       >
-        <a href={pageHref('home')} style={{ display: 'flex', alignItems: 'center', gap: 14, color: 'var(--bone)' }}>
+        <Link to={pageHref('home')} style={{ display: 'flex', alignItems: 'center', gap: 14, color: 'var(--bone)' }}>
           <img src="/assets/ts-mark-gold.svg" alt="TraderSveezy" style={{ height: 38 }} />
           <span
             style={{
@@ -43,33 +44,33 @@ export function Header({ page }: Props) {
           >
             TraderSveezy
           </span>
-        </a>
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 'clamp(16px, 2.4vw, 34px)', flexWrap: 'wrap' }}>
+        </Link>
+        <nav aria-label="Primary" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(16px, 2.4vw, 34px)', flexWrap: 'wrap' }}>
           {PAGES.map((id) => {
-            const active = id === page
             const accent = id === 'mintscript' ? 'var(--mint)' : 'var(--gold)'
             return (
-              <a
+              <NavLink
                 key={id}
-                href={pageHref(id)}
-                style={{
+                to={pageHref(id)}
+                end={id === 'home'}
+                style={({ isActive }) => ({
                   fontFamily: 'var(--font-mono)',
                   fontSize: 12,
                   fontWeight: 500,
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',
-                  color: active ? accent : 'var(--soft)',
+                  color: isActive ? accent : 'var(--soft)',
                   padding: '6px 0',
-                  borderBottom: `1px solid ${active ? accent : 'transparent'}`,
-                }}
+                  borderBottom: `1px solid ${isActive ? accent : 'transparent'}`,
+                })}
               >
                 {PAGE_LABELS[id]}
-              </a>
+              </NavLink>
             )
           })}
-          <a href={LINKS.booking} className="btn btn-primary" style={{ padding: '12px 18px', fontSize: 12 }}>
+          <Link to={LINKS.booking} className="btn btn-primary" style={{ padding: '12px 18px', fontSize: 12 }}>
             Book 1-on-1
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

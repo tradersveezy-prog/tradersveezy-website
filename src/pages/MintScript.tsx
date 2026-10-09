@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { LINKS, MINT_FEATURES, MINT_PLANS } from '../data'
 
 function planHref(key: 'discord' | 'mintscript') {
@@ -40,9 +41,9 @@ export function MintScript() {
             paddingBottom: 'clamp(64px, 8vw, 110px)',
           }}
         >
-          <div className="eyebrow" style={{ color: 'var(--mint)' }}>
+          <p className="eyebrow" style={{ color: 'var(--mint)' }}>
             The desk I trade from
-          </div>
+          </p>
           <img
             src="/assets/mintscript-logo.png"
             alt="MintScript"
@@ -51,7 +52,7 @@ export function MintScript() {
           <h1
             className="display"
             style={{
-              fontSize: 'clamp(36px, 5vw, 76px)',
+              fontSize: 'clamp(36px, 5vw, 72px)',
               letterSpacing: '0.01em',
               marginTop: 40,
               maxWidth: '14em',
@@ -95,9 +96,10 @@ export function MintScript() {
         className="shell"
         style={{ paddingTop: 'clamp(72px, 9vw, 120px)', paddingBottom: 'clamp(72px, 9vw, 120px)' }}
       >
-        <div className="eyebrow" style={{ color: 'var(--mint)' }}>
+        <p className="eyebrow" style={{ color: 'var(--mint)' }}>
           What&apos;s inside
-        </div>
+        </p>
+        <h2 className="visually-hidden">MintScript features</h2>
         <div
           className="mint-features-grid"
           style={{
@@ -114,12 +116,12 @@ export function MintScript() {
               <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 40, color: 'var(--mint)' }}>
                 {f.n}
               </div>
-              <div
+              <h3
                 className="display"
-                style={{ fontSize: 24, letterSpacing: '0.05em', marginTop: 22, color: '#F4F4F6' }}
+                style={{ fontSize: 24, letterSpacing: '0.05em', marginTop: 22, color: '#F4F4F6', marginBottom: 0 }}
               >
                 {f.title}
-              </div>
+              </h3>
               <div style={{ fontSize: 18, lineHeight: 1.5, color: '#A6A8B3', marginTop: 10 }}>{f.desc}</div>
             </div>
           ))}
@@ -250,9 +252,9 @@ export function MintScript() {
               >
                 {plan.label}
               </div>
-              <div className="display" style={{ fontSize: 28, letterSpacing: '0.04em', marginTop: 14, color: '#F4F4F6' }}>
+              <h3 className="display" style={{ fontSize: 28, letterSpacing: '0.04em', marginTop: 14, color: '#F4F4F6', marginBottom: 0 }}>
                 {plan.title}
-              </div>
+              </h3>
               <div style={{ marginTop: 22, display: 'flex', alignItems: 'baseline', gap: 6 }}>
                 <span
                   style={{
@@ -370,9 +372,9 @@ export function MintScript() {
               tools live between sessions — you still take every trade.
             </p>
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-              <a href="#coaching" className="btn btn-ghost" style={{ borderColor: 'rgba(244,244,246,0.28)', color: '#F4F4F6' }}>
+              <Link to="/coaching" className="btn btn-ghost" style={{ borderColor: 'rgba(244,244,246,0.28)', color: '#F4F4F6' }}>
                 1-on-1 sessions
-              </a>
+              </Link>
               <a href={LINKS.mintscript} target="_blank" rel="noopener noreferrer" className="btn btn-mint">
                 Open MintScript
               </a>

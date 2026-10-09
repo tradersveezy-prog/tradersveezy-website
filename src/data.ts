@@ -12,15 +12,30 @@ export const PAGE_LABELS: Record<PageId, string> = {
   about: 'About',
 }
 
-/** Home stays on the clean root URL; other pages use hash routes. */
+export const PAGE_PATHS: Record<PageId, string> = {
+  home: '/',
+  mintscript: '/mintscript',
+  coaching: '/coaching',
+  courses: '/courses',
+  tools: '/tools',
+  collabs: '/partners',
+  about: '/about',
+}
+
 export function pageHref(id: PageId): string {
-  return id === 'home' ? '/' : `#${id}`
+  return PAGE_PATHS[id]
+}
+
+export function pageFromPath(pathname: string): PageId {
+  const clean = pathname.replace(/\/+$/, '') || '/'
+  const entry = (Object.entries(PAGE_PATHS) as [PageId, string][]).find(([, path]) => path === clean)
+  return entry?.[0] ?? 'home'
 }
 
 /** Swap these when booking / Discord / course checkout links are ready. */
 export const LINKS = {
-  booking: '#coaching',
-  courses: '#courses',
+  booking: '/coaching',
+  courses: '/courses',
   discord: 'https://build.mintscript.io/join',
   mintscript: 'https://build.mintscript.io/join',
   mintscriptPlans: 'https://mintscript.io/#plans',
@@ -32,7 +47,7 @@ export const LINKS = {
 export const OFFERS = [
   {
     n: '01',
-    href: '#mintscript' as const,
+    href: '/mintscript',
     title: 'MintScript',
     desc: 'The desk I trade from: selective setups, charts, and Market Radar.',
     price: 'From $19/mo',
@@ -40,7 +55,7 @@ export const OFFERS = [
   },
   {
     n: '02',
-    href: '#coaching' as const,
+    href: '/coaching',
     title: '1-on-1 Sessions',
     desc: 'Live sessions on your trades, your risk and your process.',
     price: 'From $300',
@@ -48,7 +63,7 @@ export const OFFERS = [
   },
   {
     n: '03',
-    href: '#courses' as const,
+    href: '/courses',
     title: 'Prerecorded Courses',
     desc: 'Five courses, from market structure to trade review.',
     price: '$300 · All 5',
@@ -56,7 +71,7 @@ export const OFFERS = [
   },
   {
     n: '04',
-    href: '#tools' as const,
+    href: '/tools',
     title: 'Trading Tools',
     desc: 'Market Radar feeds, strategy checklists and a loss log.',
     price: 'In MintScript',
@@ -64,7 +79,7 @@ export const OFFERS = [
   },
   {
     n: '05',
-    href: '#collabs' as const,
+    href: '/partners',
     title: 'Brand Partnerships',
     desc: 'Open to co-branded content, workshops, and product collabs with brands that teach traders.',
     price: 'Pitch a collab',

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { LINKS } from '../data'
 
 export function About() {
@@ -29,8 +30,11 @@ export function About() {
           />
         </div>
         <div>
-          <div className="eyebrow">About · @tradersveezy</div>
-          <h1 className="display" style={{ fontSize: 'clamp(52px, 7.6vw, 118px)', marginTop: 28 }}>
+          <p className="eyebrow">About · @tradersveezy</p>
+          <h1
+            className="display"
+            style={{ fontSize: 'clamp(40px, 5.5vw, 80px)', letterSpacing: '0.02em', lineHeight: 1.02, marginTop: 28 }}
+          >
             Mentor,
             <br />
             <span style={{ color: 'var(--gold)' }}>not guru.</span>
@@ -66,9 +70,9 @@ export function About() {
             }}
           >
             I also built{' '}
-            <a href="#mintscript" style={{ color: 'var(--mint)' }}>
+            <Link to="/mintscript" style={{ color: 'var(--mint)' }}>
               MintScript
-            </a>
+            </Link>
             — the desk behind selective setups and the tools I use every day. You still take every trade.
           </p>
         </div>
@@ -250,9 +254,9 @@ export function About() {
           Learn with me.
         </h2>
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-          <a href="#coaching" className="btn btn-primary">
+          <Link to="/coaching" className="btn btn-primary">
             1-on-1 sessions
-          </a>
+          </Link>
           <a href={LINKS.x} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
             Follow on X
           </a>

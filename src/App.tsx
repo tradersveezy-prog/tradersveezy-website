@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { HelmetProvider } from 'react-helmet-async'
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
-import { PAGES, type PageId } from './data'
+import { Seo } from './components/Seo'
+import { PAGE_PATHS, PAGES, pageFromPath, type PageId } from './data'
 import { About } from './pages/About'
 import { Coaching } from './pages/Coaching'
 import { Collabs } from './pages/Collabs'
@@ -10,43 +13,59 @@ import { Home } from './pages/Home'
 import { MintScript } from './pages/MintScript'
 import { Tools } from './pages/Tools'
 
-function readPage(): PageId {
-  const hash = (location.hash || '').slice(1) as PageId
-  if (hash === 'home' || !hash) return 'home'
-  return PAGES.includes(hash) ? hash : 'home'
-}
-
-function normalizeHomeHash() {
-  if (location.hash === '#home') {
-    history.replaceState(null, '', `${location.pathname}${location.search}`)
-  }
-}
-
-export default function App() {
-  const [page, setPage] = useState<PageId>(readPage)
-
+function ScrollToTop() {
+  const { pathname } = useLocation()
   useEffect(() => {
-    normalizeHomeHash()
-    const onHash = () => {
-      normalizeHomeHash()
-      setPage(readPage())
-      window.scrollTo(0, 0)
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
+/** Old bookmark support: /#courses → /courses */
+function HashRedirect() {
+  const navigate = useNavigate()
+  useEffect(() => {
+    const raw = (location.hash || '').slice(1)
+    if (!raw) return
+    const id = (raw === 'collabs' ? 'collabs' : raw) as PageId
+    if (PAGES.includes(id)) {
+      navigate(PAGE_PATHS[id], { replace: true })
     }
-    window.addEventListener('hashchange', onHash)
-    return () => window.removeEventListener('hashchange', onHash)
-  }, [])
+  }, [navigate])
+  return null
+}
+
+function Shell() {
+  const page = pageFromPath(useLocation().pathname)
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--ink)', position: 'relative', overflowX: 'hidden' }}>
+      <Seo />
+      <ScrollToTop />
+      <HashRedirect />
       <Header page={page} />
-      {page === 'home' && <Home />}
-      {page === 'mintscript' && <MintScript />}
-      {page === 'coaching' && <Coaching />}
-      {page === 'courses' && <Courses />}
-      {page === 'tools' && <Tools />}
-      {page === 'collabs' && <Collabs />}
-      {page === 'about' && <About />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/mintscript" element={<MintScript />} />
+        <Route path="/coaching" element={<Coaching />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/tools" element={<Tools />} />
+        <Route path="/partners" element={<Collabs />} />
+        <Route path="/collabs" element={<Navigate to="/partners" replace />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
       <Footer />
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <HelmetProvider>
+      <BrowserRouter>
+        <Shell />
+      </BrowserRouter>
+    </HelmetProvider>
   )
 }

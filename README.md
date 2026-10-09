@@ -4,14 +4,17 @@ Branded site for [TraderSveezy](https://x.com/tradersveezy) — crypto trading e
 
 Built from the brand kit in the Trader Sveezy design pack (ink / signal gold / Archivo · Barlow · JetBrains Mono).
 
-## Pages
+## Pages (path URLs)
 
-- **Home** — hero, offers, recent trade cards, MintScript collab, Discord CTA
-- **1-on-1** — session packages ($300 / $750 / $1,000)
-- **Courses** — 5-course playbook bundle ($300)
-- **Tools** — Market Radar Discord feeds
-- **Collabs** — request form + MintScript partnership
-- **About** — mentor voice, risk-first process
+- `/` — Home
+- `/mintscript` — MintScript desk sales page
+- `/coaching` — 1-on-1 packages
+- `/courses` — 5-course playbook
+- `/tools` — Market Radar
+- `/partners` — brand partnerships
+- `/about` — credentials & story
+
+SEO: per-page meta + Open Graph/Twitter via `react-helmet-async`, JSON-LD rich results, `sitemap.xml`, `robots.txt`. GitHub Pages SPA fallback copies `index.html` → `404.html` on build.
 
 ## Develop
 

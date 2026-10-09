@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { FEEDS, LINKS } from '../data'
 
 export function Tools() {
@@ -39,7 +40,7 @@ export function Tools() {
 
       <section
         className="shell"
-        style={{ paddingTop: 'clamp(64px, 8vw, 110px)', paddingBottom: 'clamp(64px, 8vw, 110px)' }}
+        style={{ paddingTop: 'clamp(64px, 8vw, 110px)', paddingBottom: 'clamp(40px, 5vw, 64px)' }}
       >
         <div
           style={{
@@ -62,64 +63,26 @@ export function Tools() {
       </section>
 
       <section
-        style={{
-          background: 'var(--panel)',
-          borderTop: '1px solid rgba(242,241,238,0.08)',
-          borderBottom: '1px solid rgba(242,241,238,0.08)',
-        }}
-      >
-        <div
-          className="shell"
-          style={{
-            paddingTop: 'clamp(72px, 9vw, 120px)',
-            paddingBottom: 'clamp(72px, 9vw, 120px)',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))',
-            gap: 20,
-          }}
-        >
-          <div style={{ border: '1px solid rgba(242,241,238,0.14)', padding: '44px 40px', background: 'var(--ink)' }}>
-            <p className="eyebrow" style={{ letterSpacing: '0.22em' }}>
-              Template
-            </p>
-            <h2 className="display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', letterSpacing: '0.02em', marginTop: 18, lineHeight: 1 }}>
-              Strategy checklists
-            </h2>
-            <p style={{ fontSize: 18, lineHeight: 1.55, color: 'var(--soft)', margin: '20px 0 0' }}>
-              The pre-trade checks I go through before entering: trend, level, trigger, stop, size. If a box isn&apos;t
-              ticked, I don&apos;t take the trade.
-            </p>
-          </div>
-          <div style={{ border: '1px solid rgba(242,241,238,0.14)', padding: '44px 40px', background: 'var(--ink)' }}>
-            <p className="eyebrow" style={{ letterSpacing: '0.22em' }}>
-              Review
-            </p>
-            <h2 className="display" style={{ fontSize: 'clamp(28px, 3vw, 40px)', letterSpacing: '0.02em', marginTop: 18, lineHeight: 1 }}>
-              Loss log
-            </h2>
-            <p style={{ fontSize: 18, lineHeight: 1.55, color: 'var(--soft)', margin: '20px 0 0' }}>
-              Losses are where you learn the most. Log them: what the plan was, what happened, and whether you followed
-              it.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section
         className="shell"
         style={{
-          paddingTop: 'clamp(72px, 9vw, 120px)',
+          paddingTop: 'clamp(48px, 6vw, 72px)',
           paddingBottom: 'clamp(72px, 9vw, 120px)',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'flex-end',
           gap: 32,
           flexWrap: 'wrap',
         }}
       >
-        <h2 className="display" style={{ fontSize: 'clamp(36px, 5vw, 72px)', letterSpacing: '0.02em' }}>
-          Get the feeds.
-        </h2>
+        <div style={{ maxWidth: '36em' }}>
+          <h2 className="display" style={{ fontSize: 'clamp(36px, 5vw, 72px)', letterSpacing: '0.02em' }}>
+            Get the feeds.
+          </h2>
+          <p style={{ fontSize: 16, lineHeight: 1.55, color: 'var(--muted)', margin: '20px 0 0' }}>
+            Strategy checklists and the loss log ship with{' '}
+            <Link to="/coaching">1-on-1</Link> and the <Link to="/courses">playbook</Link> — member tools, not Radar.
+          </p>
+        </div>
         <a href={LINKS.discord} className="btn btn-primary" style={{ padding: '22px 34px' }}>
           Join the Discord
         </a>

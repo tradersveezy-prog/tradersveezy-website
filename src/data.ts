@@ -36,6 +36,8 @@ export function pageFromPath(pathname: string): PageId {
 export const LINKS = {
   booking: '/coaching',
   courses: '/courses',
+  /** FormSubmit inbox for playbook waitlist. Leave '' for UI-only until set. */
+  courseWaitlistEmail: (import.meta.env.VITE_WAITLIST_EMAIL as string | undefined)?.trim() || '',
   discord: 'https://build.mintscript.io/join',
   mintscript: 'https://build.mintscript.io/join',
   mintscriptPlans: 'https://mintscript.io/#plans',
@@ -64,16 +66,16 @@ export const OFFERS = [
   {
     n: '03',
     href: '/courses',
-    title: 'Prerecorded Courses',
-    desc: 'Five courses, from market structure to trade review.',
-    price: '$300 · All 5',
+    title: 'Trading Playbook',
+    desc: 'Five courses, from market structure to trade review — written lessons and worksheets.',
+    price: 'Coming soon',
     accent: 'gold' as const,
   },
   {
     n: '04',
     href: '/tools',
     title: 'Trading Tools',
-    desc: 'Market Radar feeds, strategy checklists and a loss log.',
+    desc: 'Market Radar Discord feeds — where to look before you size.',
     price: 'In MintScript',
     accent: 'gold' as const,
   },

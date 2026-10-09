@@ -121,9 +121,9 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
     ],
   },
   courses: {
-    title: 'Trading Courses Playbook — $300 Bundle | TraderSveezy',
+    title: 'Trading Playbook — Coming Soon | TraderSveezy',
     description:
-      'Five prerecorded trading courses: market structure, levels, entries, risk & sizing, and process & review. One payment $300 bundle.',
+      'Five trading courses coming soon: market structure, levels, entries, risk & sizing, and process & review. Join the waitlist for the $300 bundle.',
     path: '/courses',
     jsonLd: [
       {
@@ -131,19 +131,18 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
         '@type': 'Course',
         name: 'TraderSveezy Full Playbook',
         description:
-          'Five prerecorded courses covering market structure, key levels, entries, risk and position sizing, and trade review.',
+          'Five courses covering market structure, key levels, entries, risk and position sizing, and trade review. Coming soon — join the waitlist.',
         provider: { '@id': `${SITE_URL}/#organization` },
         offers: {
           '@type': 'Offer',
           price: '300',
           priceCurrency: 'USD',
           category: 'Paid',
-          availability: 'https://schema.org/InStock',
+          availability: 'https://schema.org/PreOrder',
         },
         hasCourseInstance: {
           '@type': 'CourseInstance',
           courseMode: 'online',
-          courseWorkload: 'PT5H',
         },
       },
     ],
@@ -151,7 +150,7 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
   tools: {
     title: 'Market Radar Trading Tools | TraderSveezy',
     description:
-      'Market Radar Discord feeds: gainers, volume, funding, EMA-200, key levels and support/resistance. Free habit tools inside MintScript.',
+      'Market Radar Discord feeds: gainers, volume, funding, EMA-200, key levels and support/resistance. Inside MintScript.',
     path: '/tools',
   },
   collabs: {

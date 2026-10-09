@@ -236,4 +236,8 @@ img {
     justify-self: stretch !important;
     max-width: none !important;
   }
+
+  .waitlist-grid {
+    grid-template-columns: 1fr !important;
+  }
 }

@@ -43,6 +43,7 @@ export function Tools() {
         style={{ paddingTop: 'clamp(64px, 8vw, 110px)', paddingBottom: 'clamp(40px, 5vw, 64px)' }}
       >
         <div
+          className="feeds-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 290px), 1fr))',
@@ -52,9 +53,9 @@ export function Tools() {
           }}
         >
           {FEEDS.map((f) => (
-            <div key={f.ch} style={{ background: 'var(--ink)', padding: '36px 32px 40px' }}>
+            <div key={f.ch} className="feed-tile" style={{ background: 'var(--ink)', padding: '36px 32px 40px' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: 22, color: 'var(--bone)' }}>
-                <span style={{ color: 'var(--gold)' }}>#</span> {f.ch}
+                <span className="feed-hash">#</span> {f.ch}
               </div>
               <div style={{ fontSize: 18, lineHeight: 1.5, color: 'var(--muted)', marginTop: 14 }}>{f.desc}</div>
             </div>

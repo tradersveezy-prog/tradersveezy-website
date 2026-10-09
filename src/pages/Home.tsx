@@ -73,68 +73,34 @@ export function Home() {
             </Link>
           </div>
 
-          <div style={{ position: 'relative', maxWidth: 480, justifySelf: 'end', width: '100%' }}>
-            <div
-              style={{
-                position: 'absolute',
-                inset: '-14px 14px 14px -14px',
-                border: '1px solid rgba(227,180,74,0.35)',
-              }}
-            />
-            <div
-              style={{
-                position: 'relative',
-                aspectRatio: '4 / 5',
-                background: 'var(--panel)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
-              }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background:
-                    'repeating-linear-gradient(0deg,rgba(242,241,238,0.035) 0 1px,transparent 1px 64px),repeating-linear-gradient(90deg,rgba(242,241,238,0.035) 0 1px,transparent 1px 64px)',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'radial-gradient(circle at 50% 45%, rgba(227,180,74,0.18), transparent 55%)',
-                }}
-              />
+          <div className="hero-mark" style={{ position: 'relative', maxWidth: 480, justifySelf: 'end', width: '100%' }}>
+            <div className="hero-mark-panel">
+              <div className="hero-mark-grid" aria-hidden />
+              <div className="hero-mark-glow" aria-hidden />
+              <div className="hero-mark-scan" aria-hidden />
+              <div className="hero-mark-corners" aria-hidden>
+                <span />
+                <span />
+                <span />
+                <span />
+              </div>
+              <div className="hero-mark-tape" aria-hidden>
+                <div className="hero-mark-tape-track">
+                  ENTRY · STOP · TARGET · R:R · SIZE · PLAN · RISK · EXECUTE · REVIEW · ENTRY · STOP · TARGET · R:R ·
+                  SIZE · PLAN · RISK · EXECUTE · REVIEW ·
+                </div>
+              </div>
               <img
+                className="hero-mark-logo"
                 src="/assets/ts-mark-gold.svg"
                 alt="TraderSveezy mark"
-                style={{
-                  position: 'relative',
-                  width: '50%',
-                  height: 'auto',
-                  filter: 'drop-shadow(0 24px 48px rgba(0,0,0,0.55))',
-                }}
               />
-              <div
-                style={{
-                  position: 'absolute',
-                  left: 24,
-                  right: 24,
-                  bottom: 22,
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 12,
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: 'var(--muted)',
-                }}
-              >
-                <span>Plan · Risk · Execute</span>
-                <span style={{ color: 'var(--gold)' }}>Review</span>
-              </div>
+              <ol className="hero-mark-steps" aria-label="Process">
+                <li>Plan</li>
+                <li>Risk</li>
+                <li>Execute</li>
+                <li>Review</li>
+              </ol>
             </div>
           </div>
         </div>
@@ -201,7 +167,10 @@ export function Home() {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  {o.price} <span style={{ color: accent }}>→</span>
+                  {o.price}{' '}
+                  <span className="offers-arrow" style={{ color: accent }}>
+                    →
+                  </span>
                 </span>
               </Link>
             )

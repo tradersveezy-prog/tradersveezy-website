@@ -6,6 +6,7 @@ export function Courses() {
   const [sent, setSent] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [waitlistFocused, setWaitlistFocused] = useState(false)
 
   async function onWaitlist(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -262,12 +263,18 @@ export function Courses() {
           </div>
 
           <div
+            className={`waitlist-card${waitlistFocused || sent ? ' is-focused' : ''}`}
             style={{
-              border: '1px solid rgba(227,180,74,0.45)',
               background: 'linear-gradient(180deg, rgba(227,180,74,0.06), #0B0B0B 70%)',
               padding: 'clamp(28px, 3vw, 36px)',
             }}
           >
+            {!waitlistFocused && !sent ? (
+              <div className="waitlist-tip" aria-hidden>
+                <span className="calc-tip-dot" />
+                Join waitlist
+              </div>
+            ) : null}
             {sent ? (
               <div>
                 <p className="eyebrow">You&apos;re on the list</p>
@@ -281,7 +288,10 @@ export function Courses() {
                   type="button"
                   className="btn btn-ghost"
                   style={{ marginTop: 28, fontSize: 13, padding: '14px 22px' }}
-                  onClick={() => setSent(false)}
+                  onClick={() => {
+                    setSent(false)
+                    setWaitlistFocused(false)
+                  }}
                 >
                   Add another email
                 </button>
@@ -290,11 +300,19 @@ export function Courses() {
               <form onSubmit={onWaitlist} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 <label className="field">
                   <span>Name</span>
-                  <input name="name" autoComplete="name" placeholder="Optional" />
+                  <input name="name" autoComplete="name" placeholder="Optional" onFocus={() => setWaitlistFocused(true)} />
                 </label>
                 <label className="field">
                   <span>Email</span>
-                  <input required type="email" name="email" autoComplete="email" placeholder="you@email.com" />
+                  <input
+                    required
+                    type="email"
+                    name="email"
+                    autoComplete="email"
+                    placeholder="you@email.com"
+                    className={!waitlistFocused ? 'waitlist-email-invite' : undefined}
+                    onFocus={() => setWaitlistFocused(true)}
+                  />
                 </label>
                 {error ? (
                   <p style={{ margin: 0, fontSize: 14, lineHeight: 1.45, color: 'var(--short)' }} role="alert">

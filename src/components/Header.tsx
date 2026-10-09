@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { LINKS, PAGE_LABELS, PAGES, pageHref, type PageId } from '../data'
 
@@ -5,8 +6,34 @@ type Props = {
   page: PageId
 }
 
+const BOOK_SEEN_KEY = 'ts-book-breathe-seen'
+
 export function Header({ page }: Props) {
   const mintMode = page === 'mintscript'
+  const [breathe, setBreathe] = useState(false)
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(BOOK_SEEN_KEY)) return
+      setBreathe(true)
+      const t = window.setTimeout(() => {
+        setBreathe(false)
+        sessionStorage.setItem(BOOK_SEEN_KEY, '1')
+      }, 9000)
+      return () => window.clearTimeout(t)
+    } catch {
+      /* ignore */
+    }
+  }, [])
+
+  function stopBreathe() {
+    setBreathe(false)
+    try {
+      sessionStorage.setItem(BOOK_SEEN_KEY, '1')
+    } catch {
+      /* ignore */
+    }
+  }
 
   return (
     <header
@@ -68,7 +95,12 @@ export function Header({ page }: Props) {
               </NavLink>
             )
           })}
-          <Link to={LINKS.booking} className="btn btn-primary" style={{ padding: '12px 18px', fontSize: 12 }}>
+          <Link
+            to={LINKS.booking}
+            className={`btn btn-primary${breathe ? ' btn-book-breathe' : ''}`}
+            style={{ padding: '12px 18px', fontSize: 12 }}
+            onClick={stopBreathe}
+          >
             Book 1-on-1
           </Link>
         </nav>

@@ -31,6 +31,11 @@ export function PositionCalculator() {
   const [target, setTarget] = useState('4607.16')
   const [acct, setAcct] = useState('10000')
   const [risk, setRisk] = useState('1')
+  const [touched, setTouched] = useState(false)
+
+  function markTouched() {
+    setTouched(true)
+  }
 
   const calc = useMemo(() => {
     const e = num(entry)
@@ -90,7 +95,7 @@ export function PositionCalculator() {
     label: string,
     value: string,
     onChange: (v: string) => void,
-    color?: string,
+    opts?: { color?: string; invite?: boolean },
   ) => (
     <label
       style={{
@@ -99,6 +104,7 @@ export function PositionCalculator() {
         display: 'flex',
         flexDirection: 'column',
         gap: 10,
+        position: 'relative',
       }}
     >
       <span
@@ -108,34 +114,47 @@ export function PositionCalculator() {
           fontSize: 12,
           letterSpacing: '0.18em',
           textTransform: 'uppercase',
-          color: color ?? 'var(--soft)',
+          color: opts?.color ?? 'var(--soft)',
         }}
       >
         {label}
       </span>
-      <input
-        className="calc-input"
-        inputMode="decimal"
-        value={value}
-        aria-label={label}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={(e) => e.currentTarget.select()}
-        style={{
-          ...inputBase,
-          color: color ?? 'var(--bone)',
-          borderColor: color ? `${color}66` : 'rgba(242,241,238,0.16)',
-          fontSize: 'clamp(18px, 1.8vw, 24px)',
-        }}
-      />
+      <div style={{ position: 'relative' }}>
+        <input
+          className={`calc-input${opts?.invite && !touched ? ' calc-input--invite' : ''}`}
+          inputMode="decimal"
+          value={value}
+          aria-label={label}
+          onChange={(e) => onChange(e.target.value)}
+          onFocus={(e) => {
+            markTouched()
+            e.currentTarget.select()
+          }}
+          style={{
+            ...inputBase,
+            color: opts?.color ?? 'var(--bone)',
+            borderColor: opts?.color ? `${opts.color}66` : 'rgba(242,241,238,0.16)',
+            fontSize: 'clamp(18px, 1.8vw, 24px)',
+          }}
+        />
+        {opts?.invite && !touched ? <span className="calc-caret" aria-hidden /> : null}
+      </div>
     </label>
   )
 
   return (
     <div
+      className={`calc-shell${touched ? ' is-touched' : ''}`}
       role="group"
       aria-label="Interactive position calculator. Edit entry, stop, target, account, and risk."
-      style={{ border: '1px solid rgba(227,180,74,0.35)', background: 'var(--ink)' }}
     >
+      {!touched ? (
+        <div className="calc-tip" aria-hidden>
+          <span className="calc-tip-dot" />
+          Tap a field
+        </div>
+      ) : null}
+
       <div
         style={{
           display: 'flex',
@@ -154,22 +173,16 @@ export function PositionCalculator() {
       >
         <span>
           Position calculator
-          <span style={{ color: 'var(--gold)', marginLeft: 10 }}>· editable</span>
+          <span style={{ color: 'var(--gold)', marginLeft: 10 }}>· live</span>
         </span>
         <span style={{ color: calc.dirColor }}>{calc.dir}</span>
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-          gap: 1,
-          background: 'rgba(242,241,238,0.1)',
-        }}
-      >
-        {cell('Entry', entry, setEntry)}
-        {cell('Stop', stop, setStop, 'var(--short)')}
-        {cell('Target', target, setTarget, 'var(--long)')}
+      <div className="calc-levels" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1, background: 'rgba(242,241,238,0.1)' }}>
+        {!touched ? <div className="calc-shimmer" aria-hidden /> : null}
+        {cell('Entry', entry, setEntry, { invite: true })}
+        {cell('Stop', stop, setStop, { color: 'var(--short)' })}
+        {cell('Target', target, setTarget, { color: 'var(--long)' })}
       </div>
 
       <div style={{ padding: 'clamp(28px, 4vw, 44px) 26px 28px', textAlign: 'center' }}>
@@ -184,18 +197,7 @@ export function PositionCalculator() {
         >
           Risk : Reward
         </div>
-        <div
-          className="display"
-          style={{
-            fontSize: 'clamp(60px, 7.6vw, 108px)',
-            letterSpacing: '0.02em',
-            color: 'var(--gold)',
-            marginTop: 12,
-            lineHeight: 1,
-          }}
-        >
-          {calc.rr}
-        </div>
+        <div className={`display calc-rr${!touched ? ' calc-rr--pulse' : ''}`}>{calc.rr}</div>
         <div
           style={{
             fontFamily: 'var(--font-mono)',
@@ -209,15 +211,17 @@ export function PositionCalculator() {
           {calc.verdict}
         </div>
         <div
+          className={!touched ? 'calc-bar-live' : undefined}
           style={{
             marginTop: 30,
             display: 'flex',
             height: 12,
             border: '1px solid rgba(242,241,238,0.14)',
+            overflow: 'hidden',
           }}
         >
-          <div style={{ flex: calc.riskFlex, background: 'var(--short)', transition: 'flex 0.3s' }} />
-          <div style={{ flex: calc.rewardFlex, background: 'var(--long)', transition: 'flex 0.3s' }} />
+          <div style={{ flex: calc.riskFlex, background: 'var(--short)', transition: 'flex 0.35s ease' }} />
+          <div style={{ flex: calc.rewardFlex, background: 'var(--long)', transition: 'flex 0.35s ease' }} />
         </div>
         <div
           style={{
@@ -255,7 +259,10 @@ export function PositionCalculator() {
             value={acct}
             aria-label="Account size in dollars"
             onChange={(e) => setAcct(e.target.value)}
-            onFocus={(e) => e.currentTarget.select()}
+            onFocus={(e) => {
+              markTouched()
+              e.currentTarget.select()
+            }}
             style={{ ...inputBase, fontWeight: 600, fontSize: 18 }}
           />
         </label>
@@ -269,7 +276,10 @@ export function PositionCalculator() {
             value={risk}
             aria-label="Risk percent of account"
             onChange={(e) => setRisk(e.target.value)}
-            onFocus={(e) => e.currentTarget.select()}
+            onFocus={(e) => {
+              markTouched()
+              e.currentTarget.select()
+            }}
             style={{ ...inputBase, fontWeight: 600, fontSize: 18 }}
           />
         </label>
@@ -286,6 +296,7 @@ export function PositionCalculator() {
             Position
           </span>
           <span
+            className={!touched ? 'calc-size-pulse' : undefined}
             style={{
               fontFamily: 'var(--font-mono)',
               fontWeight: 700,

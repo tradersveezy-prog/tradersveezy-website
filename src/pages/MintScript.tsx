@@ -76,7 +76,7 @@ export function MintScript() {
             on the candles. Start free in Discord; subscribe when the desk earns its spot on your screen.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 44 }}>
-            <a href={LINKS.mintscript} target="_blank" rel="noopener noreferrer" className="btn btn-mint">
+            <a href={LINKS.mintscript} target="_blank" rel="noopener noreferrer" className="btn btn-mint btn-mint-pulse">
               Join MintScript
             </a>
             <a
@@ -125,21 +125,22 @@ export function MintScript() {
               <div style={{ fontSize: 18, lineHeight: 1.5, color: '#A6A8B3', marginTop: 10 }}>{f.desc}</div>
             </div>
           ))}
-          <div
-            style={{
-              gridColumn: '1 / -1',
-              background:
-                'radial-gradient(circle at 70% 30%, rgba(227,180,74,0.12), transparent 55%), radial-gradient(circle at 20% 80%, rgba(20,230,164,0.1), transparent 50%), var(--mint-ink)',
-              padding: '48px 32px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              textAlign: 'center',
-              gap: 22,
-              minHeight: 200,
-            }}
-          >
+            <div
+              className="mint-desk-card"
+              style={{
+                gridColumn: '1 / -1',
+                background:
+                  'radial-gradient(circle at 70% 30%, rgba(227,180,74,0.12), transparent 55%), radial-gradient(circle at 20% 80%, rgba(20,230,164,0.1), transparent 50%), var(--mint-ink)',
+                padding: '48px 32px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                gap: 22,
+                minHeight: 200,
+              }}
+            >
             <div
               style={{
                 fontFamily: 'var(--font-mono)',
@@ -375,7 +376,7 @@ export function MintScript() {
               <Link to="/coaching" className="btn btn-ghost" style={{ borderColor: 'rgba(244,244,246,0.28)', color: '#F4F4F6' }}>
                 1-on-1 sessions
               </Link>
-              <a href={LINKS.mintscript} target="_blank" rel="noopener noreferrer" className="btn btn-mint">
+              <a href={LINKS.mintscript} target="_blank" rel="noopener noreferrer" className="btn btn-mint btn-mint-pulse">
                 Open MintScript
               </a>
             </div>
@@ -423,7 +424,7 @@ export function MintScript() {
             href={LINKS.mintscript}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-mint"
+            className="btn btn-mint btn-mint-pulse"
             style={{ marginTop: 40, padding: '22px 34px' }}
           >
             Join MintScript

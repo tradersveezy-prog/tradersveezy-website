@@ -190,6 +190,15 @@ img {
   resize: vertical;
 }
 
+.calc-input:hover {
+  border-color: rgba(227, 180, 74, 0.45) !important;
+}
+
+.calc-input:focus {
+  border-color: var(--gold) !important;
+  background: rgba(227, 180, 74, 0.06) !important;
+}
+
 @media (max-width: 900px) {
   .offers-row {
     grid-template-columns: 48px 1fr !important;

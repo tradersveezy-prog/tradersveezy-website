@@ -229,7 +229,7 @@ export function Home() {
             }}
           >
             <div>
-              <div className="eyebrow">Try the math</div>
+              <div className="eyebrow">Live tool · edit the numbers</div>
               <h2
                 className="display"
                 style={{ fontSize: 'clamp(44px, 6.4vw, 96px)', letterSpacing: '0.01em', marginTop: 22, lineHeight: 0.92 }}
@@ -247,8 +247,8 @@ export function Home() {
                   margin: '30px 0 0',
                 }}
               >
-                Before any trade I know three numbers: where I get in, where I&apos;m wrong, and where I take profit. Put
-                in yours and see what the trade is actually worth, and how big to size it.
+                Before any trade I know three numbers: where I get in, where I&apos;m wrong, and where I take profit. Tap
+                any field on the right — R:R and size update live.
               </p>
               <div
                 style={{
@@ -263,7 +263,7 @@ export function Home() {
                   color: 'var(--muted)',
                 }}
               >
-                {['The stop decides the size', 'Under 1 : 2, I usually pass', 'Same risk on every trade'].map((line) => (
+                {['The stop decides the size', 'Under 1 : 2, I usually pass', 'Size scales with confidence'].map((line) => (
                   <div key={line} style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
                     <span style={{ width: 8, height: 8, background: 'var(--gold)', flex: 'none' }} />
                     {line}

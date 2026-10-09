@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type CSSProperties } from 'react'
 
 function num(v: string) {
   const n = Number(String(v).replace(/,/g, ''))
@@ -8,6 +8,21 @@ function num(v: string) {
 function money(n: number) {
   if (!Number.isFinite(n)) return '—'
   return n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
+}
+
+const inputBase: CSSProperties = {
+  background: 'rgba(242,241,238,0.04)',
+  border: '1px solid rgba(242,241,238,0.16)',
+  borderRadius: 0,
+  color: 'var(--bone)',
+  fontFamily: 'var(--font-mono)',
+  fontWeight: 700,
+  padding: '10px 12px',
+  outline: 'none',
+  width: '100%',
+  minWidth: 0,
+  boxSizing: 'border-box',
+  cursor: 'text',
 }
 
 export function PositionCalculator() {
@@ -80,7 +95,7 @@ export function PositionCalculator() {
     <label
       style={{
         background: 'var(--panel)',
-        padding: '20px 22px',
+        padding: '18px 18px 20px',
         display: 'flex',
         flexDirection: 'column',
         gap: 10,
@@ -99,33 +114,35 @@ export function PositionCalculator() {
         {label}
       </span>
       <input
+        className="calc-input"
         inputMode="decimal"
         value={value}
+        aria-label={label}
         onChange={(e) => onChange(e.target.value)}
+        onFocus={(e) => e.currentTarget.select()}
         style={{
-          background: 'none',
-          border: 'none',
-          borderBottom: `1px solid ${color ? `${color}55` : 'rgba(242,241,238,0.2)'}`,
+          ...inputBase,
           color: color ?? 'var(--bone)',
-          fontFamily: 'var(--font-mono)',
-          fontWeight: 700,
-          fontSize: 'clamp(18px, 1.8vw, 26px)',
-          padding: '4px 0 8px',
-          outline: 'none',
-          width: '100%',
-          minWidth: 0,
+          borderColor: color ? `${color}66` : 'rgba(242,241,238,0.16)',
+          fontSize: 'clamp(18px, 1.8vw, 24px)',
         }}
       />
     </label>
   )
 
   return (
-    <div style={{ border: '1px solid rgba(242,241,238,0.14)', background: 'var(--ink)' }}>
+    <div
+      role="group"
+      aria-label="Interactive position calculator. Edit entry, stop, target, account, and risk."
+      style={{ border: '1px solid rgba(227,180,74,0.35)', background: 'var(--ink)' }}
+    >
       <div
         style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          gap: 12,
+          flexWrap: 'wrap',
           padding: '18px 26px',
           borderBottom: '1px solid rgba(242,241,238,0.1)',
           fontFamily: 'var(--font-mono)',
@@ -135,7 +152,10 @@ export function PositionCalculator() {
           color: 'var(--muted)',
         }}
       >
-        <span>Position calculator</span>
+        <span>
+          Position calculator
+          <span style={{ color: 'var(--gold)', marginLeft: 10 }}>· editable</span>
+        </span>
         <span style={{ color: calc.dirColor }}>{calc.dir}</span>
       </div>
 
@@ -225,54 +245,38 @@ export function PositionCalculator() {
           borderTop: '1px solid rgba(242,241,238,0.1)',
         }}
       >
-        <label style={{ background: 'var(--panel)', padding: '18px 22px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <label style={{ background: 'var(--panel)', padding: '16px 18px 18px', display: 'flex', flexDirection: 'column', gap: 8 }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted)' }}>
             Account $
           </span>
           <input
+            className="calc-input"
             inputMode="decimal"
             value={acct}
+            aria-label="Account size in dollars"
             onChange={(e) => setAcct(e.target.value)}
-            style={{
-              background: 'none',
-              border: 'none',
-              borderBottom: '1px solid rgba(242,241,238,0.2)',
-              color: 'var(--bone)',
-              fontFamily: 'var(--font-mono)',
-              fontWeight: 600,
-              fontSize: 18,
-              padding: '2px 0 6px',
-              outline: 'none',
-              width: '100%',
-            }}
+            onFocus={(e) => e.currentTarget.select()}
+            style={{ ...inputBase, fontWeight: 600, fontSize: 18 }}
           />
         </label>
-        <label style={{ background: 'var(--panel)', padding: '18px 22px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <label style={{ background: 'var(--panel)', padding: '16px 18px 18px', display: 'flex', flexDirection: 'column', gap: 8 }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted)' }}>
             Risk %
           </span>
           <input
+            className="calc-input"
             inputMode="decimal"
             value={risk}
+            aria-label="Risk percent of account"
             onChange={(e) => setRisk(e.target.value)}
-            style={{
-              background: 'none',
-              border: 'none',
-              borderBottom: '1px solid rgba(242,241,238,0.2)',
-              color: 'var(--bone)',
-              fontFamily: 'var(--font-mono)',
-              fontWeight: 600,
-              fontSize: 18,
-              padding: '2px 0 6px',
-              outline: 'none',
-              width: '100%',
-            }}
+            onFocus={(e) => e.currentTarget.select()}
+            style={{ ...inputBase, fontWeight: 600, fontSize: 18 }}
           />
         </label>
         <div
           style={{
             background: 'rgba(227,180,74,0.08)',
-            padding: '18px 22px',
+            padding: '16px 18px 18px',
             display: 'flex',
             flexDirection: 'column',
             gap: 8,
@@ -281,7 +285,17 @@ export function PositionCalculator() {
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--gold)' }}>
             Position
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 18, color: 'var(--bone)', padding: '2px 0 6px' }}>
+          <span
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontWeight: 700,
+              fontSize: 18,
+              color: 'var(--bone)',
+              padding: '10px 12px',
+              border: '1px solid rgba(227,180,74,0.35)',
+              background: 'rgba(227,180,74,0.06)',
+            }}
+          >
             {calc.size}
           </span>
         </div>
@@ -306,7 +320,7 @@ export function PositionCalculator() {
           Lose <span style={{ color: 'var(--short)' }}>{calc.loss}</span> · Make{' '}
           <span style={{ color: 'var(--long)' }}>{calc.gain}</span>
         </span>
-        <span>Example: my XAU swing</span>
+        <span style={{ color: 'var(--gold-soft)' }}>Prefilled XAU · edit any field</span>
       </div>
     </div>
   )

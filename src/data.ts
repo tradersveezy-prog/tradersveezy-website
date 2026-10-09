@@ -1,12 +1,13 @@
-export type PageId = 'home' | 'mintscript' | 'coaching' | 'courses' | 'tools' | 'collabs' | 'about'
+export type PageId = 'home' | 'mintscript' | 'coaching' | 'courses' | 'blog' | 'tools' | 'collabs' | 'about'
 
-export const PAGES: PageId[] = ['home', 'mintscript', 'coaching', 'courses', 'tools', 'collabs', 'about']
+export const PAGES: PageId[] = ['home', 'mintscript', 'coaching', 'courses', 'blog', 'tools', 'collabs', 'about']
 
 export const PAGE_LABELS: Record<PageId, string> = {
   home: 'Home',
   mintscript: 'MintScript',
   coaching: '1-on-1',
   courses: 'Courses',
+  blog: 'Notes',
   tools: 'Tools',
   collabs: 'Partners',
   about: 'About',
@@ -17,6 +18,7 @@ export const PAGE_PATHS: Record<PageId, string> = {
   mintscript: '/mintscript',
   coaching: '/coaching',
   courses: '/courses',
+  blog: '/blog',
   tools: '/tools',
   collabs: '/partners',
   about: '/about',
@@ -28,6 +30,7 @@ export function pageHref(id: PageId): string {
 
 export function pageFromPath(pathname: string): PageId {
   const clean = pathname.replace(/\/+$/, '') || '/'
+  if (clean === '/blog' || clean.startsWith('/blog/')) return 'blog'
   const entry = (Object.entries(PAGE_PATHS) as [PageId, string][]).find(([, path]) => path === clean)
   return entry?.[0] ?? 'home'
 }

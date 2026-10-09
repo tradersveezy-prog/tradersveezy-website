@@ -147,6 +147,22 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
       },
     ],
   },
+  blog: {
+    title: 'Desk Notes — Trading Process | TraderSveezy',
+    description:
+      'Short reads on market structure, risk, and process from TraderSveezy. Mentor, not guru. Educational only · Not financial advice.',
+    path: '/blog',
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Blog',
+        name: 'TraderSveezy Desk Notes',
+        description: 'Short reads on structure, risk, and process from the desk.',
+        url: `${SITE_URL}/blog`,
+        publisher: { '@id': `${SITE_URL}/#organization` },
+      },
+    ],
+  },
   tools: {
     title: 'Market Radar Trading Tools | TraderSveezy',
     description:
@@ -175,6 +191,7 @@ export function absoluteUrl(path: string) {
 
 export function seoForPath(pathname: string): PageSeo {
   const clean = pathname.replace(/\/+$/, '') || '/'
+  if (clean.startsWith('/blog')) return PAGE_SEO.blog
   const id = (Object.entries(PAGE_PATHS) as [PageId, string][]).find(([, p]) => p === clean)?.[0]
   return PAGE_SEO[id ?? 'home']
 }

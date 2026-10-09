@@ -6,6 +6,8 @@ import { Header } from './components/Header'
 import { Seo } from './components/Seo'
 import { PAGE_PATHS, PAGES, pageFromPath, type PageId } from './data'
 import { About } from './pages/About'
+import { Blog } from './pages/Blog'
+import { BlogPost } from './pages/BlogPost'
 import { Coaching } from './pages/Coaching'
 import { Collabs } from './pages/Collabs'
 import { Courses } from './pages/Courses'
@@ -49,6 +51,8 @@ function Shell() {
         <Route path="/mintscript" element={<MintScript />} />
         <Route path="/coaching" element={<Coaching />} />
         <Route path="/courses" element={<Courses />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/tools" element={<Tools />} />
         <Route path="/partners" element={<Collabs />} />
         <Route path="/collabs" element={<Navigate to="/partners" replace />} />

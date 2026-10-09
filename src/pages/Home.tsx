@@ -20,30 +20,32 @@ export function Home() {
         >
           <div>
             <div className="eyebrow">Trading education · @tradersveezy</div>
-            <h1 className="display" style={{ fontSize: 'clamp(56px, 8.4vw, 128px)', marginTop: 28 }}>
-              Trade
+            <h1
+              className="display"
+              style={{
+                fontSize: 'clamp(40px, 5.5vw, 72px)',
+                letterSpacing: '0.04em',
+                lineHeight: 1.02,
+                marginTop: 28,
+              }}
+            >
+              Trade the plan.
               <br />
-              the plan.
-              <br />
-              <span style={{ color: 'var(--gold)' }}>
-                Not the
-                <br />
-                feeling.
-              </span>
+              <span style={{ color: 'var(--gold)' }}>Not the feeling.</span>
             </h1>
             <p
               style={{
-                fontSize: 'clamp(19px, 1.6vw, 23px)',
-                lineHeight: 1.5,
+                fontSize: 'clamp(18px, 1.4vw, 21px)',
+                lineHeight: 1.55,
                 color: 'var(--soft)',
-                maxWidth: '30em',
-                margin: '36px 0 0',
+                maxWidth: '28em',
+                margin: '28px 0 0',
               }}
             >
-              Every trade I take is posted with the entry, the stop, the target and the reason I&apos;m in. I teach the
-              same process: know your risk first, then decide if the reward is worth it.
+              Entry, stop, target, and why I&apos;m in — posted before the outcome. I teach the same process: risk first,
+              then decide.
             </p>
-            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 44 }}>
+            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 36 }}>
               <a href="#coaching" className="btn btn-primary">
                 Learn 1-on-1
               </a>
@@ -51,9 +53,26 @@ export function Home() {
                 Join free Discord
               </a>
             </div>
+            <a
+              href="#mintscript"
+              style={{
+                display: 'inline-block',
+                marginTop: 22,
+                fontFamily: 'var(--font-mono)',
+                fontSize: 12,
+                fontWeight: 600,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: 'var(--muted)',
+                borderBottom: '1px solid rgba(169,165,157,0.45)',
+                paddingBottom: 4,
+              }}
+            >
+              Or explore MintScript →
+            </a>
           </div>
 
-          <div style={{ position: 'relative', maxWidth: 520, justifySelf: 'end', width: '100%' }}>
+          <div style={{ position: 'relative', maxWidth: 480, justifySelf: 'end', width: '100%' }}>
             <div
               style={{
                 position: 'absolute',
@@ -84,7 +103,7 @@ export function Home() {
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'radial-gradient(circle at 50% 45%, rgba(227,180,74,0.22), transparent 55%)',
+                  background: 'radial-gradient(circle at 50% 45%, rgba(227,180,74,0.18), transparent 55%)',
                 }}
               />
               <img
@@ -92,9 +111,9 @@ export function Home() {
                 alt="TraderSveezy mark"
                 style={{
                   position: 'relative',
-                  width: '62%',
+                  width: '50%',
                   height: 'auto',
-                  filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.6))',
+                  filter: 'drop-shadow(0 24px 48px rgba(0,0,0,0.55))',
                 }}
               />
               <div

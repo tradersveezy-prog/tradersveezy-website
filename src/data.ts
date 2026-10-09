@@ -80,9 +80,9 @@ export const OFFERS = [
   {
     n: '05',
     href: '/partners',
-    title: 'Brand Partnerships',
-    desc: 'Open to co-branded content, workshops, and product collabs with brands that teach traders.',
-    price: 'Pitch a collab',
+    title: 'Partnerships',
+    desc: 'Exchanges, projects, and platforms — only quality I can stand behind. Referrals, launches, sponsored education.',
+    price: 'Pitch a partner',
     accent: 'gold' as const,
   },
 ]

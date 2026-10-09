@@ -155,9 +155,9 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
     path: '/tools',
   },
   collabs: {
-    title: 'Brand Partnerships & Co-branded Content | TraderSveezy',
+    title: 'Exchange & Project Partnerships | TraderSveezy',
     description:
-      'Open to brand partnerships: co-branded content, workshops, tools, Spaces and live sessions with brands that teach traders.',
+      'Partner with TraderSveezy for exchange referrals, project launches, and sponsored education. Quality projects only — ones the desk can stand behind.',
     path: '/partners',
   },
   about: {

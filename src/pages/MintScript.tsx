@@ -99,10 +99,11 @@ export function MintScript() {
           What&apos;s inside
         </div>
         <div
+          className="mint-features-grid"
           style={{
             marginTop: 36,
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
             gap: 1,
             background: 'rgba(244,244,246,0.1)',
             border: '1px solid rgba(244,244,246,0.1)',
@@ -122,6 +123,58 @@ export function MintScript() {
               <div style={{ fontSize: 18, lineHeight: 1.5, color: '#A6A8B3', marginTop: 10 }}>{f.desc}</div>
             </div>
           ))}
+          <div
+            style={{
+              gridColumn: '1 / -1',
+              background:
+                'radial-gradient(circle at 70% 30%, rgba(227,180,74,0.12), transparent 55%), radial-gradient(circle at 20% 80%, rgba(20,230,164,0.1), transparent 50%), var(--mint-ink)',
+              padding: '48px 32px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              textAlign: 'center',
+              gap: 22,
+              minHeight: 200,
+            }}
+          >
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 11,
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: '#A6A8B3',
+              }}
+            >
+              Co-branded desk
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 18, flexWrap: 'wrap' }}>
+              <img src="/assets/ts-mark-gold.svg" alt="TraderSveezy" style={{ height: 52, width: 'auto' }} />
+              <span
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 22,
+                  color: '#A6A8B3',
+                  lineHeight: 1,
+                }}
+              >
+                ×
+              </span>
+              <img src="/assets/mintscript-logo.png" alt="MintScript" style={{ height: 40, width: 'auto' }} />
+            </div>
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 12,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'var(--mint)',
+              }}
+            >
+              Sveezy&apos;s desk · inside MintScript
+            </div>
+          </div>
         </div>
       </section>
 

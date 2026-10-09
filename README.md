@@ -35,9 +35,10 @@ Edit `src/data.ts` → `LINKS`:
 
 ## Domain · tradersveezy.com
 
-Hosted on GitHub Pages. After DNS is set, the site serves at https://tradersveezy.com.
+Repo: https://github.com/tradersveezy-prog/tradersveezy-website  
+Pages source: `gh-pages` branch (custom domain already set in repo settings).
 
-At your registrar (or Cloudflare), point the domain like this:
+**DNS at your registrar** (Namecheap, Cloudflare, GoDaddy, etc.):
 
 **Apex (`tradersveezy.com`) — A records**
 
@@ -54,7 +55,14 @@ At your registrar (or Cloudflare), point the domain like this:
 |------|------|--------|
 | CNAME | `www` | `tradersveezy-prog.github.io` |
 
-Then in the repo: **Settings → Pages → Custom domain** → `tradersveezy.com` → enable **Enforce HTTPS** once DNS verifies.
+After DNS propagates (can take minutes to a few hours), open **Settings → Pages** in the repo and tick **Enforce HTTPS**.
+
+**Redeploy after changes**
+
+```bash
+npm run build
+# then publish dist/ to the gh-pages branch (ask the agent, or use a Pages Action once the token has `workflow` scope)
+```
 
 ## Brand
 

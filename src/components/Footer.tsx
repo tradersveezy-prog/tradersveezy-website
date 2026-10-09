@@ -1,4 +1,4 @@
-import { LINKS, PAGE_LABELS, PAGES } from '../data'
+import { LINKS, PAGE_LABELS, PAGES, pageHref } from '../data'
 
 export function Footer() {
   return (
@@ -48,7 +48,7 @@ export function Footer() {
           {PAGES.map((id) => (
             <a
               key={id}
-              href={`#${id}`}
+              href={pageHref(id)}
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: 12,

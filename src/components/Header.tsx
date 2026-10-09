@@ -1,4 +1,4 @@
-import { LINKS, PAGE_LABELS, PAGES, type PageId } from '../data'
+import { LINKS, PAGE_LABELS, PAGES, pageHref, type PageId } from '../data'
 
 type Props = {
   page: PageId
@@ -30,7 +30,7 @@ export function Header({ page }: Props) {
           flexWrap: 'wrap',
         }}
       >
-        <a href="#home" style={{ display: 'flex', alignItems: 'center', gap: 14, color: 'var(--bone)' }}>
+        <a href={pageHref('home')} style={{ display: 'flex', alignItems: 'center', gap: 14, color: 'var(--bone)' }}>
           <img src="/assets/ts-mark-gold.svg" alt="TraderSveezy" style={{ height: 38 }} />
           <span
             style={{
@@ -51,7 +51,7 @@ export function Header({ page }: Props) {
             return (
               <a
                 key={id}
-                href={`#${id}`}
+                href={pageHref(id)}
                 style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: 12,

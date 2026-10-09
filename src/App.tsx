@@ -12,14 +12,23 @@ import { Tools } from './pages/Tools'
 
 function readPage(): PageId {
   const hash = (location.hash || '').slice(1) as PageId
+  if (hash === 'home' || !hash) return 'home'
   return PAGES.includes(hash) ? hash : 'home'
+}
+
+function normalizeHomeHash() {
+  if (location.hash === '#home') {
+    history.replaceState(null, '', `${location.pathname}${location.search}`)
+  }
 }
 
 export default function App() {
   const [page, setPage] = useState<PageId>(readPage)
 
   useEffect(() => {
+    normalizeHomeHash()
     const onHash = () => {
+      normalizeHomeHash()
       setPage(readPage())
       window.scrollTo(0, 0)
     }

@@ -12,6 +12,11 @@ export const PAGE_LABELS: Record<PageId, string> = {
   about: 'About',
 }
 
+/** Home stays on the clean root URL; other pages use hash routes. */
+export function pageHref(id: PageId): string {
+  return id === 'home' ? '/' : `#${id}`
+}
+
 /** Swap these when booking / Discord / course checkout links are ready. */
 export const LINKS = {
   booking: '#coaching',

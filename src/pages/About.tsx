@@ -43,8 +43,8 @@ export function About() {
               margin: '36px 0 0',
             }}
           >
-            I trade crypto and gold, mostly swings and intraday setups, and I post every trade publicly with the levels
-            and the reasoning, before I know the result.
+            I&apos;m a day trader. Crypto and gold, mostly intraday — with the occasional swing when the structure is
+            clean. Every trade I take is posted with the levels and the reasoning, before I know the result.
           </p>
           <p
             style={{
@@ -69,7 +69,7 @@ export function About() {
             <a href="#mintscript" style={{ color: 'var(--mint)' }}>
               MintScript
             </a>
-            — the desk behind selective swing setups and the tools I use every day. You still take every trade.
+            — the desk behind selective setups and the tools I use every day. You still take every trade.
           </p>
         </div>
       </section>

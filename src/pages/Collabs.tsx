@@ -27,7 +27,7 @@ export function Collabs() {
             paddingBottom: 'clamp(56px, 7vw, 90px)',
           }}
         >
-          <div className="eyebrow">Collaboration requests</div>
+          <div className="eyebrow">Open to partnerships</div>
           <h1 className="display" style={{ fontSize: 'clamp(56px, 9vw, 140px)', marginTop: 28 }}>
             Build it
             <br />
@@ -42,7 +42,8 @@ export function Collabs() {
               margin: '36px 0 0',
             }}
           >
-            Workshops, tools, co-branded content, live sessions. If it helps traders get better, I&apos;m interested.
+            Looking for brand partners: co-branded content, workshops, tools, Spaces and live sessions. If it helps
+            traders get better, send a request.
           </p>
         </div>
       </section>

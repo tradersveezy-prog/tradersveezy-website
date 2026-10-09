@@ -8,7 +8,7 @@ export const PAGE_LABELS: Record<PageId, string> = {
   coaching: '1-on-1',
   courses: 'Courses',
   tools: 'Tools',
-  collabs: 'Collabs',
+  collabs: 'Partners',
   about: 'About',
 }
 
@@ -60,9 +60,9 @@ export const OFFERS = [
   {
     n: '05',
     href: '#collabs' as const,
-    title: 'Collaborations',
-    desc: 'Workshops, tools and content with brands that teach.',
-    price: 'Request',
+    title: 'Brand Partnerships',
+    desc: 'Open to co-branded content, workshops, and product collabs with brands that teach traders.',
+    price: 'Pitch a collab',
     accent: 'gold' as const,
   },
 ]

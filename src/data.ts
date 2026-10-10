@@ -31,6 +31,7 @@ export function pageHref(id: PageId): string {
 export function pageFromPath(pathname: string): PageId {
   const clean = pathname.replace(/\/+$/, '') || '/'
   if (clean === '/blog' || clean.startsWith('/blog/')) return 'blog'
+  if (clean === '/courses' || clean.startsWith('/courses/')) return 'courses'
   const entry = (Object.entries(PAGE_PATHS) as [PageId, string][]).find(([, path]) => path === clean)
   return entry?.[0] ?? 'home'
 }
@@ -54,7 +55,7 @@ export const OFFERS = [
     n: '01',
     href: '/mintscript',
     title: 'MintScript',
-    desc: 'The desk I trade from: selective setups, charts, and Market Radar.',
+    desc: 'Setups, marked-up charts, Mozzie, screener, BTC Station, and Global Flow. Start free in Discord.',
     price: 'From $19/mo',
     accent: 'mint' as const,
   },
@@ -138,33 +139,33 @@ export const FEEDS = [
 export const MINT_FEATURES = [
   {
     n: '01',
-    title: 'Selective desk setups',
-    desc: 'Framed swing ideas on liquid names — entry, stop, targets, grade and risk on every card. Paced on purpose, not a spam feed.',
+    title: 'Trade setups',
+    desc: 'Entry, stop, and targets on every card — on the web and Telegram. Paced on purpose, not a spam feed.',
   },
   {
     n: '02',
-    title: 'Draw the plan on chart',
-    desc: 'Open the coin and paint entry, stop and targets on the live candles. Pro overlays sit beside the plan — not homework in another tab.',
+    title: 'Charts with pro overlays',
+    desc: 'Key levels, bounce zones, Fibs, and more marked on the candles — plus a current analysis so you’re not staring at a blank chart.',
   },
   {
     n: '03',
-    title: 'Web Feed + Telegram',
-    desc: 'Same plan on the desk and on your phone the second it prints. You still take the trade — we stop you from hunting blank charts.',
+    title: 'Mozzie',
+    desc: 'Your personal crypto analyst. Ask about a coin, a setup, or the tape — get a clear read without opening ten tabs.',
   },
   {
     n: '04',
-    title: 'Markets & desk tools',
-    desc: 'Screener, watchlist, Global Flow, BTC Station and more — confirm structure before you size.',
+    title: 'Screener',
+    desc: 'Find coins doing something real — high volume that just crossed the 50 EMA, resistance flipping to support, and similar patterns. Spot the move before you’re late.',
   },
   {
     n: '05',
-    title: 'Market Radar',
-    desc: 'Gainers, volume, funding, key levels and more — the feeds that build the free habit before you subscribe.',
+    title: 'BTC Station',
+    desc: 'Bitcoin context in one place — so alt setups make sense against what BTC is actually doing.',
   },
   {
     n: '06',
-    title: '1-on-1 with me',
-    desc: 'Subscribers get a 30-minute workshop on your process. Pro includes a follow-up.',
+    title: 'Global Flow',
+    desc: 'A live read on where money is moving across the market — so you trade with the flow, not against it.',
   },
 ]
 
@@ -175,8 +176,8 @@ export const MINT_PLANS = [
     title: 'Free Discord',
     price: '$0',
     rate: 'Apply · same-day if approved',
-    tagline: 'See how we trade before you pay for anything.',
-    features: ['Market Radar feeds', 'Charts & screeners', 'Trader chat & desk notes'],
+    tagline: 'See the feeds before you pay for anything.',
+    features: ['Market feeds (gainers, volume, levels)', 'Charts & screeners', 'Trader chat'],
     cta: 'Join free',
     href: 'discord' as const,
     featured: false,
@@ -187,12 +188,12 @@ export const MINT_PLANS = [
     title: 'Starter',
     price: '$19',
     rate: '/ mo',
-    tagline: 'One high-bar setup every other day — already framed.',
+    tagline: 'About one setup every other day — entry, stop, targets included.',
     features: [
-      'Max 1 primary alert / 48h',
-      'Full plan: Entry, SL, TP, grade & risk',
-      'Telegram the second it prints',
-      'Markets screener + charts',
+      'Max 1 setup alert / 48h',
+      'Entry, stop, targets on every card',
+      'Charts with pro overlays',
+      'Telegram when it prints',
     ],
     cta: 'Start Starter',
     href: 'mintscript' as const,
@@ -204,13 +205,13 @@ export const MINT_PLANS = [
     title: 'Core',
     price: '$69',
     rate: '/ mo',
-    tagline: 'The full primary desk — plus tools to hunt, watch, and act.',
+    tagline: 'More setups each day — plus watchlist tools and a short coaching call.',
     features: [
-      '~1–2 primary alerts / day',
-      'Watchlist · up to 10 coins',
-      'Global Flow + Indicator Builder',
-      'Web + Telegram on every print',
-      '30-min 1-on-1 workshop with me',
+      '~1–2 setup alerts / day',
+      'Charts · Mozzie · screener',
+      'BTC Station + Global Flow',
+      'Web + Telegram on every setup',
+      '30-min coaching call included',
     ],
     cta: 'Get Core',
     href: 'mintscript' as const,
@@ -222,13 +223,13 @@ export const MINT_PLANS = [
     title: 'Pro',
     price: '$199',
     rate: '/ mo',
-    tagline: 'Full desk — primary plus secondary on 4H, 6H, and 12H.',
+    tagline: 'Most setups — more timeframes, all tools, workshop + follow-up.',
     features: [
       '~3–4 alerts / day',
-      'Primary + secondary setup types',
-      'Station + every tool unlocked',
-      'Mozzie AI · highest usage tier',
-      'Workshop + follow-up included',
+      'More setup types & timeframes',
+      'Full screener · BTC Station · Global Flow',
+      'Mozzie · highest usage tier',
+      'Workshop + follow-up',
     ],
     cta: 'Go Pro',
     href: 'mintscript' as const,

@@ -20,7 +20,7 @@ If those fight each other, don’t invent a story. Note the conflict and either 
 
 ## Three labels
 
-**Trend** — higher highs / higher lows, and price on the right side of the 55 and 200 EMA. In a clean trend I don’t freeze for the perfect fill. Real trends often won’t give it.
+**Trend** — higher highs / higher lows, and for a long: price above the 21, 55, and 200 EMA on the 15m. In a clean trend I don’t freeze for the perfect fill. Real trends often won’t give it.
 
 **Range** — value work. Reclaim of the value area low, not boredom in the middle. Mid-value chopping is where people invent trades.
 

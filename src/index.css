@@ -12,7 +12,15 @@
   --short: #d9533b;
   --mint: #14e6a4;
   --mint-soft: #6ff2c6;
-  --mint-ink: #0b0c10;
+  --mint-ink: #0b0c12;
+  /* MintScript product accents (from build.mintscript.io) */
+  --mint-green: #2fd98a;
+  --mint-purple: #a78bfa;
+  --mint-purple-deep: #8b7cf6;
+  --mint-amber: #f5a623;
+  --mint-blue: #5b9df9;
+  --mint-card: #14151d;
+  --mint-grad: linear-gradient(90deg, var(--mint-green), var(--mint-purple), var(--mint-blue));
   --font-display: 'Archivo', sans-serif;
   --font-body: 'Barlow', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -139,6 +147,61 @@ img {
 .btn-mint:hover {
   background: var(--mint-soft);
   color: #06140f;
+}
+
+.btn-mint-grad {
+  background: var(--mint-grad);
+  color: #0b0c12;
+  border: none;
+}
+
+.btn-mint-grad:hover {
+  filter: brightness(1.06);
+  color: #0b0c12;
+}
+
+.mint-page {
+  --mint: var(--mint-green);
+  --mint-soft: #6ff2c6;
+}
+
+.mint-eyebrow {
+  background: var(--mint-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.mint-grad-text {
+  background: linear-gradient(100deg, var(--mint-green) 0%, var(--mint-purple) 55%, var(--mint-amber) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.mint-feat-n {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 40px;
+}
+
+.mint-feat-n.is-1 {
+  color: var(--mint-green);
+}
+.mint-feat-n.is-2 {
+  color: var(--mint-purple);
+}
+.mint-feat-n.is-3 {
+  color: var(--mint-amber);
+}
+.mint-feat-n.is-4 {
+  color: var(--mint-blue);
+}
+.mint-feat-n.is-5 {
+  color: var(--mint-green);
+}
+.mint-feat-n.is-6 {
+  color: var(--mint-purple);
 }
 
 .shell {

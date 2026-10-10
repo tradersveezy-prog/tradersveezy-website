@@ -8,7 +8,7 @@ Captured 2026-10-09. Base64 paste stripped; chart kept as Discord URL.
 
 ### How do you define TREND?
 
-higher highs/lows, above the 55 ema/200ema
+higher highs/lows; for a long — price above the 21 ema, 55 ema, and 200 ema on the 15m
 
 ### How do you define RANGE?
 

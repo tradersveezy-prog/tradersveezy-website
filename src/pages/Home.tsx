@@ -291,8 +291,8 @@ export function Home() {
                 margin: '32px 0 0',
               }}
             >
-              Selective swing setups that fill — then move — so you can manage the trade. Market Radar, charts, and a
-              paced desk in one place.
+              Setups with entry, stop, and targets. Charts with levels marked. A screener for volume + EMA flips.
+              Mozzie, BTC Station, Global Flow. Start free in Discord.
             </p>
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 40 }}>
               <Link to="/mintscript" className="btn btn-mint">
@@ -388,7 +388,7 @@ export function Home() {
                   color: '#F4F4F6',
                 }}
               >
-                30-min 1-on-1 workshop with me
+                30-min coaching call included
               </div>
               <div style={{ fontSize: 17, lineHeight: 1.5, color: '#A6A8B3', marginTop: 10 }}>
                 Pro members get a follow-up workshop included.
@@ -431,7 +431,7 @@ export function Home() {
               margin: '32px auto 0',
             }}
           >
-            Start free with Market Radar and charts. Upgrade when you want selective setups already framed for you.
+            Start free in Discord. Upgrade when you want setups with entry, stop, and targets delivered to you.
           </p>
           <a
             href={LINKS.discord}

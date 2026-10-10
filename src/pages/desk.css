@@ -1,0 +1,274 @@
+.desk-page {
+  min-height: 70vh;
+  border-bottom: 1px solid rgba(242, 241, 238, 0.08);
+  background:
+    radial-gradient(ellipse 50% 35% at 90% 0%, rgba(227, 180, 74, 0.1), transparent 55%),
+    radial-gradient(ellipse 40% 30% at 10% 100%, rgba(20, 230, 164, 0.05), transparent 50%),
+    var(--ink);
+}
+
+.desk-shell {
+  padding-top: clamp(48px, 7vw, 88px);
+  padding-bottom: clamp(72px, 10vw, 130px);
+}
+
+.desk-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px 40px;
+  margin-bottom: clamp(40px, 6vw, 64px);
+}
+
+.desk-title {
+  font-size: clamp(40px, 6vw, 68px);
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  margin-top: 14px;
+}
+
+.desk-hello {
+  margin: 14px 0 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.desk-top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.desk-section {
+  margin-bottom: clamp(48px, 7vw, 80px);
+}
+
+.desk-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.desk-section-head h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: clamp(22px, 2.5vw, 28px);
+  margin: 0;
+}
+
+.desk-continue {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(220px, 280px);
+  gap: 20px;
+  align-items: stretch;
+  padding: clamp(28px, 3vw, 36px);
+  background: linear-gradient(135deg, rgba(227, 180, 74, 0.1), var(--panel) 55%);
+  border: 1px solid var(--gold);
+}
+
+.desk-continue h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: clamp(26px, 3vw, 36px);
+  margin: 10px 0 0;
+  line-height: 1.05;
+}
+
+.desk-continue p {
+  margin: 14px 0 0;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--soft);
+  max-width: 36em;
+}
+
+.desk-continue-cta {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.desk-continue-cta .btn {
+  text-align: center;
+  width: 100%;
+}
+
+.desk-course-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(242, 241, 238, 0.12);
+}
+
+.desk-course-list li {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 16px 24px;
+  align-items: baseline;
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(242, 241, 238, 0.12);
+}
+
+.desk-course-n {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--gold);
+}
+
+.desk-course-list h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 20px;
+  margin: 0;
+}
+
+.desk-course-list p {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--soft);
+}
+
+.desk-status {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.desk-status.open {
+  color: var(--gold);
+}
+
+.desk-status.locked {
+  color: var(--muted);
+}
+
+.desk-upsell {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.desk-card {
+  padding: clamp(26px, 3vw, 32px);
+  background: var(--panel);
+  border: 1px solid rgba(242, 241, 238, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 220px;
+}
+
+.desk-card.mint {
+  border-color: rgba(20, 230, 164, 0.35);
+  background: linear-gradient(180deg, rgba(20, 230, 164, 0.08), var(--panel) 70%);
+}
+
+.desk-card h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 24px;
+  margin: 0;
+}
+
+.desk-card p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--soft);
+  flex: 1;
+}
+
+.desk-card .price {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.desk-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.desk-note {
+  display: block;
+  padding: 22px 24px;
+  border: 1px solid rgba(242, 241, 238, 0.12);
+  background: var(--panel);
+  color: var(--bone);
+  transition: border-color 0.15s;
+}
+
+.desk-note:hover {
+  border-color: var(--gold);
+  color: var(--bone);
+}
+
+.desk-note span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.desk-note strong {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.desk-foot {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.gold {
+  color: var(--gold);
+}
+
+@media (max-width: 800px) {
+  .desk-continue,
+  .desk-upsell,
+  .desk-notes {
+    grid-template-columns: 1fr;
+  }
+
+  .desk-course-list li {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .desk-status {
+    grid-column: 2;
+  }
+}

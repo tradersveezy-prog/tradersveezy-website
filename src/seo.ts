@@ -58,9 +58,9 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
     ],
   },
   mintscript: {
-    title: 'MintScript — Selective trading desk | TraderSveezy',
+    title: 'MintScript — Setups, charts, screener, Mozzie | TraderSveezy',
     description:
-      'MintScript is the desk TraderSveezy trades from: selective setups, Draw plan charts, Telegram alerts, Market Radar, and plans from $19/mo. Join at build.mintscript.io.',
+      'MintScript: trade setups, pro chart overlays, Mozzie analyst, volume/EMA screener, BTC Station, and Global Flow. Start free in Discord. From $19/mo.',
     path: '/mintscript',
     jsonLd: [
       {
@@ -71,7 +71,7 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
         operatingSystem: 'Web',
         url: 'https://build.mintscript.io/join',
         description:
-          'Selective crypto swing setups with entry, stop, targets, grade and risk — plus charts, Market Radar, and Telegram alerts.',
+          'Trade setups, marked-up charts, Mozzie crypto analyst, market screener, BTC Station, and Global Flow.',
         offers: [
           {
             '@type': 'Offer',
@@ -189,8 +189,46 @@ export function absoluteUrl(path: string) {
   return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`
 }
 
+const MARKET_STRUCTURE_SEO: PageSeo = {
+  title: 'Market Structure Interactive Module | TraderSveezy',
+  description:
+    'Interactive Course 01: name trend, range, and transition. Hotspot charts, regime quizzes, and the structure gate. Educational only · Not financial advice.',
+  path: '/courses/market-structure',
+  jsonLd: [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'LearningResource',
+      name: 'Market Structure — Interactive Module',
+      description:
+        'Name the regime before you size: trend, value-range, and transition with chart labs and a pre-trade structure gate.',
+      learningResourceType: 'Interactive lesson',
+      educationalLevel: 'Beginner to intermediate',
+      provider: { '@id': `${SITE_URL}/#organization` },
+      isAccessibleForFree: true,
+      url: `${SITE_URL}/courses/market-structure`,
+    },
+  ],
+}
+
+const ACCOUNT_SEO: PageSeo = {
+  title: 'Sign in · Create account | TraderSveezy',
+  description:
+    'Create a TraderSveezy account to access interactive course modules and member tools. Educational only · Not financial advice.',
+  path: '/account',
+}
+
+const DESK_SEO: PageSeo = {
+  title: 'Member Desk | TraderSveezy',
+  description:
+    'Your TraderSveezy desk: Course 01, playbook teasers, MintScript, and 1-on-1. Educational only · Not financial advice.',
+  path: '/desk',
+}
+
 export function seoForPath(pathname: string): PageSeo {
   const clean = pathname.replace(/\/+$/, '') || '/'
+  if (clean === '/courses/market-structure') return MARKET_STRUCTURE_SEO
+  if (clean === '/account') return ACCOUNT_SEO
+  if (clean === '/desk') return DESK_SEO
   if (clean.startsWith('/blog')) return PAGE_SEO.blog
   const id = (Object.entries(PAGE_PATHS) as [PageId, string][]).find(([, p]) => p === clean)?.[0]
   return PAGE_SEO[id ?? 'home']

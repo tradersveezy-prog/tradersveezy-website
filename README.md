@@ -16,6 +16,22 @@ Built from the brand kit in the Trader Sveezy design pack (ink / signal gold / A
 
 SEO: per-page meta + Open Graph/Twitter via `react-helmet-async`, JSON-LD rich results, `sitemap.xml`, `robots.txt`. GitHub Pages SPA fallback copies `index.html` → `404.html` on build.
 
+## Auth (accounts)
+
+Member desk (`/desk`) and interactive Course 01 (`/courses/market-structure`) require sign-in. After signup you land on the desk.
+
+1. Create a free [Supabase](https://supabase.com) project
+2. Authentication → Providers → Email enabled
+3. Authentication → URL configuration → Site URL `https://tradersveezy.com` (and `http://127.0.0.1:5173` for local)
+4. Copy Project URL + anon key into `.env`:
+
+```bash
+cp .env.example .env
+# set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
+```
+
+Without those keys, the site uses **local accounts** (this browser only) so you can still test the gate.
+
 ## Develop
 
 ```bash

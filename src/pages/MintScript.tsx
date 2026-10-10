@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { MintScreenerDemo } from '../components/MintScreenerDemo'
 import { LINKS, MINT_FEATURES, MINT_PLANS } from '../data'
 
 function planHref(key: 'discord' | 'mintscript') {
@@ -7,12 +8,12 @@ function planHref(key: 'discord' | 'mintscript') {
 
 export function MintScript() {
   return (
-    <main style={{ background: 'var(--mint-ink)' }}>
+    <main className="mint-page" style={{ background: 'var(--mint-ink)' }}>
       <section
         style={{
           position: 'relative',
           overflow: 'hidden',
-          borderBottom: '1px solid rgba(20,230,164,0.16)',
+          borderBottom: '1px solid rgba(167,139,250,0.2)',
         }}
       >
         <div
@@ -29,7 +30,8 @@ export function MintScript() {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(circle at 10% 0%, rgba(20,230,164,0.18), transparent 42%)',
+            background:
+              'radial-gradient(circle at 8% 0%, rgba(47,217,138,0.16), transparent 40%), radial-gradient(circle at 72% 8%, rgba(167,139,250,0.18), transparent 42%), radial-gradient(circle at 92% 60%, rgba(245,166,35,0.1), transparent 35%)',
             pointerEvents: 'none',
           }}
         />
@@ -38,11 +40,11 @@ export function MintScript() {
           style={{
             position: 'relative',
             paddingTop: 'clamp(72px, 10vw, 140px)',
-            paddingBottom: 'clamp(64px, 8vw, 110px)',
+            paddingBottom: 'clamp(40px, 5vw, 64px)',
           }}
         >
-          <p className="eyebrow" style={{ color: 'var(--mint)' }}>
-            The desk I trade from
+          <p className="eyebrow mint-eyebrow">
+            Setups · charts · screener · Mozzie
           </p>
           <img
             src="/assets/mintscript-logo.png"
@@ -60,8 +62,8 @@ export function MintScript() {
               lineHeight: 0.95,
             }}
           >
-            Selective setups that fill — then move.{' '}
-            <span style={{ color: 'var(--mint)' }}>You manage the trade.</span>
+            Setups, ready to take.{' '}
+            <span className="mint-grad-text">You manage the trade.</span>
           </h1>
           <p
             style={{
@@ -72,11 +74,11 @@ export function MintScript() {
               margin: '32px 0 0',
             }}
           >
-            Entry, stop, targets, grade and risk on every card — on the web Feed and Telegram. Charts with the plan drawn
-            on the candles. Start free in Discord; subscribe when the desk earns its spot on your screen.
+            Trade setups with entry, stop, and targets. Charts with levels and Fibs already marked. A screener that
+            finds volume + EMA flips. Plus Mozzie, BTC Station, and Global Flow. Start free in Discord.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 44 }}>
-            <a href={LINKS.mintscript} target="_blank" rel="noopener noreferrer" className="btn btn-mint btn-mint-pulse">
+            <a href={LINKS.mintscript} target="_blank" rel="noopener noreferrer" className="btn btn-mint-grad btn-mint-pulse">
               Join MintScript
             </a>
             <a
@@ -89,6 +91,8 @@ export function MintScript() {
               See plans
             </a>
           </div>
+
+          <MintScreenerDemo />
         </div>
       </section>
 
@@ -96,10 +100,10 @@ export function MintScript() {
         className="shell"
         style={{ paddingTop: 'clamp(72px, 9vw, 120px)', paddingBottom: 'clamp(72px, 9vw, 120px)' }}
       >
-        <p className="eyebrow" style={{ color: 'var(--mint)' }}>
-          What&apos;s inside
+        <p className="eyebrow mint-eyebrow">
+          What is MintScript
         </p>
-        <h2 className="visually-hidden">MintScript features</h2>
+        <h2 className="visually-hidden">What is MintScript</h2>
         <div
           className="mint-features-grid"
           style={{
@@ -113,7 +117,7 @@ export function MintScript() {
         >
           {MINT_FEATURES.map((f) => (
             <div key={f.n} style={{ background: 'var(--mint-ink)', padding: '40px 32px' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 40, color: 'var(--mint)' }}>
+              <div className={`mint-feat-n is-${Number(f.n)}`}>
                 {f.n}
               </div>
               <h3
@@ -175,7 +179,7 @@ export function MintScript() {
                 color: 'var(--mint)',
               }}
             >
-              Sveezy&apos;s desk · inside MintScript
+              TraderSveezy × MintScript
             </div>
           </div>
         </div>
@@ -317,7 +321,7 @@ export function MintScript() {
               </ul>
               <a href={planHref(plan.href)} target="_blank" rel="noopener noreferrer" style={{ marginTop: 'auto', display: 'block' }}>
                 <span
-                  className={plan.featured || plan.id === 'starter' || plan.id === 'pro' ? 'btn btn-mint' : 'btn btn-ghost'}
+                  className={plan.featured || plan.id === 'starter' || plan.id === 'pro' ? 'btn btn-mint-grad' : 'btn btn-ghost'}
                   style={{
                     display: 'block',
                     marginTop: 32,
@@ -369,14 +373,14 @@ export function MintScript() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             <p style={{ fontSize: 19, lineHeight: 1.55, color: '#D9DAE0', margin: 0 }}>
-              1-on-1 and courses build how you think about risk, levels and review. MintScript is where framed setups and
-              tools live between sessions — you still take every trade.
+              Coaching teaches the process. MintScript sends the setups between sessions — entry, stop, targets. You still
+              take every trade.
             </p>
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
               <Link to="/coaching" className="btn btn-ghost" style={{ borderColor: 'rgba(244,244,246,0.28)', color: '#F4F4F6' }}>
                 1-on-1 sessions
               </Link>
-              <a href={LINKS.mintscript} target="_blank" rel="noopener noreferrer" className="btn btn-mint btn-mint-pulse">
+              <a href={LINKS.mintscript} target="_blank" rel="noopener noreferrer" className="btn btn-mint-grad btn-mint-pulse">
                 Open MintScript
               </a>
             </div>
@@ -417,14 +421,14 @@ export function MintScript() {
               margin: '28px auto 0',
             }}
           >
-            Apply for free Discord access, then upgrade when you want selective setups already written — Entry, SL, TP,
-            grade and risk.
+            Join free Discord first. Upgrade for setups, marked-up charts, Mozzie, the screener, BTC Station, and Global
+            Flow.
           </p>
           <a
             href={LINKS.mintscript}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-mint btn-mint-pulse"
+            className="btn btn-mint-grad btn-mint-pulse"
             style={{ marginTop: 40, padding: '22px 34px' }}
           >
             Join MintScript

@@ -234,7 +234,7 @@ export function Collabs() {
               MintScript × TraderSveezy
             </h2>
             <p style={{ fontSize: 18, lineHeight: 1.55, color: 'var(--soft)', margin: '16px 0 0' }}>
-              The trading desk I built and promote — selective setups, charts, and education for the same audience.
+              The product I built and promote — trade setups, charts, and education for the same audience.
               That&apos;s the bar for how a partnership should feel.
             </p>
           </div>

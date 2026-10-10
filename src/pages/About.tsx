@@ -73,7 +73,7 @@ export function About() {
             <Link to="/mintscript" style={{ color: 'var(--mint)' }}>
               MintScript
             </Link>
-            — the desk behind selective setups and the tools I use every day. You still take every trade.
+            — setups, marked-up charts, screener, and Mozzie. You still take every trade.
           </p>
         </div>
       </section>

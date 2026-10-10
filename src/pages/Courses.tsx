@@ -89,6 +89,11 @@ export function Courses() {
               Five courses from market structure to trade review — filmed and written when it&apos;s ready to deliver.
               Join the waitlist and I&apos;ll tell you when the bundle opens.
             </p>
+            <p style={{ margin: '28px 0 0' }}>
+              <Link to="/courses/market-structure" className="btn btn-primary" style={{ fontSize: 13, padding: '16px 24px' }}>
+                Try Course 01 · free account
+              </Link>
+            </p>
           </div>
           <aside
             aria-label="Course bundle — coming soon"
@@ -212,7 +217,23 @@ export function Courses() {
                   }}
                 >
                   {c.tag}
+                  {c.n === '01' ? ' · Live sample' : ''}
                 </div>
+                {c.n === '01' ? (
+                  <p style={{ margin: '18px 0 0' }}>
+                    <Link
+                      to="/courses/market-structure"
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 13,
+                        letterSpacing: '0.14em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Open interactive module →
+                    </Link>
+                  </p>
+                ) : null}
               </div>
               <div className="course-desc" style={{ fontSize: 18, lineHeight: 1.55, color: 'var(--soft)' }}>
                 {c.desc}

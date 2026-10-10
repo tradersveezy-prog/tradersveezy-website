@@ -1,17 +1,22 @@
 import { useEffect } from 'react'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { AuthProvider } from './auth/AuthContext'
+import { RequireAuth } from './auth/RequireAuth'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { Seo } from './components/Seo'
 import { PAGE_PATHS, PAGES, pageFromPath, type PageId } from './data'
 import { About } from './pages/About'
+import { Account } from './pages/Account'
 import { Blog } from './pages/Blog'
 import { BlogPost } from './pages/BlogPost'
 import { Coaching } from './pages/Coaching'
 import { Collabs } from './pages/Collabs'
 import { Courses } from './pages/Courses'
+import { Desk } from './pages/Desk'
 import { Home } from './pages/Home'
+import { MarketStructure } from './pages/MarketStructure'
 import { MintScript } from './pages/MintScript'
 import { Tools } from './pages/Tools'
 
@@ -51,6 +56,23 @@ function Shell() {
         <Route path="/mintscript" element={<MintScript />} />
         <Route path="/coaching" element={<Coaching />} />
         <Route path="/courses" element={<Courses />} />
+        <Route
+          path="/courses/market-structure"
+          element={
+            <RequireAuth>
+              <MarketStructure />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/desk"
+          element={
+            <RequireAuth>
+              <Desk />
+            </RequireAuth>
+          }
+        />
+        <Route path="/account" element={<Account />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/tools" element={<Tools />} />
@@ -68,7 +90,9 @@ export default function App() {
   return (
     <HelmetProvider>
       <BrowserRouter>
-        <Shell />
+        <AuthProvider>
+          <Shell />
+        </AuthProvider>
       </BrowserRouter>
     </HelmetProvider>
   )

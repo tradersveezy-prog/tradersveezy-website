@@ -1,6 +1,9 @@
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import { usePlaybookAccess } from '../auth/usePlaybookAccess'
 import { COURSES, LINKS } from '../data'
+import { fetchCoachingSessions } from '../lib/coaching'
 import './desk.css'
 
 const NOTES = [
@@ -18,7 +21,21 @@ const NOTES = [
 
 export function Desk() {
   const { user, cloud, signOut } = useAuth()
-  const handle = user?.email?.split('@')[0] ?? 'trader'
+  const { access: hasPlaybook } = usePlaybookAccess()
+  const [params] = useSearchParams()
+  const paidReturn = params.get('paid') === '1'
+  const [coachingSessions, setCoachingSessions] = useState(0)
+  const handle = user?.displayName || user?.email?.split('@')[0] || 'trader'
+
+  useEffect(() => {
+    let cancelled = false
+    void fetchCoachingSessions(user?.id ?? null).then((n) => {
+      if (!cancelled) setCoachingSessions(n)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [user?.id, paidReturn])
 
   return (
     <main className="desk-page">
@@ -34,7 +51,15 @@ export function Desk() {
             <p className="desk-hello">
               {handle}
               {!cloud ? ' · local account' : ''}
+              {hasPlaybook ? ' · playbook unlocked' : ''}
+              {coachingSessions > 0 ? ` · ${coachingSessions} coaching credit${coachingSessions === 1 ? '' : 's'}` : ''}
             </p>
+            {paidReturn ? (
+              <p style={{ marginTop: 16, color: 'var(--soft)', maxWidth: '32em', lineHeight: 1.45 }}>
+                Payment received — access unlocks when NOWPayments confirms (usually a few minutes).
+                Refresh this page, or sign in with the same email you paid with.
+              </p>
+            ) : null}
           </div>
           <div className="desk-top-actions">
             <Link to="/account?stay=1" className="btn btn-ghost" style={{ fontSize: 12, padding: '12px 18px' }}>
@@ -60,19 +85,19 @@ export function Desk() {
           </div>
           <div className="desk-continue">
             <div>
-              <span className="eyebrow">Course 01</span>
-              <h3>Market structure</h3>
+              <span className="eyebrow">Course 05</span>
+              <h3>Process &amp; review</h3>
               <p>
-                Name what&apos;s happening — trend, range, or flip — before you size. Quizzes, chart
-                labs, and the pre-trade gate.
+                Make it stick — checklist before you trade, a simple log, review after losses, and
+                files for Google Sheets.
               </p>
             </div>
             <div className="desk-continue-cta">
-              <Link to="/courses/market-structure" className="btn btn-primary">
+              <Link to="/courses/process-review" className="btn btn-primary">
                 Open module
               </Link>
               <Link to="/courses#waitlist" className="btn btn-ghost" style={{ fontSize: 12, padding: '14px 18px' }}>
-                Full playbook waitlist
+                {hasPlaybook ? 'Playbook' : 'Waitlist · $250'}
               </Link>
             </div>
           </div>
@@ -87,17 +112,29 @@ export function Desk() {
           </div>
           <ul className="desk-course-list">
             {COURSES.map((c) => {
-              const open = c.n === '01'
+              const href =
+                c.n === '01'
+                  ? '/courses/market-structure'
+                  : c.n === '02'
+                    ? '/courses/levels-that-matter'
+                    : c.n === '03'
+                      ? '/courses/entries-triggers'
+                      : c.n === '04'
+                        ? '/courses/risk-position-sizing'
+                        : c.n === '05'
+                          ? '/courses/process-review'
+                          : null
+              const open = Boolean(href)
               return (
                 <li key={c.n}>
                   <span className="desk-course-n">{c.n}</span>
                   <div>
                     <h3>{c.title}</h3>
                     <p>{open ? c.desc : `Teaser · ${c.desc}`}</p>
-                    {open ? (
+                    {href ? (
                       <p style={{ marginTop: 10 }}>
                         <Link
-                          to="/courses/market-structure"
+                          to={href}
                           style={{
                             fontFamily: 'var(--font-mono)',
                             fontSize: 12,

@@ -98,31 +98,31 @@ export const COURSES = [
     n: '01',
     title: 'Market Structure',
     tag: 'Foundations',
-    desc: 'Trend, range and transition. How to read what the chart is actually doing before you look for a trade.',
+    desc: 'Trend, range, and flip. Read what buyers and sellers are doing before you look for a trade.',
   },
   {
     n: '02',
     title: 'Levels That Matter',
     tag: 'Support · Resistance · Volume profile',
-    desc: 'Key levels, VAH, VAL and POC. Where price is likely to react, and why.',
+    desc: 'Clear levels in 15 seconds. Higher timeframes, value edges, and the 55 / 200 as real levels.',
   },
   {
     n: '03',
     title: 'Entries & Triggers',
     tag: 'Retests · EMA reclaims · Breakouts',
-    desc: 'Turning a level into a trade: the trigger, the entry, and when to DCA or stay out.',
+    desc: 'Retest after structure, EMA reclaim, breakout sequence — when to enter, when to wait.',
   },
   {
     n: '04',
     title: 'Risk & Position Sizing',
-    tag: 'Stops · R:R · Sizing',
-    desc: 'Where the stop goes, how to size from it, and how to make a loss survivable.',
+    tag: 'Structure stop · ATR · R:R · Size',
+    desc: 'Stop beyond structure, confirm with ATR, know R:R, then size from dollar risk.',
   },
   {
     n: '05',
     title: 'Process & Review',
-    tag: 'Checklists · Journaling · Losses',
-    desc: 'A repeatable pre-trade checklist and a review habit that turns losses into lessons.',
+    tag: 'Checklist · Log · Loss review · Sheets files',
+    desc: 'Make it stick: checklist before you trade, a simple log, review after losses, weekly look-back, downloadable files.',
   },
 ]
 

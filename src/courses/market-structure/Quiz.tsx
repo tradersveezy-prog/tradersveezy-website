@@ -64,7 +64,7 @@ export function Quiz({ questions, onComplete }: Props) {
       </div>
       {revealed && (
         <div className={`ms-explain ${correct ? 'ok' : 'no'}`}>
-          <p className="mono">{correct ? 'LOCKED IN' : 'REFINE IT'}</p>
+          <p className="mono">{correct ? 'CORRECT' : 'NOT QUITE'}</p>
           <p>{q.explain}</p>
           <button type="button" className="btn btn-primary" onClick={advance}>
             {isLast

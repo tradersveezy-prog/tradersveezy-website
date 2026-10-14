@@ -3,6 +3,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthContext'
 import { RequireAuth } from './auth/RequireAuth'
+import { RequirePlaybook } from './auth/RequirePlaybook'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { Seo } from './components/Seo'
@@ -16,7 +17,11 @@ import { Collabs } from './pages/Collabs'
 import { Courses } from './pages/Courses'
 import { Desk } from './pages/Desk'
 import { Home } from './pages/Home'
+import { EntriesTriggers } from './pages/EntriesTriggers'
+import { LevelsThatMatter } from './pages/LevelsThatMatter'
 import { MarketStructure } from './pages/MarketStructure'
+import { RiskPositionSizing } from './pages/RiskPositionSizing'
+import { ProcessReview } from './pages/ProcessReview'
 import { MintScript } from './pages/MintScript'
 import { Tools } from './pages/Tools'
 
@@ -62,6 +67,38 @@ function Shell() {
             <RequireAuth>
               <MarketStructure />
             </RequireAuth>
+          }
+        />
+        <Route
+          path="/courses/levels-that-matter"
+          element={
+            <RequirePlaybook>
+              <LevelsThatMatter />
+            </RequirePlaybook>
+          }
+        />
+        <Route
+          path="/courses/entries-triggers"
+          element={
+            <RequirePlaybook>
+              <EntriesTriggers />
+            </RequirePlaybook>
+          }
+        />
+        <Route
+          path="/courses/risk-position-sizing"
+          element={
+            <RequirePlaybook>
+              <RiskPositionSizing />
+            </RequirePlaybook>
+          }
+        />
+        <Route
+          path="/courses/process-review"
+          element={
+            <RequirePlaybook>
+              <ProcessReview />
+            </RequirePlaybook>
           }
         />
         <Route

@@ -1,25 +1,43 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import { usePlaybookAccess } from '../auth/usePlaybookAccess'
+import { fetchCoachingSessions } from '../lib/coaching'
 import './account.css'
 
 type Mode = 'signin' | 'signup'
 
 export function Account() {
-  const { user, loading, cloud, signIn, signUp, signOut } = useAuth()
+  const { user, loading, cloud, signIn, signUp, signOut, updateDisplayName } = useAuth()
+  const { access: hasPlaybook } = usePlaybookAccess()
+  const [coachingSessions, setCoachingSessions] = useState(0)
   const [params] = useSearchParams()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    let cancelled = false
+    void fetchCoachingSessions(user?.id ?? null).then((n) => {
+      if (!cancelled) setCoachingSessions(n)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [user?.id])
   const next = useMemo(() => {
     const raw = params.get('next') || '/desk'
     return raw.startsWith('/') ? raw : '/desk'
   }, [params])
 
   const [mode, setMode] = useState<Mode>(params.get('mode') === 'signup' ? 'signup' : 'signin')
+  const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [info, setInfo] = useState('')
+  const [nameDraft, setNameDraft] = useState('')
+  const [nameBusy, setNameBusy] = useState(false)
+  const [nameMsg, setNameMsg] = useState('')
 
   if (!loading && user && params.get('stay') !== '1') {
     return <Navigate to={next} replace />
@@ -32,7 +50,7 @@ export function Account() {
     setBusy(true)
     try {
       if (mode === 'signup') {
-        const res = await signUp(email, password)
+        const res = await signUp(email, password, displayName)
         if (res.error) {
           setError(res.error)
           return
@@ -56,6 +74,23 @@ export function Account() {
     }
   }
 
+  async function onSaveName(e: FormEvent) {
+    e.preventDefault()
+    setNameMsg('')
+    setNameBusy(true)
+    try {
+      const res = await updateDisplayName(nameDraft)
+      if (res.error) {
+        setNameMsg(res.error)
+        return
+      }
+      setNameMsg('Saved.')
+      setNameDraft('')
+    } finally {
+      setNameBusy(false)
+    }
+  }
+
   if (loading) {
     return (
       <main className="shell account-page">
@@ -74,12 +109,40 @@ export function Account() {
             <br />
             <span className="gold">signed in.</span>
           </h1>
+          <p className="account-name display">{user.displayName}</p>
           <p className="account-email mono">{user.email}</p>
+          <p className="account-note mono" style={{ marginTop: 12 }}>
+            Playbook: {hasPlaybook ? 'unlocked' : 'not unlocked'}
+            {coachingSessions > 0 ? ` · Coaching credits: ${coachingSessions}` : ''}
+          </p>
           {!cloud && (
             <p className="account-note">
               Local account on this browser only. Add Supabase keys for real cloud accounts.
             </p>
           )}
+
+          <form className="account-form account-name-form" onSubmit={onSaveName}>
+            <label className="field">
+              <span>Display name (on certificates)</span>
+              <input
+                type="text"
+                autoComplete="nickname"
+                maxLength={40}
+                value={nameDraft}
+                onChange={(e) => setNameDraft(e.target.value)}
+                placeholder={user.displayName}
+              />
+            </label>
+            {nameMsg ? (
+              <p className={nameMsg === 'Saved.' ? 'account-info' : 'account-error'} role="status">
+                {nameMsg}
+              </p>
+            ) : null}
+            <button type="submit" className="btn btn-ghost" disabled={nameBusy || !nameDraft.trim()}>
+              {nameBusy ? 'Saving…' : 'Update name'}
+            </button>
+          </form>
+
           <div className="account-actions">
             <Link to="/desk" className="btn btn-primary">
               Open desk
@@ -154,6 +217,21 @@ export function Account() {
         </div>
 
         <form className="account-form" onSubmit={onSubmit}>
+          {mode === 'signup' ? (
+            <label className="field">
+              <span>Display name</span>
+              <input
+                required
+                type="text"
+                autoComplete="nickname"
+                minLength={2}
+                maxLength={40}
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="How you want it on certificates"
+              />
+            </label>
+          ) : null}
           <label className="field">
             <span>Email</span>
             <input

@@ -27,11 +27,31 @@
   max-width: 28em;
 }
 
-.account-email {
+.account-name {
   margin: 24px 0 0;
+  font-size: clamp(28px, 4vw, 36px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--gold);
+  line-height: 1.1;
+}
+
+.account-email {
+  margin: 10px 0 0;
   font-size: 14px;
   letter-spacing: 0.06em;
-  color: var(--gold);
+  color: var(--muted);
+}
+
+.account-name-form {
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(242, 241, 238, 0.12);
+}
+
+.account-name-form .btn {
+  width: auto;
+  align-self: flex-start;
 }
 
 .account-note {

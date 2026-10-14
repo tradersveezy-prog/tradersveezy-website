@@ -99,8 +99,8 @@ export function ChartLab({ lab, onComplete }: Props) {
               <div className={`ms-debrief ${matched ? 'ok' : 'no'}`}>
                 <p className={`ms-verdict mono ${matched ? 'ok' : 'no'}`}>
                   {matched
-                    ? `You matched · ${CALL_LABEL[lab.correctCall]} was the call`
-                    : `Not the call · you chose ${CALL_LABEL[decision]}, model says ${CALL_LABEL[lab.correctCall]}`}
+                    ? `Correct · ${CALL_LABEL[lab.correctCall]}`
+                    : `Not quite · you chose ${CALL_LABEL[decision]}; answer is ${CALL_LABEL[lab.correctCall]}`}
                 </p>
                 <p>
                   <strong className="mono">STORY</strong> {lab.decision.story}
@@ -113,8 +113,8 @@ export function ChartLab({ lab, onComplete }: Props) {
                 </p>
                 {!matched && (
                   <p className="ms-nudge">
-                    Skip means “no trade today.” Wait means “setup is there — hold for the 15m
-                    trigger.” Different jobs.
+                    Skip means no trade. Wait means the setup is there — hold for the 15-minute
+                    signal. Different choices.
                   </p>
                 )}
                 <button type="button" className="btn btn-primary" onClick={onComplete}>

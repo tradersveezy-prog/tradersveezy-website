@@ -123,7 +123,7 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
   courses: {
     title: 'Trading Playbook — Coming Soon | TraderSveezy',
     description:
-      'Five trading courses coming soon: market structure, levels, entries, risk & sizing, and process & review. Join the waitlist for the $300 bundle.',
+      'Five trading courses: market structure, levels, entries, risk & sizing, and process & review — one video per module plus written interactive lessons. Waitlist special $250.',
     path: '/courses',
     jsonLd: [
       {
@@ -227,6 +227,38 @@ const DESK_SEO: PageSeo = {
 export function seoForPath(pathname: string): PageSeo {
   const clean = pathname.replace(/\/+$/, '') || '/'
   if (clean === '/courses/market-structure') return MARKET_STRUCTURE_SEO
+  if (clean === '/courses/levels-that-matter') {
+    return {
+      title: 'Levels That Matter Interactive Module | TraderSveezy',
+      description:
+        'Course 02 interactive: swings, POC/VAL/VAH, premium vs discount, and a levels gate. Educational only · Not financial advice.',
+      path: '/courses/levels-that-matter',
+    }
+  }
+  if (clean === '/courses/entries-triggers') {
+    return {
+      title: 'Entries & Triggers Interactive Module | TraderSveezy',
+      description:
+        'Course 03 interactive: retests, EMA reclaims, breakout sequence, hard stops, and an entries gate. Educational only · Not financial advice.',
+      path: '/courses/entries-triggers',
+    }
+  }
+  if (clean === '/courses/risk-position-sizing') {
+    return {
+      title: 'Risk & Position Sizing Interactive Module | TraderSveezy',
+      description:
+        'Course 04 interactive: structure stops, ATR confirmation, R:R filter, position sizing, and a risk gate. Educational only · Not financial advice.',
+      path: '/courses/risk-position-sizing',
+    }
+  }
+  if (clean === '/courses/process-review') {
+    return {
+      title: 'Process & Review Interactive Module | TraderSveezy',
+      description:
+        'Course 05 interactive: before-trade checklist, trade log, loss review, weekly look-back, and Google Sheets downloads. Educational only · Not financial advice.',
+      path: '/courses/process-review',
+    }
+  }
   if (clean === '/account') return ACCOUNT_SEO
   if (clean === '/desk') return DESK_SEO
   if (clean.startsWith('/blog')) return PAGE_SEO.blog

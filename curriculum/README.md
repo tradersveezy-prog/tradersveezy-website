@@ -13,9 +13,9 @@ Written playbook first. Video later if we want it.
 
 | Course | Title | Status |
 |--------|--------|--------|
-| 01 | Market Structure | **Locked** to dump — 6 lessons + examples · site page waits on video |
-| 02 | Levels That Matter | Not started |
-| 03 | Entries & Triggers | Not started |
+| 01 | Market Structure | **Interactive live** · `/courses/market-structure` |
+| 02 | Levels That Matter | **Interactive live** · `/courses/levels-that-matter` |
+| 03 | Entries & Triggers | **Interactive live** · `/courses/entries-triggers` |
 | 04 | Risk & Position Sizing | Not started |
 | 05 | Process & Review | Not started |
 

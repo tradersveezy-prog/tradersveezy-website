@@ -1,50 +1,83 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { COURSES, LINKS } from '../data'
+import { useAuth } from '../auth/AuthContext'
+import { usePlaybookAccess } from '../auth/usePlaybookAccess'
+import { COURSES } from '../data'
+import { PLAYBOOK_PRICE_USD, startPlaybookCheckout } from '../lib/playbook'
+import { supabase, supabaseConfigured } from '../lib/supabase'
 
 export function Courses() {
-  const [sent, setSent] = useState(false)
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
-  const [waitlistFocused, setWaitlistFocused] = useState(false)
+  const { user } = useAuth()
+  const { access: hasPlaybook } = usePlaybookAccess()
+  const [payBusy, setPayBusy] = useState(false)
+  const [payError, setPayError] = useState('')
+  const [payEmail, setPayEmail] = useState('')
 
-  async function onWaitlist(e: FormEvent<HTMLFormElement>) {
+  async function onPayCrypto(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setError('')
-    setBusy(true)
-    const fd = new FormData(e.currentTarget)
-    const name = String(fd.get('name') || '').trim()
-    const email = String(fd.get('email') || '').trim()
-
+    setPayError('')
+    setPayBusy(true)
     try {
-      const inbox = LINKS.courseWaitlistEmail
-      if (inbox) {
-        const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(inbox)}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            name: name || 'Waitlist',
-            email,
-            _subject: 'TraderSveezy playbook waitlist',
-            _template: 'table',
-            message: `${name || 'Someone'} joined the playbook waitlist (${email}).`,
-          }),
-        })
-        if (!res.ok) throw new Error('submit failed')
-      } else {
-        const key = 'ts-playbook-waitlist'
-        const prev = JSON.parse(localStorage.getItem(key) || '[]') as unknown[]
-        prev.push({ name, email, at: new Date().toISOString() })
-        localStorage.setItem(key, JSON.stringify(prev))
+      const email = (user?.email || payEmail).trim()
+      if (!email) throw new Error('Enter the email for your access.')
+      if (!supabaseConfigured) {
+        throw new Error('Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env first.')
       }
-      e.currentTarget.reset()
-      setSent(true)
-    } catch {
-      setError("Couldn't join just now. Try again, or DM @tradersveezy on X.")
-    } finally {
-      setBusy(false)
+      const { data: session } = supabase ? await supabase.auth.getSession() : { data: { session: null } }
+      const url = await startPlaybookCheckout(email, session.session?.access_token)
+      window.location.href = url
+    } catch (err) {
+      setPayError(err instanceof Error ? err.message : 'Could not start payment.')
+      setPayBusy(false)
     }
   }
+
+  const payForm = (
+    <form onSubmit={onPayCrypto} style={{ marginTop: 28 }}>
+      {!user?.email ? (
+        <label style={{ display: 'block', marginBottom: 12 }}>
+          <span className="mono" style={{ fontSize: 11, letterSpacing: '0.12em', color: 'var(--muted)' }}>
+            EMAIL FOR ACCESS
+          </span>
+          <input
+            type="email"
+            required
+            value={payEmail}
+            onChange={(ev) => setPayEmail(ev.target.value)}
+            placeholder="you@email.com"
+            style={{
+              display: 'block',
+              width: '100%',
+              marginTop: 8,
+              padding: '14px 16px',
+              boxSizing: 'border-box',
+              background: 'var(--ink)',
+              border: '1px solid rgba(242,241,238,0.2)',
+              color: 'var(--bone)',
+              fontFamily: 'var(--font-body)',
+              fontSize: 16,
+            }}
+          />
+        </label>
+      ) : (
+        <p className="mono" style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>
+          Access email: {user.email}
+        </p>
+      )}
+      {payError ? <p style={{ color: 'var(--short)', fontSize: 14, marginBottom: 12 }}>{payError}</p> : null}
+      <button
+        type="submit"
+        className="btn btn-primary"
+        disabled={payBusy}
+        style={{ display: 'block', width: '100%', textAlign: 'center', fontSize: 13, padding: 19 }}
+      >
+        {payBusy ? 'Opening checkout…' : `Pay with crypto · $${PLAYBOOK_PRICE_USD}`}
+      </button>
+      <p className="mono" style={{ fontSize: 11, color: 'var(--muted)', marginTop: 12, lineHeight: 1.4 }}>
+        $50 off list · Course 01 now · Full playbook when we open · Crypto via NOWPayments
+      </p>
+    </form>
+  )
 
   return (
     <main>
@@ -63,7 +96,7 @@ export function Courses() {
           }}
         >
           <div style={{ minWidth: 0 }}>
-            <p className="eyebrow">Playbook · Coming soon</p>
+            <p className="eyebrow">Playbook · Waitlist special</p>
             <h1
               className="display"
               style={{
@@ -86,17 +119,21 @@ export function Courses() {
                 margin: '28px 0 0',
               }}
             >
-              Five courses from market structure to trade review — filmed and written when it&apos;s ready to deliver.
-              Join the waitlist and I&apos;ll tell you when the bundle opens.
+              Pay now at the waitlist price ($50 off). Start Course 01 today. Full access opens soon — interactive
+              lessons are live; remaining module videos roll out as they&apos;re filmed.
             </p>
-            <p style={{ margin: '28px 0 0' }}>
+            <p style={{ margin: '28px 0 0', display: 'flex', flexWrap: 'wrap', gap: 12 }}>
               <Link to="/courses/market-structure" className="btn btn-primary" style={{ fontSize: 13, padding: '16px 24px' }}>
-                Try Course 01 · free account
+                Start Course 01
               </Link>
+              <a href="#waitlist" className="btn btn-ghost" style={{ fontSize: 13, padding: '16px 24px' }}>
+                Waitlist · pay $250
+              </a>
             </p>
           </div>
           <aside
-            aria-label="Course bundle — coming soon"
+            id="buy"
+            aria-label="Waitlist special pricing"
             style={{
               border: '1px solid var(--gold)',
               padding: '40px 36px',
@@ -116,19 +153,42 @@ export function Courses() {
                 color: 'var(--muted)',
               }}
             >
-              All 5 courses
+              Waitlist special
             </div>
             <div
               style={{
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 700,
-                fontSize: 76,
-                color: 'var(--gold)',
                 marginTop: 14,
-                letterSpacing: '-0.02em',
+                display: 'flex',
+                alignItems: 'baseline',
+                gap: 16,
+                flexWrap: 'wrap',
               }}
             >
-              $300
+              <span
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 700,
+                  fontSize: 36,
+                  color: 'var(--muted)',
+                  letterSpacing: '-0.02em',
+                  textDecoration: 'line-through',
+                  textDecorationThickness: 2,
+                }}
+              >
+                $300
+              </span>
+              <span
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 700,
+                  fontSize: 76,
+                  color: 'var(--gold)',
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1,
+                }}
+              >
+                $250
+              </span>
             </div>
             <div
               style={{
@@ -137,10 +197,10 @@ export function Courses() {
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 color: 'var(--muted)',
-                marginTop: 6,
+                marginTop: 10,
               }}
             >
-              One payment · Bundle
+              $50 off · One crypto payment
             </div>
             <div
               style={{
@@ -156,15 +216,19 @@ export function Courses() {
                 padding: '8px 14px',
               }}
             >
-              Coming soon
+              {hasPlaybook ? 'Unlocked' : 'Pay now'}
             </div>
-            <a
-              href="#waitlist"
-              className="btn btn-ghost"
-              style={{ display: 'block', marginTop: 28, textAlign: 'center', fontSize: 13, padding: 19 }}
-            >
-              Join the waitlist
-            </a>
+            {hasPlaybook ? (
+              <Link
+                to="/desk"
+                className="btn btn-primary"
+                style={{ display: 'block', marginTop: 28, textAlign: 'center', fontSize: 13, padding: 19 }}
+              >
+                Open desk
+              </Link>
+            ) : (
+              payForm
+            )}
           </aside>
         </div>
       </section>
@@ -217,12 +281,22 @@ export function Courses() {
                   }}
                 >
                   {c.tag}
-                  {c.n === '01' ? ' · Live sample' : ''}
+                  {c.n === '01' ? ' · Open now' : hasPlaybook ? ' · Unlocked' : ' · Waitlist unlock'}
                 </div>
-                {c.n === '01' ? (
+                {['01', '02', '03', '04', '05'].includes(c.n) ? (
                   <p style={{ margin: '18px 0 0' }}>
                     <Link
-                      to="/courses/market-structure"
+                      to={
+                        c.n === '01'
+                          ? '/courses/market-structure'
+                          : c.n === '02'
+                            ? '/courses/levels-that-matter'
+                            : c.n === '03'
+                              ? '/courses/entries-triggers'
+                              : c.n === '04'
+                                ? '/courses/risk-position-sizing'
+                                : '/courses/process-review'
+                      }
                       style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: 13,
@@ -230,7 +304,7 @@ export function Courses() {
                         textTransform: 'uppercase',
                       }}
                     >
-                      Open interactive module →
+                      {c.n === '01' ? 'Open Course 01 →' : hasPlaybook ? 'Open module →' : 'Unlock with waitlist →'}
                     </Link>
                   </p>
                 ) : null}
@@ -264,89 +338,50 @@ export function Courses() {
           }}
         >
           <div>
-            <p className="eyebrow">Waitlist</p>
+            <p className="eyebrow">Waitlist = pay now</p>
             <h2
               id="waitlist-heading"
               className="display"
               style={{ fontSize: 'clamp(32px, 4vw, 52px)', letterSpacing: '0.02em', lineHeight: 1.05, marginTop: 20 }}
             >
-              Get told when
+              Lock $250.
               <br />
-              <span style={{ color: 'var(--gold)' }}>it opens.</span>
+              <span style={{ color: 'var(--gold)' }}>Start Course 01.</span>
             </h2>
             <p style={{ fontSize: 18, lineHeight: 1.55, color: 'var(--soft)', maxWidth: '28em', margin: '22px 0 0' }}>
-              No drip spam. One note when the $300 bundle is ready — then you decide.
+              List price $300. Waitlist is $50 off if you pay now in crypto. You get Course 01 immediately. Full playbook
+              access opens soon — you&apos;re already in.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.5, color: 'var(--muted)', margin: '28px 0 0', maxWidth: '30em' }}>
-              Want structure on your trades before then?{' '}
-              <Link to="/coaching">Book a 1-on-1</Link>.
+              Prefer live help now? <Link to="/coaching">1-on-1 sessions</Link> (crypto too).
             </p>
           </div>
 
           <div
-            className={`waitlist-card${waitlistFocused || sent ? ' is-focused' : ''}`}
+            className="waitlist-card is-focused"
             style={{
               background: 'linear-gradient(180deg, rgba(227,180,74,0.06), #0B0B0B 70%)',
               padding: 'clamp(28px, 3vw, 36px)',
             }}
           >
-            {!waitlistFocused && !sent ? (
-              <div className="waitlist-tip" aria-hidden>
-                <span className="calc-tip-dot" />
-                Join waitlist
-              </div>
-            ) : null}
-            {sent ? (
+            {hasPlaybook ? (
               <div>
-                <p className="eyebrow">You&apos;re on the list</p>
+                <p className="eyebrow">You&apos;re in</p>
                 <h3 className="display" style={{ fontSize: 28, letterSpacing: '0.03em', marginTop: 16, lineHeight: 1.1 }}>
-                  I&apos;ll ping you at launch.
+                  Playbook unlocked.
                 </h3>
-                <p style={{ fontSize: 16, lineHeight: 1.5, color: 'var(--soft)', margin: '16px 0 0' }}>
-                  Educational only · Not financial advice.
-                </p>
-                <button
-                  type="button"
-                  className="btn btn-ghost"
-                  style={{ marginTop: 28, fontSize: 13, padding: '14px 22px' }}
-                  onClick={() => {
-                    setSent(false)
-                    setWaitlistFocused(false)
-                  }}
-                >
-                  Add another email
-                </button>
+                <Link to="/desk" className="btn btn-primary" style={{ marginTop: 28, display: 'inline-block' }}>
+                  Open desk
+                </Link>
               </div>
             ) : (
-              <form onSubmit={onWaitlist} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                <label className="field">
-                  <span>Name</span>
-                  <input name="name" autoComplete="name" placeholder="Optional" onFocus={() => setWaitlistFocused(true)} />
-                </label>
-                <label className="field">
-                  <span>Email</span>
-                  <input
-                    required
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    placeholder="you@email.com"
-                    className={!waitlistFocused ? 'waitlist-email-invite' : undefined}
-                    onFocus={() => setWaitlistFocused(true)}
-                  />
-                </label>
-                {error ? (
-                  <p style={{ margin: 0, fontSize: 14, lineHeight: 1.45, color: 'var(--short)' }} role="alert">
-                    {error}
-                  </p>
-                ) : null}
-                <button type="submit" className="btn btn-primary" style={{ marginTop: 4, border: 'none' }} disabled={busy}>
-                  {busy ? 'Joining…' : 'Join waitlist'}
-                </button>
-                <p style={{ margin: 0, fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.06em', color: 'var(--muted)' }}>
-                  Educational only · Not financial advice
-                </p>
-              </form>
+              <>
+                <p className="eyebrow">Crypto checkout</p>
+                <h3 className="display" style={{ fontSize: 26, letterSpacing: '0.03em', marginTop: 12, lineHeight: 1.15 }}>
+                  Waitlist special
+                </h3>
+                {payForm}
+              </>
             )}
           </div>
         </div>

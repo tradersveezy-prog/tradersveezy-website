@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { FillBlank } from '../courses/games/FillBlank'
+import { MatchPairs } from '../courses/games/MatchPairs'
+import { OrderSteps } from '../courses/games/OrderSteps'
+import { WordBank } from '../courses/games/WordBank'
 import { ChartLab } from '../courses/market-structure/ChartLab'
+import { ChartPick } from '../courses/market-structure/ChartPick'
+import { CourseVideo } from '../courses/market-structure/CourseVideo'
 import {
   LABS,
+  MODULE_VIDEO,
   PHRASE,
   QUIZZES,
   RULES,
@@ -10,7 +17,12 @@ import {
   type StepId,
 } from '../courses/market-structure/data'
 import { Quiz } from '../courses/market-structure/Quiz'
+import { CourseFinish } from '../courses/market-structure/CourseFinish'
 import { StructureGate } from '../courses/market-structure/StructureGate'
+import { TeachFigure } from '../courses/market-structure/TeachFigure'
+import { BreakReclaimChart } from '../courses/diagrams/BreakReclaimChart'
+import { TrendEmaChart } from '../courses/diagrams/TrendEmaChart'
+import { ValueProfileChart } from '../courses/diagrams/ValueProfileChart'
 import '../courses/market-structure/market-structure.css'
 
 function stepFromParam(raw: string | null): StepId {
@@ -66,8 +78,8 @@ export function MarketStructure() {
               <span className="gold">happening.</span>
             </h1>
             <p className="lede">
-              Before levels and entries — buyers vs sellers, where value is, and whether you&apos;re in
-              a trend, a range, or a flip. Tap charts. Pass quizzes. Clear the gate.
+              Before levels and entries — buyers versus sellers, where value sits, and whether you are in a
+              trend, a range, or a flip. Charts, quizzes, then a checklist.
             </p>
             <blockquote className="ms-quote">
               <p>{PHRASE}</p>
@@ -83,34 +95,37 @@ export function MarketStructure() {
           <section className="ms-panel">
             <p className="eyebrow">Why this first</p>
             <h2 className="display ms-h2">
-              Candles are
+              Candles show
               <br />
-              <span className="gold">sides.</span>
+              <span className="gold">who is winning.</span>
             </h2>
             <div className="ms-cards">
               <article>
                 <span className="mono">01</span>
-                <h3>Buyers & sellers</h3>
-                <p>Every bar is someone winning a fight. Structure is that fight over time — not pretty lines.</p>
+                <h3>Buyers &amp; sellers</h3>
+                <p>Every bar is one side winning. Structure is that contest over time — not decorative lines.</p>
               </article>
               <article>
                 <span className="mono">02</span>
                 <h3>Value first</h3>
-                <p>Where the market already agreed on price. Buying the dip into that beats chasing mid-air.</p>
+                <p>
+                  Where the market already agreed on price. Prefer buying into that area over chasing halfway
+                  through a move.
+                </p>
               </article>
               <article>
                 <span className="mono">03</span>
-                <h3>Three stories</h3>
+                <h3>Three conditions</h3>
                 <p>
-                  Trend · Range (value) · Flip. Can&apos;t name it in one sentence? Stand down.
+                  Trend · Range (value) · Flip. If you cannot name it in one sentence, stay flat.
                 </p>
               </article>
             </div>
             <p className="ms-stack mono">
-              Day charts · Big picture {RULES.stack.context} · Entry {RULES.stack.execution}
+              Day charts · Context {RULES.stack.context} · Entry {RULES.stack.execution}
             </p>
             <button type="button" className="btn btn-primary" onClick={next}>
-              Cold-open quiz
+              Quick quiz
             </button>
           </section>
         )}
@@ -123,19 +138,37 @@ export function MarketStructure() {
 
         {step === 'trend' && (
           <section className="ms-panel">
-            <p className="eyebrow">Story · Trend</p>
+            <p className="eyebrow">Condition · Trend</p>
             <h2 className="display ms-h2">
               Higher highs.
               <br />
               <span className="gold">Above 21 · 55 · 200.</span>
             </h2>
+            <TeachFigure
+              diagram={<TrendEmaChart />}
+              alt="Uptrend with higher highs, higher lows, and price above EMAs"
+              caption="Structure + averages"
+              note="Higher highs and lows — and still above 21 · 55 · 200 on the 15-minute."
+            />
+            <ChartPick
+              prompt="Where would you rather look for a long on this idea?"
+              diagram={<TrendEmaChart />}
+              options={[
+                { id: 'chase', x: 82, y: 28, label: 'Chase the high' },
+                { id: 'pull', x: 58, y: 48, label: 'Pullback · above EMAs' },
+                { id: 'under', x: 40, y: 72, label: 'Under the averages' },
+              ]}
+              correctId="pull"
+              explainOk="Yes — with the trend, after a pullback, while price still holds the averages."
+              explainNo="Prefer a pullback that still sits above 21 · 55 · 200 — not a chase or a break under."
+            />
             <div className="ms-law">
               <div>
-                <span className="mono">LAW</span>
+                <span className="mono">RULE</span>
                 <p>{RULES.trend.law}</p>
               </div>
               <div>
-                <span className="mono">REFUSE</span>
+                <span className="mono">AVOID</span>
                 <p>{RULES.trend.refuse}</p>
               </div>
             </div>
@@ -153,19 +186,37 @@ export function MarketStructure() {
 
         {step === 'range' && (
           <section className="ms-panel">
-            <p className="eyebrow">Story · Range</p>
+            <p className="eyebrow">Condition · Range</p>
             <h2 className="display ms-h2">
               Trade the edges.
               <br />
               <span className="gold">Not the middle.</span>
             </h2>
+            <TeachFigure
+              diagram={<ValueProfileChart />}
+              alt="Volume profile with VAH, POC, and VAL labeled"
+              caption="Value · edges matter"
+              note="Range work is value work. Prefer VAL reclaim over mid-value noise."
+            />
+            <ChartPick
+              prompt="Where do you usually want to work in a range?"
+              diagram={<ValueProfileChart />}
+              options={[
+                { id: 'vah', x: 70, y: 22, label: 'Far above value' },
+                { id: 'mid', x: 55, y: 48, label: 'Middle of value' },
+                { id: 'val', x: 48, y: 72, label: 'Low end · VAL' },
+              ]}
+              correctId="val"
+              explainOk="Edges first — especially buying the low end of value back (VAL reclaim)."
+              explainNo="The middle is noise by default. Look at the edges of value."
+            />
             <div className="ms-law">
               <div>
-                <span className="mono">LAW</span>
+                <span className="mono">RULE</span>
                 <p>{RULES.range.law}</p>
               </div>
               <div>
-                <span className="mono">REFUSE</span>
+                <span className="mono">AVOID</span>
                 <p>{RULES.range.refuse}</p>
               </div>
             </div>
@@ -183,24 +234,42 @@ export function MarketStructure() {
 
         {step === 'transition' && (
           <section className="ms-panel">
-            <p className="eyebrow">Story · Flip</p>
+            <p className="eyebrow">Condition · Flip</p>
             <h2 className="display ms-h2">
-              Poke under.
+              Break under.
               <br />
               <span className="gold">Close back. Confirm.</span>
             </h2>
+            <TeachFigure
+              diagram={<BreakReclaimChart />}
+              alt="Price breaking under a key level then closing back above"
+              caption="Failed break"
+              note="Dip under · close back · wait for several confirms before you size."
+            />
+            <ChartPick
+              prompt="Price just closed back above the level once. What do you do?"
+              diagram={<BreakReclaimChart />}
+              options={[
+                { id: 'first', x: 48, y: 42, label: 'Enter on first close' },
+                { id: 'wait', x: 72, y: 38, label: 'Wait for more closes' },
+                { id: 'chase', x: 88, y: 22, label: 'Chase far above' },
+              ]}
+              correctId="wait"
+              explainOk="Wait for a few holding closes. Then look near the level — not far above it."
+              explainNo="One reclaim candle is not enough. Wait, then enter near the broken level."
+            />
             <div className="ms-law">
               <div>
-                <span className="mono">LAW</span>
+                <span className="mono">RULE</span>
                 <p>{RULES.transition.law}</p>
               </div>
               <div>
-                <span className="mono">REFUSE</span>
+                <span className="mono">AVOID</span>
                 <p>{RULES.transition.refuse}</p>
               </div>
             </div>
             <button type="button" className="btn btn-primary" onClick={next}>
-              Transition quiz
+              Flip quiz
             </button>
           </section>
         )}
@@ -219,26 +288,26 @@ export function MarketStructure() {
 
         {step === 'mtf' && (
           <section className="ms-panel">
-            <p className="eyebrow">Chart stack</p>
+            <p className="eyebrow">Chart setup</p>
             <h2 className="display ms-h2">
-              Two clocks.
+              Two charts for context.
               <br />
-              <span className="gold">One trigger.</span>
+              <span className="gold">One for entry.</span>
             </h2>
             <div className="ms-mtf">
               <div className="ms-mtf-card">
-                <span className="mono">BIG PICTURE</span>
+                <span className="mono">CONTEXT</span>
                 <strong>12H · 6H</strong>
-                <p>Name the story and the zone. Don&apos;t invent a new one on a lower chart.</p>
+                <p>Name the condition and the zone. Do not invent a new story on a lower chart.</p>
               </div>
               <div className="ms-mtf-card gold-border">
                 <span className="mono">ENTRY</span>
                 <strong>15m</strong>
-                <p>Wait for the fight at the zone the big picture already named.</p>
+                <p>Wait for a reaction at the zone the higher charts already named.</p>
               </div>
             </div>
             <button type="button" className="btn btn-primary" onClick={next}>
-              Stack quiz
+              Chart quiz
             </button>
           </section>
         )}
@@ -261,6 +330,124 @@ export function MarketStructure() {
           </section>
         )}
 
+        {step === 'play-fill' && (
+          <section className="ms-panel">
+            <p className="eyebrow">Play · Fill-in</p>
+            <h2 className="display ms-h2">
+              Finish the
+              <br />
+              <span className="gold">sentence.</span>
+            </h2>
+            <FillBlank
+              items={[
+                {
+                  id: 'f1',
+                  sentence: 'If you cannot name the condition, stay ___.',
+                  choices: ['long', 'flat', 'levered'],
+                  correct: 'flat',
+                  explain: 'No clear read = no trade.',
+                },
+                {
+                  id: 'f2',
+                  sentence: 'Context lives on 12H and 6H. Entry thinking lives on ___.',
+                  choices: ['1m', '15m', 'weekly only'],
+                  correct: '15m',
+                  explain: 'Two charts for context, one for the entry.',
+                },
+                {
+                  id: 'f3',
+                  sentence: 'In a range, work the ___ of value — not the middle.',
+                  choices: ['edges', 'noise', 'random ticks'],
+                  correct: 'edges',
+                  explain: 'VAL / VAH matter. Middle is usually a skip.',
+                },
+              ]}
+              onComplete={next}
+            />
+          </section>
+        )}
+
+        {step === 'play-match' && (
+          <section className="ms-panel">
+            <p className="eyebrow">Play · Match</p>
+            <h2 className="display ms-h2">
+              Link the
+              <br />
+              <span className="gold">idea.</span>
+            </h2>
+            <MatchPairs
+              pairs={[
+                { id: 'm1', left: 'Trend', right: 'Higher highs / lows + EMAs' },
+                { id: 'm2', left: 'Range', right: 'Value edges (VAL / VAH)' },
+                { id: 'm3', left: 'Flip', right: 'Break, close back, confirm' },
+                { id: 'm4', left: 'Stay flat', right: 'Cannot name the condition' },
+              ]}
+              onComplete={next}
+            />
+          </section>
+        )}
+
+        {step === 'play-order' && (
+          <section className="ms-panel">
+            <p className="eyebrow">Play · Order</p>
+            <h2 className="display ms-h2">
+              Tap the steps
+              <br />
+              <span className="gold">in order.</span>
+            </h2>
+            <OrderSteps
+              prompt="Before you look for an entry, what comes first?"
+              items={[
+                { id: 'o1', label: 'Name the condition' },
+                { id: 'o2', label: 'Mark context on 12H · 6H' },
+                { id: 'o3', label: 'Plan the 15m idea' },
+                { id: 'o4', label: 'Enter only if it is clear' },
+              ]}
+              explain="Name it first. Context next. Entry last — or stay flat."
+              onComplete={next}
+            />
+          </section>
+        )}
+
+        {step === 'play-spell' && (
+          <section className="ms-panel">
+            <p className="eyebrow">Play · Spell</p>
+            <h2 className="display ms-h2">
+              Build the
+              <br />
+              <span className="gold">word.</span>
+            </h2>
+            <WordBank
+              clue="When you cannot name the chart, you stay ___."
+              answer="FLAT"
+              decoys={['E', 'R', 'Y']}
+              explain="Flat is a valid choice. Guessing is not."
+              onComplete={next}
+            />
+          </section>
+        )}
+
+        {step === 'video' && (
+          <section className="ms-panel">
+            <p className="eyebrow">Course 01 · Video</p>
+            <h2 className="display ms-h2">
+              Module 1
+              <br />
+              <span className="gold">video.</span>
+            </h2>
+            <p className="lede">
+              Trend, range, flip, and how to use 12H · 6H · 15m. Watch this, then pass the gate.
+            </p>
+            <CourseVideo
+              youtubeId={MODULE_VIDEO.youtubeId}
+              title={MODULE_VIDEO.title}
+              posterSrc={MODULE_VIDEO.posterSrc}
+              continueLabel="Continue"
+              onContinue={next}
+            />
+          </section>
+        )}
+
         {step === 'gate' && (
           <section className="ms-panel">
             <StructureGate onPass={() => go('complete')} />
@@ -268,33 +455,17 @@ export function MarketStructure() {
         )}
 
         {step === 'complete' && (
-          <section className="ms-panel ms-done">
-            <p className="eyebrow">Gate cleared</p>
-            <h2 className="display ms-h2">
-              Structure
-              <br />
-              <span className="gold">first.</span>
-            </h2>
-            <p className="lede">
-              You named the stories, touched live charts, and passed the pre-trade gate. Full filmed
-              playbook still coming — this module is the sample of how we teach.
-            </p>
-            <blockquote className="ms-quote">
-              <p>{PHRASE}</p>
-            </blockquote>
-            <div className="ms-done-actions">
-              <Link to="/desk" className="btn btn-primary">
-                Back to desk
-              </Link>
-              <Link to="/courses#waitlist" className="btn btn-ghost">
-                Playbook waitlist
-              </Link>
-              <button type="button" className="btn btn-ghost" onClick={() => go('intro')}>
-                Restart module
-              </button>
-            </div>
-            <p className="ms-foot mono">Educational only · Not financial advice</p>
-          </section>
+          <CourseFinish
+            courseId="01"
+            courseTitle="Market Structure"
+            phrase={PHRASE}
+            beats={['Premise', 'Trend', 'Range', 'Flip', 'Labs', 'Games', 'Video', 'Gate']}
+            takeaway="If you cannot name what’s happening in one sentence, stay flat."
+            nextLabel="Course 02 · Levels"
+            nextTo="/courses/levels-that-matter"
+            onRestart={() => go('intro')}
+            sharePath="/courses/market-structure"
+          />
         )}
       </div>
     </main>

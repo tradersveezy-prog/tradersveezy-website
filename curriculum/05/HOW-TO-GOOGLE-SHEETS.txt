@@ -1,17 +1,21 @@
-TraderSveezy - Course 05 desk files
-===================================
+TraderSveezy - Course 05 desk pack
+=================================
 
-1. Download the CSV from the course.
-2. Google Sheets -> Blank spreadsheet.
-3. File -> Import -> Upload -> pick the CSV.
-4. Choose "Insert new sheet(s)" so every file lands in one workbook.
-5. Name the tabs: Checklist / Log / Losses / Weekly / Rules.
+Best: download desk-pack.xlsx (all tabs, already styled).
 
-Extras
-------
-- View -> Freeze -> 1 row
-- Yes/No columns: Data -> Data validation -> Dropdown
-- Duplicate a blank log row when you need more space
+Google Sheets
+-------------
+1. sheets.google.com -> Blank spreadsheet
+2. File -> Import -> Upload -> desk-pack.xlsx
+3. Choose "Replace spreadsheet" or "Insert new sheet(s)"
+
+Excel / Numbers
+---------------
+Open the .xlsx directly. Header row is frozen. Yes/No columns have dropdowns.
+
+Tabs
+----
+Checklist · Trade log · Loss review · Weekly · Rules
 
 Educational only - Not financial advice
 @tradersveezy

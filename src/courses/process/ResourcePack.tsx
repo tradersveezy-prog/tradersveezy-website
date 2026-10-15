@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { CHECKLIST_ITEMS, RESOURCES } from './data'
+import { CHECKLIST_ITEMS, DESK_PACK_FILE, RESOURCES } from './data'
 
 type Props = {
   onContinue: () => void
@@ -26,8 +26,15 @@ export function ResourcePack({ onContinue }: Props) {
         <span className="gold">Then download.</span>
       </h2>
       <p className="lede">
-        Tick the checklist here. Same sheet downloads clean for Google Sheets or Excel - plain text,
-        no weird characters.
+        Tick the checklist here. Downloads are branded Excel files - gold headers, borders, frozen
+        rows, Yes/No dropdowns. Open in Excel or import the .xlsx into Google Sheets.
+      </p>
+
+      <a className="ms-desk-pack-cta btn btn-primary" href={DESK_PACK_FILE} download>
+        Download full desk pack · XLSX
+      </a>
+      <p className="mono ms-desk-pack-note">
+        One file · 5 tabs · Checklist · Log · Losses · Weekly · Rules
       </p>
 
       <section className="ms-desk-sheet" aria-labelledby="live-checklist">
@@ -82,9 +89,9 @@ export function ResourcePack({ onContinue }: Props) {
       </section>
 
       <div className="ms-resource-head">
-        <p className="eyebrow">Downloads</p>
+        <p className="eyebrow">Or grab one tab</p>
         <p className="lede" style={{ margin: '10px 0 0', maxWidth: '34em' }}>
-          Import each CSV into one Google Sheet (File → Import → Upload → new sheet). Freeze row 1.
+          Same styling as the pack. Sheets: File → Import → Upload → pick the .xlsx.
         </p>
       </div>
 
@@ -107,9 +114,7 @@ export function ResourcePack({ onContinue }: Props) {
       </ul>
 
       <div className="ms-resource-bundle">
-        <p>
-          Sheets tip: one workbook, five tabs - Checklist · Log · Losses · Weekly · Rules.
-        </p>
+        <p>Prefer the pack - one download, every tab already named and styled.</p>
         <a className="btn btn-ghost" href="/curriculum/05/HOW-TO-GOOGLE-SHEETS.txt" download>
           How-to
         </a>

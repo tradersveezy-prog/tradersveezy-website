@@ -60,46 +60,49 @@ export type ResourceFile = {
   kind: string
 }
 
+/** Full branded workbook (gold headers, borders, dropdowns). */
+export const DESK_PACK_FILE = '/curriculum/05/desk-pack.xlsx'
+
 export const RESOURCES: ResourceFile[] = [
   {
     id: 'checklist',
     n: '01',
     title: 'Before-trade checklist',
     blurb: '15 yes/no checks. One no = no trade.',
-    file: '/curriculum/05/pre-trade-checklist.csv',
-    kind: 'CSV',
+    file: '/curriculum/05/pre-trade-checklist.xlsx',
+    kind: 'XLSX',
   },
   {
     id: 'journal',
     n: '02',
     title: 'Trade log',
     blurb: 'Plan first. Result later. Wins, losses, skips.',
-    file: '/curriculum/05/trade-journal.csv',
-    kind: 'CSV',
+    file: '/curriculum/05/trade-journal.xlsx',
+    kind: 'XLSX',
   },
   {
     id: 'loss',
     n: '03',
     title: 'Loss review',
     blurb: 'Rule break or bad beat? Write it before the next risk.',
-    file: '/curriculum/05/loss-review.csv',
-    kind: 'CSV',
+    file: '/curriculum/05/loss-review.xlsx',
+    kind: 'XLSX',
   },
   {
     id: 'weekly',
     n: '04',
     title: 'Weekly check-in',
     blurb: '15 minutes. Best trade. Worst slip. One keep. One stop.',
-    file: '/curriculum/05/weekly-review.csv',
-    kind: 'CSV',
+    file: '/curriculum/05/weekly-review.xlsx',
+    kind: 'XLSX',
   },
   {
     id: 'rules',
     n: '05',
     title: 'Playbook rules',
     blurb: 'Do this / don’t - from all five courses.',
-    file: '/curriculum/05/playbook-rules.csv',
-    kind: 'CSV',
+    file: '/curriculum/05/playbook-rules.xlsx',
+    kind: 'XLSX',
   },
 ]
 

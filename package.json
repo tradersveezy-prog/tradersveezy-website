@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && cp dist/index.html dist/404.html",
+    "desk-pack": "node scripts/build-desk-pack.mjs",
+    "build": "node scripts/build-desk-pack.mjs && tsc --noEmit && vite build && cp dist/index.html dist/404.html",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
+    "exceljs": "^4.4.0",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   }

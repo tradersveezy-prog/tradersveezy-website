@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { SITE_URL } from '../seo'
 import { supabase, supabaseConfigured } from '../lib/supabase'
 import {
   localGetSession,
@@ -23,17 +24,25 @@ export type AuthUser = {
   displayName: string
 }
 
+/** Live site only — reset emails must not point at localhost. */
+export const AUTH_REDIRECT_URL = `${SITE_URL}/account`
+
 type AuthContextValue = {
   user: AuthUser | null
   loading: boolean
   /** true = real Supabase; false = this-browser local accounts */
   cloud: boolean
+  /** Set when the user opens a password-recovery link. */
+  passwordRecovery: boolean
+  clearPasswordRecovery: () => void
   signUp: (
     email: string,
     password: string,
     displayName: string,
   ) => Promise<{ error?: string; needsConfirm?: boolean }>
   signIn: (email: string, password: string) => Promise<{ error?: string }>
+  requestPasswordReset: (email: string) => Promise<{ error?: string }>
+  updatePassword: (password: string) => Promise<{ error?: string }>
   updateDisplayName: (displayName: string) => Promise<{ error?: string }>
   signOut: () => Promise<void>
 }
@@ -67,6 +76,7 @@ function toUser(
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [loading, setLoading] = useState(true)
+  const [passwordRecovery, setPasswordRecovery] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -75,7 +85,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (supabase) {
         const { data } = await supabase.auth.getSession()
         if (!cancelled) setUser(toUser(data.session?.user ?? null))
-        const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+          if (event === 'PASSWORD_RECOVERY') setPasswordRecovery(true)
           setUser(toUser(session?.user ?? null))
         })
         if (!cancelled) setLoading(false)
@@ -97,6 +108,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       unsub?.()
     }
   }, [])
+
+  const clearPasswordRecovery = useCallback(() => setPasswordRecovery(false), [])
 
   const signUp = useCallback(async (email: string, password: string, displayName: string) => {
     const name = displayName.trim().replace(/\s+/g, ' ').slice(0, 40)
@@ -128,6 +141,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const res = localSignIn(email, password)
     if (res.error) return { error: res.error }
     setUser(toUser(res.user ?? null))
+    return {}
+  }, [])
+
+  const requestPasswordReset = useCallback(async (email: string) => {
+    const trimmed = email.trim()
+    if (!trimmed) return { error: 'Enter your email.' }
+    if (!supabase) {
+      return { error: 'Password reset needs cloud accounts (Supabase).' }
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(trimmed, {
+      redirectTo: AUTH_REDIRECT_URL,
+    })
+    if (error) return { error: error.message }
+    return {}
+  }, [])
+
+  const updatePassword = useCallback(async (password: string) => {
+    if (password.length < 6) return { error: 'Password must be at least 6 characters.' }
+    if (!supabase) return { error: 'Password reset needs cloud accounts (Supabase).' }
+    const { error } = await supabase.auth.updateUser({ password })
+    if (error) return { error: error.message }
+    setPasswordRecovery(false)
     return {}
   }, [])
 
@@ -165,12 +200,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       loading,
       cloud: supabaseConfigured,
+      passwordRecovery,
+      clearPasswordRecovery,
       signUp,
       signIn,
+      requestPasswordReset,
+      updatePassword,
       updateDisplayName,
       signOut,
     }),
-    [user, loading, signUp, signIn, updateDisplayName, signOut],
+    [
+      user,
+      loading,
+      passwordRecovery,
+      clearPasswordRecovery,
+      signUp,
+      signIn,
+      requestPasswordReset,
+      updatePassword,
+      updateDisplayName,
+      signOut,
+    ],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -22,7 +22,7 @@ Member desk (`/desk`) and interactive Course 01 (`/courses/market-structure`) re
 
 1. Create a free [Supabase](https://supabase.com) project
 2. Authentication → Providers → Email enabled
-3. Authentication → URL configuration → Site URL `https://tradersveezy.com` (and `http://127.0.0.1:5173` for local)
+3. Authentication → URL configuration → **Site URL** `https://tradersveezy.com` (required for password-reset emails; keep `http://127.0.0.1:5173/**` only in Redirect URLs for local)
 4. Copy Project URL + anon key into `.env`:
 
 ```bash

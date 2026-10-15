@@ -62,8 +62,10 @@ Use a **different** URL than MintScript’s webhook.
 
 Supabase → Authentication → URL configuration:
 
-- Site URL: `https://tradersveezy.com`
-- Redirect: `http://127.0.0.1:5173` and `https://tradersveezy.com`
+- **Site URL:** `https://tradersveezy.com` (not localhost — password reset / confirm emails use this)
+- **Redirect URLs:** `https://tradersveezy.com/**` and `http://127.0.0.1:5173/**`
+
+The site always requests reset links with `redirectTo=https://tradersveezy.com/account`.
 
 ## Test
 

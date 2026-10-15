@@ -5,10 +5,21 @@ import { usePlaybookAccess } from '../auth/usePlaybookAccess'
 import { fetchCoachingSessions } from '../lib/coaching'
 import './account.css'
 
-type Mode = 'signin' | 'signup'
+type Mode = 'signin' | 'signup' | 'forgot'
 
 export function Account() {
-  const { user, loading, cloud, signIn, signUp, signOut, updateDisplayName } = useAuth()
+  const {
+    user,
+    loading,
+    cloud,
+    passwordRecovery,
+    signIn,
+    signUp,
+    signOut,
+    updateDisplayName,
+    requestPasswordReset,
+    updatePassword,
+  } = useAuth()
   const { access: hasPlaybook } = usePlaybookAccess()
   const [coachingSessions, setCoachingSessions] = useState(0)
   const [params] = useSearchParams()
@@ -23,6 +34,7 @@ export function Account() {
       cancelled = true
     }
   }, [user?.id])
+
   const next = useMemo(() => {
     const raw = params.get('next') || '/desk'
     return raw.startsWith('/') ? raw : '/desk'
@@ -32,6 +44,7 @@ export function Account() {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [info, setInfo] = useState('')
@@ -39,7 +52,7 @@ export function Account() {
   const [nameBusy, setNameBusy] = useState(false)
   const [nameMsg, setNameMsg] = useState('')
 
-  if (!loading && user && params.get('stay') !== '1') {
+  if (!loading && user && !passwordRecovery && params.get('stay') !== '1') {
     return <Navigate to={next} replace />
   }
 
@@ -49,6 +62,15 @@ export function Account() {
     setInfo('')
     setBusy(true)
     try {
+      if (mode === 'forgot') {
+        const res = await requestPasswordReset(email)
+        if (res.error) {
+          setError(res.error)
+          return
+        }
+        setInfo('Check your email for a reset link. It opens tradersveezy.com/account.')
+        return
+      }
       if (mode === 'signup') {
         const res = await signUp(email, password, displayName)
         if (res.error) {
@@ -69,6 +91,25 @@ export function Account() {
         return
       }
       navigate(next, { replace: true })
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function onSetPassword(e: FormEvent) {
+    e.preventDefault()
+    setError('')
+    setInfo('')
+    setBusy(true)
+    try {
+      const res = await updatePassword(newPassword)
+      if (res.error) {
+        setError(res.error)
+        return
+      }
+      setInfo('Password updated. You’re signed in.')
+      setNewPassword('')
+      navigate('/desk', { replace: true })
     } finally {
       setBusy(false)
     }
@@ -95,6 +136,50 @@ export function Account() {
     return (
       <main className="shell account-page">
         <p className="eyebrow">Loading…</p>
+      </main>
+    )
+  }
+
+  if (passwordRecovery && user) {
+    return (
+      <main className="account-page">
+        <div className="shell account-shell">
+          <p className="eyebrow">Account</p>
+          <h1 className="display account-title">
+            Set a
+            <br />
+            <span className="gold">new password.</span>
+          </h1>
+          <p className="account-lede">Choose a new password for {user.email}.</p>
+          <form className="account-form" onSubmit={onSetPassword} style={{ marginTop: 32 }}>
+            <label className="field">
+              <span>New password</span>
+              <input
+                required
+                type="password"
+                autoComplete="new-password"
+                minLength={6}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Min. 6 characters"
+              />
+            </label>
+            {error ? (
+              <p className="account-error" role="alert">
+                {error}
+              </p>
+            ) : null}
+            {info ? (
+              <p className="account-info" role="status">
+                {info}
+              </p>
+            ) : null}
+            <button type="submit" className="btn btn-primary" disabled={busy}>
+              {busy ? 'Saving…' : 'Update password'}
+            </button>
+          </form>
+          <p className="account-foot mono">Educational only · Not financial advice</p>
+        </div>
       </main>
     )
   }
@@ -168,6 +253,12 @@ export function Account() {
               <br />
               <span className="gold">an account.</span>
             </>
+          ) : mode === 'forgot' ? (
+            <>
+              Reset
+              <br />
+              <span className="gold">password.</span>
+            </>
           ) : (
             <>
               Sign
@@ -177,8 +268,9 @@ export function Account() {
           )}
         </h1>
         <p className="account-lede">
-          Create an account for your member desk — Course 01, playbook teasers, and clear next steps
-          into MintScript or 1-on-1.
+          {mode === 'forgot'
+            ? 'We’ll email a reset link that opens the live site. Set a new password there.'
+            : 'Create an account for your member desk — Course 01, playbook teasers, and clear next steps into MintScript or 1-on-1.'}
         </p>
 
         {!cloud && (
@@ -187,34 +279,51 @@ export function Account() {
           </p>
         )}
 
-        <div className="account-tabs" role="tablist">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === 'signin'}
-            className={mode === 'signin' ? 'on' : ''}
-            onClick={() => {
-              setMode('signin')
-              setError('')
-              setInfo('')
-            }}
-          >
-            Sign in
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === 'signup'}
-            className={mode === 'signup' ? 'on' : ''}
-            onClick={() => {
-              setMode('signup')
-              setError('')
-              setInfo('')
-            }}
-          >
-            Create account
-          </button>
-        </div>
+        {mode !== 'forgot' ? (
+          <div className="account-tabs" role="tablist">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'signin'}
+              className={mode === 'signin' ? 'on' : ''}
+              onClick={() => {
+                setMode('signin')
+                setError('')
+                setInfo('')
+              }}
+            >
+              Sign in
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'signup'}
+              className={mode === 'signup' ? 'on' : ''}
+              onClick={() => {
+                setMode('signup')
+                setError('')
+                setInfo('')
+              }}
+            >
+              Create account
+            </button>
+          </div>
+        ) : (
+          <p style={{ margin: '28px 0 0' }}>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              style={{ fontSize: 12, padding: '10px 14px' }}
+              onClick={() => {
+                setMode('signin')
+                setError('')
+                setInfo('')
+              }}
+            >
+              ← Back to sign in
+            </button>
+          </p>
+        )}
 
         <form className="account-form" onSubmit={onSubmit}>
           {mode === 'signup' ? (
@@ -243,18 +352,20 @@ export function Account() {
               placeholder="you@email.com"
             />
           </label>
-          <label className="field">
-            <span>Password</span>
-            <input
-              required
-              type="password"
-              autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Min. 6 characters"
-            />
-          </label>
+          {mode !== 'forgot' ? (
+            <label className="field">
+              <span>Password</span>
+              <input
+                required
+                type="password"
+                autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Min. 6 characters"
+              />
+            </label>
+          ) : null}
           {error ? (
             <p className="account-error" role="alert">
               {error}
@@ -266,9 +377,41 @@ export function Account() {
             </p>
           ) : null}
           <button type="submit" className="btn btn-primary" disabled={busy}>
-            {busy ? 'Working…' : mode === 'signup' ? 'Create account' : 'Sign in'}
+            {busy
+              ? 'Working…'
+              : mode === 'signup'
+                ? 'Create account'
+                : mode === 'forgot'
+                  ? 'Email reset link'
+                  : 'Sign in'}
           </button>
         </form>
+
+        {mode === 'signin' ? (
+          <p style={{ marginTop: 18 }}>
+            <button
+              type="button"
+              onClick={() => {
+                setMode('forgot')
+                setError('')
+                setInfo('')
+              }}
+              style={{
+                background: 'none',
+                border: 0,
+                padding: 0,
+                color: 'var(--gold)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: 13,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+              }}
+            >
+              Forgot password?
+            </button>
+          </p>
+        ) : null}
 
         <p className="account-foot mono">Educational only · Not financial advice</p>
       </div>

@@ -33,12 +33,21 @@ function ScrollToTop() {
   return null
 }
 
-/** Old bookmark support: /#courses → /courses */
+/** Old bookmark support: /#courses → /courses (skip Supabase auth hashes). */
 function HashRedirect() {
   const navigate = useNavigate()
   useEffect(() => {
     const raw = (location.hash || '').slice(1)
     if (!raw) return
+    if (
+      raw.includes('access_token=') ||
+      raw.includes('refresh_token=') ||
+      raw.includes('type=recovery') ||
+      raw.includes('type=signup') ||
+      raw.startsWith('error')
+    ) {
+      return
+    }
     const id = (raw === 'collabs' ? 'collabs' : raw) as PageId
     if (PAGES.includes(id)) {
       navigate(PAGE_PATHS[id], { replace: true })

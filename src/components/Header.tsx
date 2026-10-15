@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { useAuth } from '../auth/AuthContext'
 import { LINKS, PAGE_LABELS, PAGES, pageHref, type PageId } from '../data'
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 const BOOK_SEEN_KEY = 'ts-book-breathe-seen'
 
 export function Header({ page }: Props) {
+  const { user } = useAuth()
   const mintMode = page === 'mintscript'
   const [breathe, setBreathe] = useState(false)
 
@@ -95,6 +97,21 @@ export function Header({ page }: Props) {
               </NavLink>
             )
           })}
+          <NavLink
+            to={user ? '/account?stay=1' : '/account'}
+            style={({ isActive }) => ({
+              fontFamily: 'var(--font-mono)',
+              fontSize: 12,
+              fontWeight: 500,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: isActive ? (mintMode ? 'var(--mint)' : 'var(--gold)') : 'var(--soft)',
+              padding: '6px 0',
+              borderBottom: `1px solid ${isActive ? (mintMode ? 'var(--mint)' : 'var(--gold)') : 'transparent'}`,
+            })}
+          >
+            {user ? 'Account' : 'Sign in'}
+          </NavLink>
           <Link
             to={LINKS.booking}
             className={`btn btn-primary${breathe ? ' btn-book-breathe' : ''}`}

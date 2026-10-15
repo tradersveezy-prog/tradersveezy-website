@@ -244,7 +244,7 @@ export const PROCESS_LABS: RiskLabDef[] = [
     pair: 'PLAYBOOK',
     tf: 'ALL STEPS',
     regime: 'See → review',
-    blurb: 'Tap each marker. Where do people usually drop the ball?',
+    blurb: 'Tap each marker. The loop only works if you finish it — what do you do after a trade?',
     diagram: 'structure',
     hotspots: [
       {
@@ -269,11 +269,16 @@ export const PROCESS_LABS: RiskLabDef[] = [
         body: 'Course 05: if you skip this, the same mistake shows up on a new coin.',
       },
     ],
-    correctCall: 'wait',
+    calls: [
+      { id: 'jump', label: 'Next trade' },
+      { id: 'review', label: 'Review first' },
+      { id: 'ignore', label: 'Skip review' },
+    ],
+    correctCall: 'review',
     decision: {
-      story: 'Looking back is part of the job',
-      why: 'Trading without review repeats the same errors',
-      action: 'Build the checklist and log habit first — then take the next trade',
+      story: 'Close the loop before you size up again',
+      why: 'Without look-back, Courses 01–04 don’t stick',
+      action: 'Checklist + log (or loss sheet) — then the next setup',
     },
   },
   {
@@ -282,7 +287,7 @@ export const PROCESS_LABS: RiskLabDef[] = [
     pair: 'AFTER A LOSS',
     tf: 'HABITS',
     regime: 'Review first',
-    blurb: 'You just got stopped. Tap the markers — what should you do?',
+    blurb: 'You just got stopped. Tap the markers — what should you do next?',
     diagram: 'atr',
     hotspots: [
       {
@@ -307,11 +312,16 @@ export const PROCESS_LABS: RiskLabDef[] = [
         body: 'Did I break a rule? What will I do next time? Then take new risk — or stay out.',
       },
     ],
-    correctCall: 'skip',
+    calls: [
+      { id: 'revenge', label: 'Revenge size' },
+      { id: 'review', label: 'Write review' },
+      { id: 'forget', label: 'Move on' },
+    ],
+    correctCall: 'review',
     decision: {
-      story: 'Skip the next angry trade',
+      story: 'Review before any new risk',
       why: 'Revenge is not a plan',
-      action: 'Fill the loss sheet first. Sit out until you do',
+      action: 'Fill the loss sheet. Sit out until you do',
     },
   },
   {
@@ -320,7 +330,7 @@ export const PROCESS_LABS: RiskLabDef[] = [
     pair: 'NO TRADE',
     tf: 'DESK',
     regime: 'Checklist says no',
-    blurb: 'Entry looks fine, but reward is weak and the stop is too tight. What do you do?',
+    blurb: 'Entry looks fine, but reward is weak and the stop is too tight. Call it.',
     diagram: 'size',
     hotspots: [
       {
@@ -345,7 +355,12 @@ export const PROCESS_LABS: RiskLabDef[] = [
         body: 'Log that you passed. Saying no is part of the job.',
       },
     ],
-    correctCall: 'skip',
+    calls: [
+      { id: 'force', label: 'Take it' },
+      { id: 'sit', label: 'Sit out' },
+      { id: 'half', label: 'Half size' },
+    ],
+    correctCall: 'sit',
     decision: {
       story: 'Sitting out is the right call',
       why: 'Two checklist fails',

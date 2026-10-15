@@ -1305,6 +1305,16 @@
   gap: 8px;
 }
 
+.ms-decision-row.is-wide {
+  flex-direction: column;
+}
+
+.ms-decision-row.is-wide .ms-call {
+  letter-spacing: 0.1em;
+  font-size: 11px;
+  padding: 12px 10px;
+}
+
 .ms-call {
   flex: 1;
   font-family: var(--font-display);

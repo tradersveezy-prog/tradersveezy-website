@@ -218,6 +218,8 @@ export const QUIZZES: Record<string, QuizQ[]> = {
 }
 
 /** Decision labs — diagram stages (no screenshot dependency). */
+export type LabCallOption = { id: string; label: string }
+
 export type RiskLabDef = {
   id: string
   title: string
@@ -227,7 +229,9 @@ export type RiskLabDef = {
   blurb: string
   diagram: 'structure' | 'atr' | 'size'
   hotspots: { id: string; x: number; y: number; title: string; body: string }[]
-  correctCall: CallChoice
+  /** Defaults to Trade / Wait / Skip when omitted (Courses 01–04 style). */
+  calls?: LabCallOption[]
+  correctCall: string
   decision: { story: string; why: string; action: string }
 }
 

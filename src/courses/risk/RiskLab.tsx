@@ -1,6 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import type { CallChoice } from '../market-structure/data'
-import type { RiskLabDef } from './data'
+import type { LabCallOption, RiskLabDef } from './data'
 
 type Props = {
   lab: RiskLabDef
@@ -8,16 +7,19 @@ type Props = {
   onComplete: () => void
 }
 
-const CALL_LABEL: Record<CallChoice, string> = {
-  trade: 'Trade',
-  wait: 'Wait',
-  skip: 'Skip',
-}
+const DEFAULT_CALLS: LabCallOption[] = [
+  { id: 'trade', label: 'Trade' },
+  { id: 'wait', label: 'Wait' },
+  { id: 'skip', label: 'Skip' },
+]
 
 export function RiskLab({ lab, diagram, onComplete }: Props) {
+  const calls = lab.calls?.length ? lab.calls : DEFAULT_CALLS
+  const labelFor = (id: string) => calls.find((c) => c.id === id)?.label ?? id
+
   const [open, setOpen] = useState<string | null>(null)
   const [seen, setSeen] = useState<Set<string>>(() => new Set())
-  const [decision, setDecision] = useState<CallChoice | null>(null)
+  const [decision, setDecision] = useState<string | null>(null)
   const [locked, setLocked] = useState(false)
 
   const allSeen = seen.size >= lab.hotspots.length
@@ -28,7 +30,7 @@ export function RiskLab({ lab, diagram, onComplete }: Props) {
     setSeen((s) => new Set(s).add(id))
   }
 
-  function lock(choice: CallChoice) {
+  function lock(choice: string) {
     setDecision(choice)
     setLocked(true)
   }
@@ -81,16 +83,16 @@ export function RiskLab({ lab, diagram, onComplete }: Props) {
 
           <div className="ms-decision">
             <span className="eyebrow">YOUR CALL</span>
-            <div className="ms-decision-row">
-              {(['trade', 'wait', 'skip'] as const).map((c) => (
+            <div className={`ms-decision-row${calls.some((c) => c.label.length > 8) ? ' is-wide' : ''}`}>
+              {calls.map((c) => (
                 <button
-                  key={c}
+                  key={c.id}
                   type="button"
-                  className={`ms-call ${decision === c ? 'on' : ''}`}
-                  disabled={!allSeen || (locked && decision !== c)}
-                  onClick={() => lock(c)}
+                  className={`ms-call ${decision === c.id ? 'on' : ''}`}
+                  disabled={!allSeen || (locked && decision !== c.id)}
+                  onClick={() => lock(c.id)}
                 >
-                  {c}
+                  {c.label}
                 </button>
               ))}
             </div>
@@ -101,8 +103,8 @@ export function RiskLab({ lab, diagram, onComplete }: Props) {
               <div className={`ms-debrief ${matched ? 'ok' : 'no'}`}>
                 <p className={`ms-verdict mono ${matched ? 'ok' : 'no'}`}>
                   {matched
-                    ? `Correct · ${CALL_LABEL[lab.correctCall]}`
-                    : `Not quite · you chose ${CALL_LABEL[decision]}; answer is ${CALL_LABEL[lab.correctCall]}`}
+                    ? `Correct · ${labelFor(lab.correctCall)}`
+                    : `Not quite · you chose ${labelFor(decision)}; answer is ${labelFor(lab.correctCall)}`}
                 </p>
                 <p>
                   <strong className="mono">STORY</strong> {lab.decision.story}

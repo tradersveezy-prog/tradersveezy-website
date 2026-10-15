@@ -280,6 +280,240 @@ async function buildRules(wb) {
   })
 }
 
+/** Daily account / P&L tracker — styled version of the user's balance goal sheet. */
+async function buildDailyTracker(wb) {
+  const sheet = wb.addWorksheet('Daily P&L', { properties: { defaultRowHeight: 22 } })
+  sheet.properties.tabColor = { argb: `FF${LONG}` }
+  sheet.views = [{ state: 'frozen', ySplit: 3, xSplit: 0, activeCell: 'C4', showGridLines: false }]
+
+  const headers = [
+    'Date',
+    'Starting balance',
+    'Ending balance',
+    'Daily account goal',
+    'Profit %',
+    'Daily P&L',
+    'Daily goal $',
+    'Beat goal by',
+    'Notes',
+  ]
+  const cols = headers.length
+
+  styleTitle(sheet.getRow(1), cols, 'COURSE 05 · DAILY P&L TRACKER')
+  styleBanner(
+    sheet.getRow(2),
+    cols,
+    'Set goal % + start balance on the right · Enter date + ending balance each day · Educational only · Not financial advice',
+  )
+  styleHeader(sheet.getRow(3), headers)
+  setWidths(sheet, [12, 15, 15, 16, 11, 12, 12, 12, 28])
+
+  // Settings panel (columns K–M)
+  const labelFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${INK}` } }
+  const valueFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${BONE}` } }
+  const goldFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${GOLD}` } }
+
+  function sideLabel(r, c, text) {
+    const cell = sheet.getCell(r, c)
+    cell.value = text
+    cell.font = { name: 'Arial', size: 9, bold: true, color: { argb: `FF${GOLD}` } }
+    cell.fill = labelFill
+    cell.border = thinBorder(GOLD)
+    cell.alignment = { vertical: 'middle', horizontal: 'left' }
+  }
+  function sideValue(r, c, value, numFmt) {
+    const cell = sheet.getCell(r, c)
+    cell.value = value
+    cell.font = { name: 'Arial', size: 12, bold: true, color: { argb: `FF${INK}` } }
+    cell.fill = valueFill
+    cell.border = thinBorder(GOLD)
+    cell.alignment = { vertical: 'middle', horizontal: 'center' }
+    if (numFmt) cell.numFmt = numFmt
+  }
+
+  sheet.getColumn(11).width = 18
+  sheet.getColumn(12).width = 14
+  sheet.getColumn(13).width = 16
+  sheet.getColumn(14).width = 22
+
+  // K1–L1 brand chip
+  sheet.mergeCells(1, 11, 1, 12)
+  sheet.getCell(1, 11).value = 'GOAL SETTINGS'
+  sheet.getCell(1, 11).font = { name: 'Arial Black', size: 11, color: { argb: `FF${INK}` } }
+  sheet.getCell(1, 11).fill = goldFill
+  sheet.getCell(1, 11).alignment = { vertical: 'middle', horizontal: 'center' }
+  sheet.getCell(1, 12).fill = goldFill
+  sheet.getCell(1, 11).border = thinBorder(INK)
+  sheet.getCell(1, 12).border = thinBorder(INK)
+
+  sideLabel(2, 11, 'Daily profit goal')
+  sideValue(2, 12, 0.02, '0.0%')
+  sideLabel(3, 11, 'Starting balance')
+  sideValue(3, 12, 1000, '"$"#,##0.00')
+
+  sideLabel(5, 11, 'Total P&L')
+  sideValue(5, 12, { formula: 'SUMIF(F4:F63,"<>")' }, '"$"#,##0.00')
+  sheet.getCell(5, 12).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${LONG}` } }
+  sheet.getCell(5, 12).font = { name: 'Arial', size: 12, bold: true, color: { argb: `FF${INK}` } }
+
+  sideLabel(6, 11, 'Avg daily P&L')
+  sideValue(6, 12, { formula: 'IFERROR(AVERAGEIF(F4:F63,"<>"),0)' }, '"$"#,##0.00')
+
+  sideLabel(7, 11, 'Days logged')
+  sideValue(7, 12, { formula: 'COUNTA(A4:A63)' }, '0')
+
+  sideLabel(8, 11, 'Days beat goal')
+  sideValue(8, 12, { formula: 'COUNTIF(H4:H63,">0")' }, '0')
+
+  // Expected compound path
+  sheet.mergeCells(10, 11, 10, 12)
+  sheet.getCell(10, 11).value = 'EXPECTED PATH'
+  sheet.getCell(10, 11).font = { name: 'Arial', size: 9, bold: true, color: { argb: `FF${INK}` } }
+  sheet.getCell(10, 11).fill = goldFill
+  sheet.getCell(10, 11).alignment = { horizontal: 'center', vertical: 'middle' }
+  sheet.getCell(10, 12).fill = goldFill
+  sheet.getCell(10, 11).border = thinBorder(INK)
+  sheet.getCell(10, 12).border = thinBorder(INK)
+
+  sideLabel(11, 11, 'Day')
+  sheet.getCell(11, 12).value = 'Target balance'
+  sheet.getCell(11, 12).font = { name: 'Arial', size: 9, bold: true, color: { argb: `FF${INK}` } }
+  sheet.getCell(11, 12).fill = goldFill
+  sheet.getCell(11, 12).border = thinBorder(INK)
+  sheet.getCell(11, 12).alignment = { horizontal: 'center', vertical: 'middle' }
+
+  for (let d = 1; d <= 20; d++) {
+    const r = 11 + d
+    const dayCell = sheet.getCell(r, 11)
+    dayCell.value = d
+    dayCell.font = { name: 'Arial', size: 9, color: { argb: `FF${MUTED}` } }
+    dayCell.fill = labelFill
+    dayCell.border = thinBorder(DEEP)
+    dayCell.alignment = { horizontal: 'center', vertical: 'middle' }
+
+    const bal = sheet.getCell(r, 12)
+    // Compound from settings start: L3 * (1+L2)^d
+    bal.value = { formula: `$L$3*((1+$L$2)^${d})` }
+    bal.numFmt = '"$"#,##0.00'
+    bal.font = { name: 'Arial', size: 9, color: { argb: `FF${INK}` } }
+    bal.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: d % 2 ? `FF${BONE}` : 'FFFFFFFF' } }
+    bal.border = thinBorder('D9D4C8')
+    bal.alignment = { horizontal: 'right', vertical: 'middle' }
+  }
+
+  sheet.getCell(1, 14).value = 'TRADE NOTES'
+  sheet.getCell(1, 14).font = { name: 'Arial', size: 9, bold: true, color: { argb: `FF${INK}` } }
+  sheet.getCell(1, 14).fill = goldFill
+  sheet.getCell(1, 14).border = thinBorder(INK)
+  sheet.getCell(1, 14).alignment = { horizontal: 'center' }
+  for (let r = 2; r <= 12; r++) {
+    const n = sheet.getCell(r, 14)
+    n.fill = valueFill
+    n.border = thinBorder('D9D4C8')
+  }
+
+  const rows = 40
+  for (let i = 0; i < rows; i++) {
+    const r = 4 + i
+    const row = sheet.getRow(r)
+    styleDataRow(row, cols, i % 2 === 0)
+    row.height = 24
+
+    // Starting balance: first day from settings; then previous ending
+    if (i === 0) {
+      row.getCell(2).value = { formula: 'IF($L$3="","",$L$3)' }
+    } else {
+      row.getCell(2).value = { formula: `IF(C${r - 1}="","",C${r - 1})` }
+    }
+    row.getCell(2).numFmt = '"$"#,##0.00'
+
+    // Daily account goal = start * (1 + goal%)
+    row.getCell(4).value = { formula: `IF(B${r}="","",B${r}*(1+$L$2))` }
+    row.getCell(4).numFmt = '"$"#,##0.00'
+    row.getCell(4).font = { name: 'Arial', size: 10, color: { argb: `FF${DEEP}` } }
+
+    // Profit %
+    row.getCell(5).value = { formula: `IF(OR(B${r}="",C${r}=""),"",(C${r}-B${r})/B${r})` }
+    row.getCell(5).numFmt = '0.00%'
+
+    // Daily P&L
+    row.getCell(6).value = { formula: `IF(OR(B${r}="",C${r}=""),"",C${r}-B${r})` }
+    row.getCell(6).numFmt = '"$"#,##0.00'
+
+    // Daily goal $
+    row.getCell(7).value = { formula: `IF(B${r}="","",B${r}*$L$2)` }
+    row.getCell(7).numFmt = '"$"#,##0.00'
+
+    // Beat goal by
+    row.getCell(8).value = { formula: `IF(OR(B${r}="",C${r}=""),"",F${r}-G${r})` }
+    row.getCell(8).numFmt = '"$"#,##0.00'
+
+    row.getCell(3).numFmt = '"$"#,##0.00'
+    row.getCell(3).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: `FF${GOLD}` },
+    }
+    row.getCell(3).font = { name: 'Arial', size: 10, bold: true, color: { argb: `FF${INK}` } }
+
+    // Conditional-ish highlight via font on P&L / beat columns (ExcelJS full CF is heavy; tint cells)
+    row.getCell(6).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: i % 2 ? 'FFE8F5EF' : 'FFF1FAF5' },
+    }
+  }
+
+  // Sample day 1 so the sheet isn't empty on open
+  sheet.getCell(4, 1).value = new Date()
+  sheet.getCell(4, 1).numFmt = 'yyyy-mm-dd'
+  sheet.getCell(4, 3).value = 1020
+  sheet.getCell(4, 9).value = 'Example row — replace with your numbers'
+
+  // Conditional formatting for P&L and beat columns
+  sheet.addConditionalFormatting({
+    ref: 'F4:F43',
+    rules: [
+      {
+        type: 'cellIs',
+        operator: 'greaterThan',
+        formulae: ['0'],
+        style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFB8E0CC' } } },
+      },
+      {
+        type: 'cellIs',
+        operator: 'lessThan',
+        formulae: ['0'],
+        style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFF0C4BC' } } },
+      },
+    ],
+  })
+  sheet.addConditionalFormatting({
+    ref: 'H4:H43',
+    rules: [
+      {
+        type: 'cellIs',
+        operator: 'greaterThan',
+        formulae: ['0'],
+        style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFB8E0CC' } } },
+      },
+      {
+        type: 'cellIs',
+        operator: 'lessThan',
+        formulae: ['0'],
+        style: { fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFF0C4BC' } } },
+      },
+    ],
+  })
+
+  try {
+    sheet.mergeCells(1, 2, 1, cols)
+    sheet.mergeCells(2, 1, 2, cols)
+  } catch {
+    /* ok */
+  }
+}
+
 async function buildBlankLog(wb, name, subtitle, headers, widths, yesCols = [], blankRows = 14, tab = LONG) {
   const sheet = wb.addWorksheet(name, { properties: { defaultRowHeight: 20 } })
   decorateSheet(sheet, tab)
@@ -315,6 +549,7 @@ fs.mkdirSync(outDir, { recursive: true })
 
 await writeWorkbook('desk-pack.xlsx', async (wb) => {
   await buildChecklist(wb)
+  await buildDailyTracker(wb)
   await buildBlankLog(
     wb,
     'Trade log',
@@ -390,6 +625,9 @@ await writeWorkbook('weekly-review.xlsx', async (wb) => {
 await writeWorkbook('playbook-rules.xlsx', async (wb) => {
   await buildRules(wb)
 })
+await writeWorkbook('daily-pnl-tracker.xlsx', async (wb) => {
+  await buildDailyTracker(wb)
+})
 
 fs.writeFileSync(
   path.join(outDir, 'HOW-TO-GOOGLE-SHEETS.txt'),
@@ -403,6 +641,7 @@ Google Sheets
 1. sheets.google.com -> Blank spreadsheet
 2. File -> Import -> Upload -> desk-pack.xlsx
 3. Choose "Replace spreadsheet" or "Insert new sheet(s)"
+4. On Daily P&L: set goal % + starting balance in the gold settings box
 
 Excel / Numbers
 ---------------
@@ -410,7 +649,14 @@ Open the .xlsx directly. Header row is frozen. Yes/No columns have dropdowns.
 
 Tabs
 ----
-Checklist · Trade log · Loss review · Weekly · Rules
+Checklist · Daily P&L · Trade log · Loss review · Weekly · Rules
+
+Daily P&L
+---------
+- Change Daily profit goal (default 2%) and Starting balance
+- Each day: enter Date + Ending balance (gold column)
+- Starting balance, goals, P&L %, beat-by auto-calculate
+- Right side: totals + 20-day expected compound path
 
 Educational only - Not financial advice
 @tradersveezy

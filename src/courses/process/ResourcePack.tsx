@@ -54,7 +54,7 @@ export function ResourcePack({ onContinue }: Props) {
         {busy === 'pack' ? 'Downloading…' : 'Download full desk pack · XLSX'}
       </button>
       <p className="mono ms-desk-pack-note">
-        One file · 5 tabs · Checklist · Log · Losses · Weekly · Rules
+        One file · 6 tabs · Checklist · Daily P&L · Log · Losses · Weekly · Rules
       </p>
       {dlError ? (
         <p className="account-error" role="alert" style={{ marginTop: 12 }}>

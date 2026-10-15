@@ -73,8 +73,16 @@ export const RESOURCES: ResourceFile[] = [
     kind: 'XLSX',
   },
   {
-    id: 'journal',
+    id: 'daily',
     n: '02',
+    title: 'Daily P&L tracker',
+    blurb: 'Balance, % goal, daily P&L, beat-by — with auto formulas.',
+    file: '/curriculum/05/daily-pnl-tracker.xlsx',
+    kind: 'XLSX',
+  },
+  {
+    id: 'journal',
+    n: '03',
     title: 'Trade log',
     blurb: 'Plan first. Result later. Wins, losses, skips.',
     file: '/curriculum/05/trade-journal.xlsx',
@@ -82,7 +90,7 @@ export const RESOURCES: ResourceFile[] = [
   },
   {
     id: 'loss',
-    n: '03',
+    n: '04',
     title: 'Loss review',
     blurb: 'Rule break or bad beat? Write it before the next risk.',
     file: '/curriculum/05/loss-review.xlsx',
@@ -90,7 +98,7 @@ export const RESOURCES: ResourceFile[] = [
   },
   {
     id: 'weekly',
-    n: '04',
+    n: '05',
     title: 'Weekly check-in',
     blurb: '15 minutes. Best trade. Worst slip. One keep. One stop.',
     file: '/curriculum/05/weekly-review.xlsx',
@@ -98,7 +106,7 @@ export const RESOURCES: ResourceFile[] = [
   },
   {
     id: 'rules',
-    n: '05',
+    n: '06',
     title: 'Playbook rules',
     blurb: 'Do this / don’t - from all five courses.',
     file: '/curriculum/05/playbook-rules.xlsx',

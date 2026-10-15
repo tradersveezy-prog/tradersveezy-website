@@ -963,62 +963,208 @@
   color: var(--soft);
 }
 
-/* Course 05 — downloadable desk pack */
+/* Course 05 — desk pack */
 .ms-resources {
-  max-width: 780px;
+  max-width: 820px;
+}
+
+.ms-desk-sheet {
+  margin: 36px 0 40px;
+  border: 1px solid rgba(227, 180, 74, 0.35);
+  background:
+    linear-gradient(180deg, rgba(227, 180, 74, 0.07), transparent 120px),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 31px,
+      rgba(242, 241, 238, 0.03) 31px,
+      rgba(242, 241, 238, 0.03) 32px
+    ),
+    var(--panel);
+  box-shadow: 0 0 0 1px rgba(6, 6, 6, 0.4);
+}
+
+.ms-desk-sheet-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px 28px 22px;
+  border-bottom: 1px solid rgba(227, 180, 74, 0.28);
+}
+
+.ms-desk-sheet-head h3 {
+  margin: 10px 0 0;
+  font-size: clamp(26px, 3vw, 36px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.ms-desk-sheet-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ms-desk-sheet-meta .is-yes {
+  color: var(--long);
+}
+
+.ms-desk-sheet-meta .is-no {
+  color: var(--short);
+}
+
+.ms-desk-checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ms-desk-checks li {
+  display: grid;
+  grid-template-columns: 40px 44px minmax(0, 1fr) auto;
+  gap: 12px 14px;
+  align-items: center;
+  padding: 14px 28px;
+  border-bottom: 1px solid rgba(242, 241, 238, 0.08);
+}
+
+.ms-desk-checks li:last-child {
+  border-bottom: 0;
+}
+
+.ms-desk-checks li.is-yes {
+  background: rgba(79, 178, 134, 0.06);
+}
+
+.ms-desk-checks li.is-no {
+  background: rgba(217, 83, 59, 0.07);
+}
+
+.ms-desk-n {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.ms-desk-course {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.ms-desk-checks p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--bone);
+}
+
+.ms-desk-toggles {
+  display: flex;
+  gap: 6px;
+}
+
+.ms-desk-toggles button {
+  min-width: 52px;
+  padding: 8px 10px;
+  border: 1px solid rgba(242, 241, 238, 0.18);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.ms-desk-toggles button.on.yes {
+  border-color: var(--long);
+  color: var(--ink);
+  background: var(--long);
+}
+
+.ms-desk-toggles button.on.no {
+  border-color: var(--short);
+  color: var(--ink);
+  background: var(--short);
+}
+
+.ms-desk-foot {
+  margin: 0;
+  padding: 16px 28px 22px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-top: 1px solid rgba(227, 180, 74, 0.2);
+}
+
+.ms-resource-head {
+  margin: 8px 0 0;
 }
 
 .ms-resource-list {
   list-style: none;
-  margin: 36px 0 28px;
+  margin: 28px 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .ms-resource-card {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 20px 24px;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 16px 20px;
   align-items: center;
-  padding: clamp(20px, 3vw, 28px);
-  background:
-    radial-gradient(ellipse 60% 80% at 100% 0%, rgba(227, 180, 74, 0.1), transparent 55%),
-    var(--panel);
+  padding: 20px 22px;
+  background: var(--panel);
   border: 1px solid rgba(242, 241, 238, 0.12);
-  border-left: 3px solid var(--gold);
+}
+
+.ms-resource-n {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.ms-resource-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 14px;
+  margin-bottom: 6px;
 }
 
 .ms-resource-card h3 {
-  margin: 8px 0 10px;
-  font-size: clamp(22px, 2.5vw, 28px);
-  letter-spacing: 0.03em;
+  margin: 0;
+  font-size: clamp(18px, 2.2vw, 24px);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   line-height: 1.1;
 }
 
+.ms-resource-kind {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
 .ms-resource-card p {
   margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.45;
   color: var(--soft);
-}
-
-.ms-resource-id {
-  display: block;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-
-.ms-resource-tip {
-  margin-top: 12px !important;
-  font-size: 11px !important;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted) !important;
 }
 
 .ms-resource-bundle {
@@ -1028,17 +1174,43 @@
   justify-content: space-between;
   gap: 16px;
   margin: 0 0 28px;
-  padding: 20px 22px;
+  padding: 18px 20px;
   border: 1px solid rgba(227, 180, 74, 0.28);
   background: rgba(227, 180, 74, 0.06);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--soft);
 }
 
-@media (max-width: 640px) {
+.ms-resource-bundle p {
+  margin: 0;
+  max-width: 36em;
+}
+
+@media (max-width: 720px) {
+  .ms-desk-checks li {
+    grid-template-columns: 36px 40px 1fr;
+    padding: 14px 18px;
+  }
+
+  .ms-desk-toggles {
+    grid-column: 1 / -1;
+  }
+
+  .ms-desk-sheet-head {
+    padding: 22px 18px 18px;
+  }
+
+  .ms-desk-foot {
+    padding: 14px 18px 18px;
+  }
+
   .ms-resource-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: 40px 1fr;
   }
 
   .ms-resource-card .btn {
+    grid-column: 1 / -1;
     width: 100%;
     text-align: center;
   }

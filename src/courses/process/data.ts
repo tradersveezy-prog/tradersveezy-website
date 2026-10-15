@@ -26,56 +26,80 @@ export const RULES = {
   },
 } as const
 
+export type ChecklistItem = {
+  n: string
+  course: string
+  text: string
+}
+
+/** Same lines as pre-trade-checklist.csv — shown live on the desk pack. */
+export const CHECKLIST_ITEMS: ChecklistItem[] = [
+  { n: '01', course: '01', text: 'Can I name what the chart is doing in one sentence (trend / range / flip)?' },
+  { n: '02', course: '01', text: 'Am I using a higher timeframe for context and a lower one for the entry?' },
+  { n: '03', course: '01', text: 'Am I reading buyers and sellers - not drawing random lines?' },
+  { n: '04', course: '02', text: 'Is the level clear in about 15 seconds? If not I skip.' },
+  { n: '05', course: '02', text: 'Does the level have proof (touches / EMAs / value) - not a Fib alone?' },
+  { n: '06', course: '03', text: 'Is my entry type clear (retest / EMA reclaim / breakout)?' },
+  { n: '07', course: '03', text: 'Am I waiting for the full trigger - not the first break alone?' },
+  { n: '08', course: '03', text: 'Do I have a hard stop written down?' },
+  { n: '09', course: '04', text: 'Is the stop past the level that kills the idea?' },
+  { n: '10', course: '04', text: 'Does ATR say the stop is not too tight and not crazy wide?' },
+  { n: '11', course: '04', text: 'Is reward worth the risk (about 1.5R or better)?' },
+  { n: '12', course: '04', text: 'Is size based on dollars I can lose - not a guess?' },
+  { n: '13', course: '05', text: 'Did I check news / events that could wreck a clean chart?' },
+  { n: '14', course: '05', text: `Can I say: ${PHRASE}` },
+  { n: '15', course: '05', text: 'If any answer is No - I stay out.' },
+]
+
 export type ResourceFile = {
   id: string
+  n: string
   title: string
   blurb: string
   file: string
-  sheetsTip: string
+  kind: string
 }
 
 export const RESOURCES: ResourceFile[] = [
   {
     id: 'checklist',
+    n: '01',
     title: 'Before-trade checklist',
-    blurb: 'Yes/no boxes from all five courses. One no = no trade. Open it in Google Sheets and tick as you go.',
+    blurb: '15 yes/no checks. One no = no trade.',
     file: '/curriculum/05/pre-trade-checklist.csv',
-    sheetsTip: 'Freeze the top row · use Yes/No dropdowns',
+    kind: 'CSV',
   },
   {
     id: 'journal',
+    n: '02',
     title: 'Trade log',
-    blurb: 'Write the plan first. Add the result later. Winners, losers, and skips.',
+    blurb: 'Plan first. Result later. Wins, losses, skips.',
     file: '/curriculum/05/trade-journal.csv',
-    sheetsTip: 'Copy a blank row when you need more space',
+    kind: 'CSV',
   },
   {
     id: 'loss',
+    n: '03',
     title: 'Loss review',
-    blurb: 'Simple questions after a stop: did I break a rule, and what do I do next time?',
+    blurb: 'Rule break or bad beat? Write it before the next risk.',
     file: '/curriculum/05/loss-review.csv',
-    sheetsTip: 'One row per loss — before the next trade',
+    kind: 'CSV',
   },
   {
     id: 'weekly',
+    n: '04',
     title: 'Weekly check-in',
-    blurb: 'Fifteen minutes each week. Best trade. Worst slip. One keep. One stop.',
+    blurb: '15 minutes. Best trade. Worst slip. One keep. One stop.',
     file: '/curriculum/05/weekly-review.csv',
-    sheetsTip: 'One row every Monday',
+    kind: 'CSV',
   },
   {
     id: 'rules',
+    n: '05',
     title: 'Playbook rules',
-    blurb: 'Do this / don’t do that from every course — one sheet to pin by your desk.',
+    blurb: 'Do this / don’t - from all five courses.',
     file: '/curriculum/05/playbook-rules.csv',
-    sheetsTip: 'Filter by course when you need a refresh',
-  },
-  {
-    id: 'howto',
-    title: 'How to open these in Google Sheets',
-    blurb: 'Short steps: File → Import → Upload → pick the CSV.',
-    file: '/curriculum/05/HOW-TO-GOOGLE-SHEETS.txt',
-    sheetsTip: 'Read once, then set up your file',
+    kind: 'CSV',
   },
 ]
 

@@ -1,17 +1,17 @@
-TraderSveezy · Course 05 files → Google Sheets
-==============================================
+TraderSveezy - Course 05 desk files
+===================================
 
-1. Download the .csv files from the course (or this folder).
-2. Open Google Sheets → Blank spreadsheet.
-3. File → Import → Upload → pick a CSV.
-4. Choose “Insert new sheet(s)” so you can add more files to the same workbook.
-5. Repeat for each file. Name the tabs: Checklist, Log, Losses, Weekly, Rules.
+1. Download the CSV from the course.
+2. Google Sheets -> Blank spreadsheet.
+3. File -> Import -> Upload -> pick the CSV.
+4. Choose "Insert new sheet(s)" so every file lands in one workbook.
+5. Name the tabs: Checklist / Log / Losses / Weekly / Rules.
 
-Helpful extras
---------------
-• View → Freeze → 1 row (headers stay visible while you scroll).
-• On Yes/No columns: Data → Data validation → Dropdown.
-• Copy a blank row when you need more space in the log.
+Extras
+------
+- View -> Freeze -> 1 row
+- Yes/No columns: Data -> Data validation -> Dropdown
+- Duplicate a blank log row when you need more space
 
-Educational only · Not financial advice
+Educational only - Not financial advice
 @tradersveezy

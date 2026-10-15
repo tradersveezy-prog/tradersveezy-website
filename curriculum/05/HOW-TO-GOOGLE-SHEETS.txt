@@ -8,6 +8,7 @@ Google Sheets
 1. sheets.google.com -> Blank spreadsheet
 2. File -> Import -> Upload -> desk-pack.xlsx
 3. Choose "Replace spreadsheet" or "Insert new sheet(s)"
+4. On Daily P&L: set goal % + starting balance in the gold settings box
 
 Excel / Numbers
 ---------------
@@ -15,7 +16,14 @@ Open the .xlsx directly. Header row is frozen. Yes/No columns have dropdowns.
 
 Tabs
 ----
-Checklist · Trade log · Loss review · Weekly · Rules
+Checklist · Daily P&L · Trade log · Loss review · Weekly · Rules
+
+Daily P&L
+---------
+- Change Daily profit goal (default 2%) and Starting balance
+- Each day: enter Date + Ending balance (gold column)
+- Starting balance, goals, P&L %, beat-by auto-calculate
+- Right side: totals + 20-day expected compound path
 
 Educational only - Not financial advice
 @tradersveezy

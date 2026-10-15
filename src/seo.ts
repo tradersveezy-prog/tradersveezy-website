@@ -5,8 +5,8 @@ export const SITE_URL = 'https://tradersveezy.com'
 export const SITE_NAME = 'TraderSveezy'
 /** PNG/JPG — many crawlers ignore SVG for link previews. */
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/assets/og-default.jpg`
-export const OG_IMAGE_WIDTH = 1280
-export const OG_IMAGE_HEIGHT = 720
+export const OG_IMAGE_WIDTH = 1200
+export const OG_IMAGE_HEIGHT = 630
 export const TWITTER_HANDLE = '@tradersveezy'
 
 export type PageSeo = {
@@ -51,7 +51,7 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
       'Day trading education for crypto and gold. Risk-first process, interactive playbook, 1-on-1 coaching, and MintScript desk tools. Educational only · Not financial advice.',
     path: '/',
     image: '/assets/og-default.jpg',
-    imageAlt: 'TraderSveezy — Trade the plan. Not the feeling.',
+    imageAlt: 'TraderSveezy — 1-on-1 mentorship, courses & tools for traders who manage risk first.',
     jsonLd: [
       {
         '@context': 'https://schema.org',

@@ -8,6 +8,7 @@ type Props = {
 }
 
 const BOOK_SEEN_KEY = 'ts-book-breathe-seen'
+const NAV_PAGES = PAGES.filter((id) => id !== 'home')
 
 export function Header({ page }: Props) {
   const { user } = useAuth()
@@ -39,6 +40,7 @@ export function Header({ page }: Props) {
 
   return (
     <header
+      className={`site-header${mintMode ? ' is-mint' : ''}`}
       style={{
         position: 'sticky',
         top: 0,
@@ -48,49 +50,22 @@ export function Header({ page }: Props) {
         borderBottom: mintMode ? '1px solid rgba(20,230,164,0.18)' : '1px solid rgba(227,180,74,0.16)',
       }}
     >
-      <div
-        className="shell"
-        style={{
-          paddingTop: 18,
-          paddingBottom: 18,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 24,
-          flexWrap: 'wrap',
-        }}
-      >
-        <Link to={pageHref('home')} style={{ display: 'flex', alignItems: 'center', gap: 14, color: 'var(--bone)' }}>
-          <img src="/assets/ts-mark-gold.svg" alt="TraderSveezy" style={{ height: 38 }} />
-          <span
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 800,
-              fontSize: 17,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-            }}
-          >
-            TraderSveezy
-          </span>
+      <div className="shell site-header-inner">
+        <Link to="/" className="site-logo" aria-label="TraderSveezy home">
+          <img src="/assets/ts-mark-gold.svg" alt="" style={{ height: 34 }} />
+          <span className="site-logo-word">TraderSveezy</span>
         </Link>
-        <nav aria-label="Primary" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(16px, 2.4vw, 34px)', flexWrap: 'wrap' }}>
-          {PAGES.map((id) => {
+        <nav aria-label="Primary" className="site-nav">
+          {NAV_PAGES.map((id) => {
             const accent = id === 'mintscript' ? 'var(--mint)' : 'var(--gold)'
             return (
               <NavLink
                 key={id}
                 to={pageHref(id)}
-                end={id === 'home'}
+                className="site-nav-link"
                 style={({ isActive }) => ({
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 12,
-                  fontWeight: 500,
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
                   color: isActive ? accent : 'var(--soft)',
-                  padding: '6px 0',
-                  borderBottom: `1px solid ${isActive ? accent : 'transparent'}`,
+                  borderBottomColor: isActive ? accent : 'transparent',
                 })}
               >
                 {PAGE_LABELS[id]}
@@ -99,15 +74,10 @@ export function Header({ page }: Props) {
           })}
           <NavLink
             to={user ? '/account?stay=1' : '/account'}
+            className="site-nav-link"
             style={({ isActive }) => ({
-              fontFamily: 'var(--font-mono)',
-              fontSize: 12,
-              fontWeight: 500,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
               color: isActive ? (mintMode ? 'var(--mint)' : 'var(--gold)') : 'var(--soft)',
-              padding: '6px 0',
-              borderBottom: `1px solid ${isActive ? (mintMode ? 'var(--mint)' : 'var(--gold)') : 'transparent'}`,
+              borderBottomColor: isActive ? (mintMode ? 'var(--mint)' : 'var(--gold)') : 'transparent',
             })}
           >
             {user ? 'Account' : 'Sign in'}
@@ -115,7 +85,7 @@ export function Header({ page }: Props) {
           <Link
             to={LINKS.booking}
             className={`btn btn-primary${breathe ? ' btn-book-breathe' : ''}`}
-            style={{ padding: '12px 18px', fontSize: 12 }}
+            style={{ padding: '11px 16px', fontSize: 11, flexShrink: 0 }}
             onClick={stopBreathe}
           >
             Book 1-on-1

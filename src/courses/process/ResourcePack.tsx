@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { CHECKLIST_ITEMS, DESK_PACK_FILE, RESOURCES } from './data'
+import { downloadFile, filenameFromPath } from './downloadFile'
 
 type Props = {
   onContinue: () => void
@@ -7,6 +8,8 @@ type Props = {
 
 export function ResourcePack({ onContinue }: Props) {
   const [marks, setMarks] = useState<Record<string, 'yes' | 'no' | ''>>({})
+  const [busy, setBusy] = useState('')
+  const [dlError, setDlError] = useState('')
   const answered = useMemo(
     () => CHECKLIST_ITEMS.filter((i) => marks[i.n] === 'yes' || marks[i.n] === 'no').length,
     [marks],
@@ -15,6 +18,18 @@ export function ResourcePack({ onContinue }: Props) {
 
   function setMark(n: string, v: 'yes' | 'no') {
     setMarks((prev) => ({ ...prev, [n]: prev[n] === v ? '' : v }))
+  }
+
+  async function onDownload(path: string, id: string) {
+    setDlError('')
+    setBusy(id)
+    try {
+      await downloadFile(path, filenameFromPath(path))
+    } catch (err) {
+      setDlError(err instanceof Error ? err.message : 'Download failed.')
+    } finally {
+      setBusy('')
+    }
   }
 
   return (
@@ -30,12 +45,22 @@ export function ResourcePack({ onContinue }: Props) {
         rows, Yes/No dropdowns. Open in Excel or import the .xlsx into Google Sheets.
       </p>
 
-      <a className="ms-desk-pack-cta btn btn-primary" href={DESK_PACK_FILE} download>
-        Download full desk pack · XLSX
-      </a>
+      <button
+        type="button"
+        className="ms-desk-pack-cta btn btn-primary"
+        disabled={busy === 'pack'}
+        onClick={() => void onDownload(DESK_PACK_FILE, 'pack')}
+      >
+        {busy === 'pack' ? 'Downloading…' : 'Download full desk pack · XLSX'}
+      </button>
       <p className="mono ms-desk-pack-note">
         One file · 5 tabs · Checklist · Log · Losses · Weekly · Rules
       </p>
+      {dlError ? (
+        <p className="account-error" role="alert" style={{ marginTop: 12 }}>
+          {dlError}
+        </p>
+      ) : null}
 
       <section className="ms-desk-sheet" aria-labelledby="live-checklist">
         <header className="ms-desk-sheet-head">
@@ -106,18 +131,28 @@ export function ResourcePack({ onContinue }: Props) {
               </div>
               <p>{r.blurb}</p>
             </div>
-            <a className="btn btn-primary" href={r.file} download>
-              Download
-            </a>
+            <button
+              type="button"
+              className="btn btn-primary"
+              disabled={busy === r.id}
+              onClick={() => void onDownload(r.file, r.id)}
+            >
+              {busy === r.id ? '…' : 'Download'}
+            </button>
           </li>
         ))}
       </ul>
 
       <div className="ms-resource-bundle">
         <p>Prefer the pack - one download, every tab already named and styled.</p>
-        <a className="btn btn-ghost" href="/curriculum/05/HOW-TO-GOOGLE-SHEETS.txt" download>
+        <button
+          type="button"
+          className="btn btn-ghost"
+          disabled={busy === 'howto'}
+          onClick={() => void onDownload('/curriculum/05/HOW-TO-GOOGLE-SHEETS.txt', 'howto')}
+        >
           How-to
-        </a>
+        </button>
       </div>
 
       <button type="button" className="btn btn-primary" onClick={onContinue}>

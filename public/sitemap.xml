@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://tradersveezy.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://tradersveezy.com/assets/og-default.jpg</image:loc>
+      <image:title>TraderSveezy</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://tradersveezy.com/mintscript</loc>
@@ -12,28 +17,46 @@
   </url>
   <url>
     <loc>https://tradersveezy.com/coaching</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://tradersveezy.com/assets/og-coaching.jpg</image:loc>
+      <image:title>1-on-1 coaching</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://tradersveezy.com/courses</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://tradersveezy.com/assets/og-courses.jpg</image:loc>
+      <image:title>Trading playbook waitlist</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://tradersveezy.com/courses/market-structure</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://tradersveezy.com/courses/levels-that-matter</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tradersveezy.com/account</loc>
+    <loc>https://tradersveezy.com/courses/entries-triggers</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tradersveezy.com/courses/risk-position-sizing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tradersveezy.com/courses/process-review</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://tradersveezy.com/blog</loc>

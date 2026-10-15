@@ -880,7 +880,8 @@ img {
     max-width: none !important;
   }
 
-  .waitlist-grid {
+  .waitlist-grid,
+  .courses-outcomes {
     grid-template-columns: 1fr !important;
   }
 }

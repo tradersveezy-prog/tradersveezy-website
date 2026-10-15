@@ -6,6 +6,37 @@ import { COURSES } from '../data'
 import { PLAYBOOK_PRICE_USD, startPlaybookCheckout } from '../lib/playbook'
 import { supabase, supabaseConfigured } from '../lib/supabase'
 
+const INCLUDES = [
+  {
+    n: '01',
+    title: 'Five interactive modules',
+    body: 'Market structure → levels → entries → risk → process. Quizzes, chart picks, and games — not a PDF dump.',
+  },
+  {
+    n: '02',
+    title: 'One video per module',
+    body: 'Course 01 video is live. The rest film as we go — you already own the waitlist seat at $50 off.',
+  },
+  {
+    n: '03',
+    title: 'The same rules I use',
+    body: 'Name the condition, mark levels that matter, wait for a trigger, size from risk, review the losses.',
+  },
+  {
+    n: '04',
+    title: 'Shareable cert when done',
+    body: 'Finish all five live modules and download a cert with your name. Process over vibes.',
+  },
+]
+
+const OUTCOMES = [
+  'Stop guessing “is this a trend or a trap?”',
+  'Mark levels you can explain in 15 seconds',
+  'Enter on a named trigger — retest, reclaim, or breakout sequence',
+  'Place a structure stop and size from dollar risk',
+  'Keep a simple checklist and review loop',
+]
+
 export function Courses() {
   const { user } = useAuth()
   const { access: hasPlaybook } = usePlaybookAccess()
@@ -74,7 +105,7 @@ export function Courses() {
         {payBusy ? 'Opening checkout…' : `Pay with crypto · $${PLAYBOOK_PRICE_USD}`}
       </button>
       <p className="mono" style={{ fontSize: 11, color: 'var(--muted)', marginTop: 12, lineHeight: 1.4 }}>
-        $50 off list · Course 01 now · Full playbook when we open · Crypto via NOWPayments
+        One payment · Crypto only (NOWPayments) · Educational only · Not financial advice
       </p>
     </form>
   )
@@ -96,7 +127,7 @@ export function Courses() {
           }}
         >
           <div style={{ minWidth: 0 }}>
-            <p className="eyebrow">Playbook · Waitlist special</p>
+            <p className="eyebrow">Crypto day trading playbook · Waitlist</p>
             <h1
               className="display"
               style={{
@@ -106,28 +137,61 @@ export function Courses() {
                 marginTop: 28,
               }}
             >
-              The full
+              Learn to trade
               <br />
-              <span style={{ color: 'var(--gold)' }}>playbook.</span>
+              <span style={{ color: 'var(--gold)' }}>the plan.</span>
             </h1>
             <p
               style={{
                 fontSize: 'clamp(18px, 1.4vw, 21px)',
                 lineHeight: 1.5,
                 color: 'var(--soft)',
-                maxWidth: '28em',
+                maxWidth: '32em',
                 margin: '28px 0 0',
               }}
             >
-              Pay now at the waitlist price ($50 off). Start Course 01 today. Full access opens soon — interactive
-              lessons are live; remaining module videos roll out as they&apos;re filmed.
+              An interactive course stack for crypto (and gold) day traders who want a repeatable process — not tip
+              spam. You learn how I read structure, mark levels, take entries, size risk, and review losses.
             </p>
-            <p style={{ margin: '28px 0 0', display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+            <ul
+              style={{
+                margin: '28px 0 0',
+                padding: 0,
+                listStyle: 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 10,
+                maxWidth: '34em',
+              }}
+            >
+              {[
+                '5 modules · written lessons + quizzes + chart labs',
+                'Course 01 (Market Structure) open today with an account',
+                'Pay $250 now ($50 off $300) — unlock 02–05 + cert path',
+                'Module videos roll out as filmed · interactive is live',
+              ].map((line) => (
+                <li
+                  key={line}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '12px 1fr',
+                    gap: 12,
+                    fontSize: 16,
+                    lineHeight: 1.45,
+                    color: 'var(--bone)',
+                  }}
+                >
+                  <span style={{ color: 'var(--gold)', marginTop: 2 }}>▸</span>
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+            <p style={{ margin: '32px 0 0', display: 'flex', flexWrap: 'wrap', gap: 12 }}>
               <Link to="/courses/market-structure" className="btn btn-primary" style={{ fontSize: 13, padding: '16px 24px' }}>
-                Start Course 01
+                Try Course 01 free
               </Link>
               <a href="#waitlist" className="btn btn-ghost" style={{ fontSize: 13, padding: '16px 24px' }}>
-                Waitlist · pay $250
+                Unlock full playbook · $250
               </a>
             </p>
           </div>
@@ -200,8 +264,11 @@ export function Courses() {
                 marginTop: 10,
               }}
             >
-              $50 off · One crypto payment
+              $50 off · Full 5-course playbook
             </div>
+            <p style={{ fontSize: 15, lineHeight: 1.45, color: 'var(--soft)', margin: '18px 0 0' }}>
+              Pay now. Start Course 01 today. Courses 02–05 unlock with payment. Videos keep shipping.
+            </p>
             <div
               style={{
                 marginTop: 20,
@@ -235,12 +302,119 @@ export function Courses() {
 
       <section
         className="shell"
+        style={{ paddingTop: 'clamp(56px, 7vw, 88px)', paddingBottom: 'clamp(40px, 5vw, 64px)' }}
+        aria-labelledby="what-you-get"
+      >
+        <p className="eyebrow">What this is</p>
+        <h2
+          id="what-you-get"
+          className="display"
+          style={{ fontSize: 'clamp(32px, 4vw, 48px)', letterSpacing: '0.02em', marginTop: 16, lineHeight: 1.05 }}
+        >
+          A process you can
+          <br />
+          <span style={{ color: 'var(--gold)' }}>run without me.</span>
+        </h2>
+        <p style={{ fontSize: 18, lineHeight: 1.55, color: 'var(--soft)', maxWidth: '36em', margin: '20px 0 0' }}>
+          Most traders skip straight to entries. This playbook forces the order: name what the market is doing, mark
+          the level, wait for the trigger, own the risk, then review. Same language as the desk.
+        </p>
+        <div
+          style={{
+            marginTop: 40,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
+            gap: 16,
+          }}
+        >
+          {INCLUDES.map((item) => (
+            <article
+              key={item.n}
+              style={{
+                border: '1px solid rgba(242,241,238,0.12)',
+                background: 'var(--panel)',
+                padding: '28px 24px',
+              }}
+            >
+              <span className="mono" style={{ fontSize: 12, color: 'var(--gold)', letterSpacing: '0.14em' }}>
+                {item.n}
+              </span>
+              <h3 className="display" style={{ fontSize: 22, marginTop: 14, letterSpacing: '0.04em' }}>
+                {item.title}
+              </h3>
+              <p style={{ fontSize: 16, lineHeight: 1.5, color: 'var(--soft)', margin: '12px 0 0' }}>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section
+        style={{
+          background: 'var(--panel)',
+          borderTop: '1px solid rgba(242,241,238,0.08)',
+          borderBottom: '1px solid rgba(242,241,238,0.08)',
+        }}
+      >
+        <div
+          className="shell courses-outcomes"
+          style={{
+            paddingTop: 'clamp(56px, 7vw, 88px)',
+            paddingBottom: 'clamp(56px, 7vw, 88px)',
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.1fr)',
+            gap: 'clamp(32px, 5vw, 72px)',
+            alignItems: 'start',
+          }}
+        >
+          <div>
+            <p className="eyebrow">After the playbook</p>
+            <h2 className="display" style={{ fontSize: 'clamp(28px, 3.5vw, 42px)', marginTop: 14, lineHeight: 1.08 }}>
+              What you should
+              <br />
+              <span style={{ color: 'var(--gold)' }}>be able to do.</span>
+            </h2>
+          </div>
+          <ol style={{ margin: 0, padding: 0, listStyle: 'none', borderTop: '1px solid rgba(242,241,238,0.14)' }}>
+            {OUTCOMES.map((line, i) => (
+              <li
+                key={line}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '48px 1fr',
+                  gap: 16,
+                  padding: '20px 0',
+                  borderBottom: '1px solid rgba(242,241,238,0.14)',
+                  fontSize: 18,
+                  lineHeight: 1.45,
+                  color: 'var(--bone)',
+                }}
+              >
+                <span className="mono" style={{ color: 'var(--gold)', fontSize: 13 }}>
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section
+        className="shell"
         style={{ paddingTop: 'clamp(64px, 8vw, 110px)', paddingBottom: 'clamp(40px, 5vw, 64px)' }}
         aria-labelledby="courses-list-heading"
       >
-        <h2 id="courses-list-heading" className="visually-hidden">
-          Course list
+        <p className="eyebrow">Curriculum</p>
+        <h2
+          id="courses-list-heading"
+          className="display"
+          style={{ fontSize: 'clamp(28px, 3.5vw, 42px)', marginTop: 14, marginBottom: 8 }}
+        >
+          Five modules.
         </h2>
+        <p style={{ fontSize: 17, color: 'var(--soft)', margin: '0 0 28px', maxWidth: '34em' }}>
+          Course 01 is free with an account. 02–05 open with the waitlist payment.
+        </p>
         <div style={{ borderTop: '1px solid rgba(242,241,238,0.14)' }}>
           {COURSES.map((c) => (
             <article
@@ -281,7 +455,7 @@ export function Courses() {
                   }}
                 >
                   {c.tag}
-                  {c.n === '01' ? ' · Open now' : hasPlaybook ? ' · Unlocked' : ' · Waitlist unlock'}
+                  {c.n === '01' ? ' · Free with account' : hasPlaybook ? ' · Unlocked' : ' · Waitlist unlock'}
                 </div>
                 {['01', '02', '03', '04', '05'].includes(c.n) ? (
                   <p style={{ margin: '18px 0 0' }}>
@@ -344,16 +518,17 @@ export function Courses() {
               className="display"
               style={{ fontSize: 'clamp(32px, 4vw, 52px)', letterSpacing: '0.02em', lineHeight: 1.05, marginTop: 20 }}
             >
-              Lock $250.
+              Lock the price.
               <br />
-              <span style={{ color: 'var(--gold)' }}>Start Course 01.</span>
+              <span style={{ color: 'var(--gold)' }}>Start today.</span>
             </h2>
             <p style={{ fontSize: 18, lineHeight: 1.55, color: 'var(--soft)', maxWidth: '28em', margin: '22px 0 0' }}>
-              List price $300. Waitlist is $50 off if you pay now in crypto. You get Course 01 immediately. Full playbook
-              access opens soon — you&apos;re already in.
+              List is $300. Waitlist is $250 if you pay in crypto now. You get Course 01 immediately. Payment unlocks
+              Courses 02–05 and the cert path. Remaining module videos ship as they&apos;re filmed — you&apos;re already
+              in at the special.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.5, color: 'var(--muted)', margin: '28px 0 0', maxWidth: '30em' }}>
-              Prefer live help now? <Link to="/coaching">1-on-1 sessions</Link> (crypto too).
+              Prefer live help on your trades? <Link to="/coaching">1-on-1 sessions</Link> (crypto too).
             </p>
           </div>
 
@@ -378,8 +553,11 @@ export function Courses() {
               <>
                 <p className="eyebrow">Crypto checkout</p>
                 <h3 className="display" style={{ fontSize: 26, letterSpacing: '0.03em', marginTop: 12, lineHeight: 1.15 }}>
-                  Waitlist special
+                  Full playbook · $250
                 </h3>
+                <p style={{ fontSize: 15, color: 'var(--soft)', marginTop: 10, lineHeight: 1.45 }}>
+                  Structure · levels · entries · risk · process
+                </p>
                 {payForm}
               </>
             )}

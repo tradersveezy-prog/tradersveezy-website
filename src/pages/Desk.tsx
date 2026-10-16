@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { usePlaybookAccess } from '../auth/usePlaybookAccess'
 import { COURSES, LINKS } from '../data'
+import { track } from '../lib/analytics'
 import { fetchCoachingSessions } from '../lib/coaching'
 import './desk.css'
 
@@ -26,6 +27,10 @@ export function Desk() {
   const paidReturn = params.get('paid') === '1'
   const [coachingSessions, setCoachingSessions] = useState(0)
   const handle = user?.displayName || user?.email?.split('@')[0] || 'trader'
+
+  useEffect(() => {
+    if (paidReturn) track('checkout_paid', { product: 'playbook_or_coaching', surface: 'desk' })
+  }, [paidReturn])
 
   useEffect(() => {
     let cancelled = false

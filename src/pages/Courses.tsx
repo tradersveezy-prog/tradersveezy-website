@@ -484,6 +484,13 @@ export function Courses() {
                                 ? '/courses/risk-position-sizing'
                                 : '/courses/process-review'
                       }
+                      onClick={() =>
+                        track('course_opened', {
+                          course: c.n,
+                          unlocked: c.n === '01' || hasPlaybook,
+                          surface: 'courses_list',
+                        })
+                      }
                       style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: 13,

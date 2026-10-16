@@ -17,6 +17,7 @@ export function initAnalytics() {
     person_profiles: 'identified_only',
     capture_pageview: false, // SPA: we capture on route change
     capture_pageleave: true,
+    autocapture: true,
     persistence: 'localStorage+cookie',
   })
 }

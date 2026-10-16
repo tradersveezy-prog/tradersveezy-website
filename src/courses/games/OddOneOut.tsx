@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { track } from '../../lib/analytics'
 
 export type OddOneQ = {
   id: string
@@ -30,6 +31,7 @@ export function OddOneOut({ title = 'Odd one out', items, onComplete }: Props) {
   function advance() {
     if (!locked) return
     if (isLast) {
+      track('game_completed', { game: 'odd_one_out' })
       onComplete()
       return
     }

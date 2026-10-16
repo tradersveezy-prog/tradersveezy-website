@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { track } from '../../lib/analytics'
 import type { QuizQ } from './data'
 
 type Props = {
@@ -24,7 +25,15 @@ export function Quiz({ questions, onComplete }: Props) {
 
   function advance() {
     if (isLast) {
-      onComplete(scoreRef.current, questions.length)
+      const score = scoreRef.current
+      const total = questions.length
+      track('quiz_completed', {
+        score,
+        total,
+        pct: Math.round((score / total) * 100),
+        path: typeof window !== 'undefined' ? window.location.pathname : '',
+      })
+      onComplete(score, total)
       return
     }
     setI((n) => n + 1)

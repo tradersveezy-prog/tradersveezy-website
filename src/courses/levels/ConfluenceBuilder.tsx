@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { track } from '../../lib/analytics'
 
 const FACTORS = [
   { id: 'poc', label: 'POC in the zone', weight: 2 },
@@ -74,7 +75,10 @@ export function ConfluenceBuilder({ onComplete }: Props) {
         className="btn btn-primary"
         style={{ marginTop: 24 }}
         disabled={!picked}
-        onClick={onComplete}
+        onClick={() => {
+          track('game_completed', { game: 'confluence_builder', score })
+          onComplete()
+        }}
       >
         {!picked
           ? 'Select at least one factor'

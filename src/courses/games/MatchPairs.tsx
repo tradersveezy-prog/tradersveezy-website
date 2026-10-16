@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { track } from '../../lib/analytics'
 
 export type MatchPair = {
   id: string
@@ -105,7 +106,14 @@ export function MatchPairs({
         <div className="ms-game-feedback ok">
           <p className="mono">All matched</p>
           <p>You linked every pair. That sticks better than reading a list.</p>
-          <button type="button" className="btn btn-primary" onClick={onComplete}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              track('game_completed', { game: 'match_pairs' })
+              onComplete()
+            }}
+          >
             Continue
           </button>
         </div>

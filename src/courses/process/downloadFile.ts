@@ -19,7 +19,7 @@ export async function downloadFile(path: string, filename: string) {
   a.click()
   a.remove()
   URL.revokeObjectURL(objectUrl)
-  track('file_downloaded', { filename })
+  track('file_downloaded', { filename, path })
 }
 
 export function filenameFromPath(path: string) {

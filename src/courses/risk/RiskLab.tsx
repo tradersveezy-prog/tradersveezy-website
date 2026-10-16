@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react'
+import { track } from '../../lib/analytics'
 import type { LabCallOption, RiskLabDef } from './data'
 
 type Props = {
@@ -33,6 +34,13 @@ export function RiskLab({ lab, diagram, onComplete }: Props) {
   function lock(choice: string) {
     setDecision(choice)
     setLocked(true)
+    track('lab_call', {
+      lab: lab.title,
+      choice,
+      correct: lab.correctCall,
+      matched: choice === lab.correctCall,
+      path: typeof window !== 'undefined' ? window.location.pathname : '',
+    })
   }
 
   const hotspot = lab.hotspots.find((h) => h.id === open)

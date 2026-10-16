@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { MintScreenerDemo } from '../components/MintScreenerDemo'
 import { LINKS, MINT_FEATURES, MINT_PLANS } from '../data'
+import { track } from '../lib/analytics'
 
 function planHref(key: 'discord' | 'mintscript') {
   return key === 'discord' ? LINKS.discord : LINKS.mintscript
@@ -78,7 +79,13 @@ export function MintScript() {
             finds volume + EMA flips. Plus Mozzie, BTC Station, and Global Flow. Start free in Discord.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 44 }}>
-            <a href={LINKS.mintscript} target="_blank" rel="noopener noreferrer" className="btn btn-mint-grad btn-mint-pulse">
+            <a
+              href={LINKS.mintscript}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-mint-grad btn-mint-pulse"
+              onClick={() => track('outbound_clicked', { destination: 'mintscript_join', surface: 'mintscript_hero' })}
+            >
               Join MintScript
             </a>
             <a
@@ -87,6 +94,7 @@ export function MintScript() {
               rel="noopener noreferrer"
               className="btn btn-ghost"
               style={{ borderColor: 'rgba(244,244,246,0.28)', color: '#F4F4F6' }}
+              onClick={() => track('outbound_clicked', { destination: 'mintscript_plans', surface: 'mintscript_hero' })}
             >
               See plans
             </a>

@@ -27,6 +27,10 @@ export function Coaching() {
   const [sessions, setSessions] = useState(0)
 
   useEffect(() => {
+    if (paid) track('checkout_paid', { product: 'coaching' })
+  }, [paid])
+
+  useEffect(() => {
     let cancelled = false
     async function load() {
       if (!user?.id) {

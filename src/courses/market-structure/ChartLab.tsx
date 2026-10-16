@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { track } from '../../lib/analytics'
 import type { CallChoice, ChartLab as Lab } from './data'
 
 type Props = {
@@ -29,6 +30,13 @@ export function ChartLab({ lab, onComplete }: Props) {
   function lock(choice: CallChoice) {
     setDecision(choice)
     setLocked(true)
+    track('lab_call', {
+      lab: lab.title,
+      choice,
+      correct: lab.correctCall,
+      matched: choice === lab.correctCall,
+      path: typeof window !== 'undefined' ? window.location.pathname : '',
+    })
   }
 
   const hotspot = lab.hotspots.find((h) => h.id === open)

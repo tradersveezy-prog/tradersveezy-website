@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { track } from '../../lib/analytics'
 
 export type TrueFalseQ = {
   id: string
@@ -29,6 +30,7 @@ export function TrueFalse({ title = 'True or false', items, onComplete }: Props)
   function advance() {
     if (!locked) return
     if (isLast) {
+      track('game_completed', { game: 'true_false' })
       onComplete()
       return
     }

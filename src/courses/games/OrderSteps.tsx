@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { track } from '../../lib/analytics'
 
 export type OrderItem = {
   id: string
@@ -89,7 +90,14 @@ export function OrderSteps({
           <p className="mono">{ok ? 'In order' : 'Not quite'}</p>
           <p>{explain}</p>
           {ok ? (
-            <button type="button" className="btn btn-primary" onClick={onComplete}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                track('game_completed', { game: 'order_steps' })
+                onComplete()
+              }}
+            >
               Continue
             </button>
           ) : (

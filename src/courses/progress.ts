@@ -1,3 +1,5 @@
+import { track } from '../lib/analytics'
+
 /** Interactive modules that count toward the shareable playbook cert. */
 export const LIVE_COURSES = [
   { id: '01', title: 'Market Structure', path: '/courses/market-structure' },
@@ -31,6 +33,10 @@ export function markCourseComplete(id: LiveCourseId) {
   if (!next.includes(id)) {
     next.push(id)
     write(next)
+    track('course_completed', { course: id, done: next.length, total: LIVE_COURSES.length })
+    if (LIVE_COURSES.every((c) => next.includes(c.id))) {
+      track('playbook_completed', { courses: next.length })
+    }
   }
 }
 

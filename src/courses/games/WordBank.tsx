@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { track } from '../../lib/analytics'
 
 /** Mini crossword-lite: build a word from a letter bank. */
 type Props = {
@@ -104,7 +105,14 @@ export function WordBank({
           <p className="mono">{ok ? `Spelled ${target}` : 'Not that word'}</p>
           <p>{explain}</p>
           {ok ? (
-            <button type="button" className="btn btn-primary" onClick={onComplete}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                track('game_completed', { game: 'word_bank' })
+                onComplete()
+              }}
+            >
               Continue
             </button>
           ) : (

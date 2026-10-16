@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { PositionCalculator } from '../components/PositionCalculator'
 import { LINKS, OFFERS } from '../data'
+import { track } from '../lib/analytics'
 
 export function Home() {
   return (
@@ -47,15 +48,26 @@ export function Home() {
               then decide.
             </p>
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 36 }}>
-              <Link to="/coaching" className="btn btn-primary">
+              <Link
+                to="/coaching"
+                className="btn btn-primary"
+                onClick={() => track('cta_clicked', { cta: 'learn_1on1', surface: 'home_hero' })}
+              >
                 Learn 1-on-1
               </Link>
-              <a href={LINKS.discord} className="btn btn-ghost" target="_blank" rel="noopener noreferrer">
+              <a
+                href={LINKS.discord}
+                className="btn btn-ghost"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track('outbound_clicked', { destination: 'discord', surface: 'home_hero' })}
+              >
                 Join free Discord
               </a>
             </div>
             <Link
               to="/mintscript"
+              onClick={() => track('cta_clicked', { cta: 'mintscript', surface: 'home_hero' })}
               style={{
                 display: 'inline-block',
                 marginTop: 22,
@@ -134,6 +146,7 @@ export function Home() {
                 key={o.n}
                 to={o.href}
                 className="offers-row"
+                onClick={() => track('cta_clicked', { cta: `offer_${o.n}`, surface: 'home_offers', label: o.title })}
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '72px minmax(0, 1.3fr) minmax(0, 1fr) auto',
@@ -295,7 +308,11 @@ export function Home() {
               Mozzie, BTC Station, Global Flow. Start free in Discord.
             </p>
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 40 }}>
-              <Link to="/mintscript" className="btn btn-mint">
+              <Link
+                to="/mintscript"
+                className="btn btn-mint"
+                onClick={() => track('cta_clicked', { cta: 'mintscript', surface: 'home_desk' })}
+              >
                 Explore MintScript
               </Link>
               <a
@@ -304,6 +321,7 @@ export function Home() {
                 rel="noopener noreferrer"
                 className="btn btn-ghost"
                 style={{ borderColor: 'rgba(244,244,246,0.28)', color: '#F4F4F6' }}
+                onClick={() => track('outbound_clicked', { destination: 'discord', surface: 'home_desk' })}
               >
                 Free Discord
               </a>

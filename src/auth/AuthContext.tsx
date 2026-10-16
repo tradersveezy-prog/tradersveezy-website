@@ -160,12 +160,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = useCallback(async (email: string, password: string) => {
     if (supabase) {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) return { error: error.message }
+      if (error) {
+        track('auth_sign_in_failed')
+        return { error: error.message }
+      }
       return {}
     }
     const res = localSignIn(email, password)
-    if (res.error) return { error: res.error }
+    if (res.error) {
+      track('auth_sign_in_failed', { local: true })
+      return { error: res.error }
+    }
     setUser(toUser(res.user ?? null))
+    identifyUser(toUser(res.user ?? null))
+    track('auth_signed_in', { local: true })
     return {}
   }, [])
 
@@ -178,7 +186,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.resetPasswordForEmail(trimmed, {
       redirectTo: AUTH_REDIRECT_URL,
     })
-    if (error) return { error: error.message }
+    if (error) {
+      track('auth_password_reset_failed')
+      return { error: error.message }
+    }
+    track('auth_password_reset_requested')
     return {}
   }, [])
 
@@ -188,6 +200,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.updateUser({ password })
     if (error) return { error: error.message }
     setPasswordRecovery(false)
+    track('auth_password_updated')
     return {}
   }, [])
 

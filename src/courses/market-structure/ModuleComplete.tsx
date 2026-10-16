@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { toBlob } from 'html-to-image'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthContext'
+import { track } from '../../lib/analytics'
 import { LIVE_COURSES } from '../progress'
 
 type Props = {
@@ -60,6 +61,7 @@ export function ModuleComplete({
           text: shareText,
           url: shareUrl,
         })
+        track('cert_shared', { method: 'native' })
         return
       }
     } catch {
@@ -67,6 +69,7 @@ export function ModuleComplete({
     }
     try {
       await navigator.clipboard.writeText(shareText)
+      track('cert_shared', { method: 'clipboard_text' })
       setLinkCopied(true)
       window.setTimeout(() => setLinkCopied(false), 2200)
     } catch {
@@ -77,6 +80,7 @@ export function ModuleComplete({
   async function copyLink() {
     try {
       await navigator.clipboard.writeText(shareUrl)
+      track('cert_shared', { method: 'copy_link' })
       setLinkCopied(true)
       window.setTimeout(() => setLinkCopied(false), 2200)
     } catch {
@@ -98,6 +102,7 @@ export function ModuleComplete({
 
       if (typeof ClipboardItem !== 'undefined' && navigator.clipboard?.write) {
         await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+        track('cert_shared', { method: 'copy_image' })
         setImageStatus('copied')
         window.setTimeout(() => setImageStatus('idle'), 2200)
         return
@@ -109,6 +114,7 @@ export function ModuleComplete({
       a.download = 'tradersveezy-playbook-complete.png'
       a.click()
       URL.revokeObjectURL(url)
+      track('cert_shared', { method: 'download_image' })
       setImageStatus('copied')
       window.setTimeout(() => setImageStatus('idle'), 2200)
     } catch {

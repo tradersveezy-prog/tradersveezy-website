@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { FEEDS, LINKS } from '../data'
+import { track } from '../lib/analytics'
 
 export function Tools() {
   return (
@@ -84,7 +85,12 @@ export function Tools() {
             <Link to="/coaching">1-on-1</Link> and the <Link to="/courses">playbook</Link> — member tools, not Radar.
           </p>
         </div>
-        <a href={LINKS.discord} className="btn btn-primary" style={{ padding: '22px 34px' }}>
+        <a
+          href={LINKS.discord}
+          className="btn btn-primary"
+          style={{ padding: '22px 34px' }}
+          onClick={() => track('outbound_clicked', { destination: 'discord', surface: 'tools' })}
+        >
           Join the Discord
         </a>
       </section>

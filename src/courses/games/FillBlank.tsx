@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { track } from '../../lib/analytics'
 
 export type FillBlankQ = {
   id: string
@@ -33,6 +34,7 @@ export function FillBlank({ title = 'Fill the blank', items, onComplete }: Props
   function advance() {
     if (!locked) return
     if (isLast) {
+      track('game_completed', { game: 'fill_blank' })
       onComplete()
       return
     }

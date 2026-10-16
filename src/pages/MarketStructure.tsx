@@ -23,6 +23,7 @@ import { TeachFigure } from '../courses/market-structure/TeachFigure'
 import { BreakReclaimChart } from '../courses/diagrams/BreakReclaimChart'
 import { TrendEmaChart } from '../courses/diagrams/TrendEmaChart'
 import { ValueProfileChart } from '../courses/diagrams/ValueProfileChart'
+import { track } from '../lib/analytics'
 import '../courses/market-structure/market-structure.css'
 
 function stepFromParam(raw: string | null): StepId {
@@ -38,6 +39,7 @@ export function MarketStructure() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    track('course_step', { course: '01', step })
   }, [step])
 
   function go(id: StepId) {

@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { identifyUser, track } from '../lib/analytics'
 import { SITE_URL } from '../seo'
 import { supabase, supabaseConfigured } from '../lib/supabase'
 import {
@@ -84,16 +85,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async function boot() {
       if (supabase) {
         const { data } = await supabase.auth.getSession()
-        if (!cancelled) setUser(toUser(data.session?.user ?? null))
+        const next = toUser(data.session?.user ?? null)
+        if (!cancelled) {
+          setUser(next)
+          identifyUser(next)
+        }
         const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
           if (event === 'PASSWORD_RECOVERY') setPasswordRecovery(true)
-          setUser(toUser(session?.user ?? null))
+          const u = toUser(session?.user ?? null)
+          setUser(u)
+          if (event === 'SIGNED_IN') {
+            identifyUser(u)
+            track('auth_signed_in')
+          } else if (event === 'SIGNED_OUT') {
+            identifyUser(null)
+            track('auth_signed_out')
+          } else if (u) {
+            identifyUser(u)
+          }
         })
         if (!cancelled) setLoading(false)
         return () => sub.subscription.unsubscribe()
       }
       if (!cancelled) {
-        setUser(toUser(localGetSession()))
+        const local = toUser(localGetSession())
+        setUser(local)
+        identifyUser(local)
         setLoading(false)
       }
       return undefined
@@ -123,12 +140,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         options: { data: { display_name: name } },
       })
       if (error) return { error: error.message }
-      if (data.session?.user) setUser(toUser(data.session.user))
+      if (data.session?.user) {
+        const u = toUser(data.session.user)
+        setUser(u)
+        identifyUser(u)
+      }
+      track('auth_sign_up', { needs_confirm: !data.session })
       return { needsConfirm: !data.session }
     }
     const res = localSignUp(email, password, name)
     if (res.error) return { error: res.error }
-    setUser(toUser(res.user ?? null))
+    const u = toUser(res.user ?? null)
+    setUser(u)
+    identifyUser(u)
+    track('auth_sign_up', { needs_confirm: false, local: true })
     return {}
   }, [])
 

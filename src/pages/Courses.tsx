@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { usePlaybookAccess } from '../auth/usePlaybookAccess'
 import { COURSES } from '../data'
+import { track } from '../lib/analytics'
 import { PLAYBOOK_PRICE_USD, startPlaybookCheckout } from '../lib/playbook'
 import { supabase, supabaseConfigured } from '../lib/supabase'
 
@@ -55,9 +56,11 @@ export function Courses() {
         throw new Error('Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env first.')
       }
       const { data: session } = supabase ? await supabase.auth.getSession() : { data: { session: null } }
+      track('checkout_started', { product: 'playbook', price_usd: PLAYBOOK_PRICE_USD })
       const url = await startPlaybookCheckout(email, session.session?.access_token)
       window.location.href = url
     } catch (err) {
+      track('checkout_failed', { product: 'playbook' })
       setPayError(err instanceof Error ? err.message : 'Could not start payment.')
       setPayBusy(false)
     }
@@ -187,10 +190,20 @@ export function Courses() {
               ))}
             </ul>
             <p style={{ margin: '32px 0 0', display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-              <Link to="/courses/market-structure" className="btn btn-primary" style={{ fontSize: 13, padding: '16px 24px' }}>
+              <Link
+                to="/courses/market-structure"
+                className="btn btn-primary"
+                style={{ fontSize: 13, padding: '16px 24px' }}
+                onClick={() => track('cta_clicked', { cta: 'try_course_01', surface: 'courses_hero' })}
+              >
                 Try Course 01 free
               </Link>
-              <a href="#waitlist" className="btn btn-ghost" style={{ fontSize: 13, padding: '16px 24px' }}>
+              <a
+                href="#waitlist"
+                className="btn btn-ghost"
+                style={{ fontSize: 13, padding: '16px 24px' }}
+                onClick={() => track('cta_clicked', { cta: 'unlock_playbook', surface: 'courses_hero' })}
+              >
                 Unlock full playbook · $250
               </a>
             </p>

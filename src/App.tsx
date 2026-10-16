@@ -6,6 +6,7 @@ import { RequireAuth } from './auth/RequireAuth'
 import { RequirePlaybook } from './auth/RequirePlaybook'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
+import { PostHogPageview } from './components/PostHogPageview'
 import { Seo } from './components/Seo'
 import { PAGE_PATHS, PAGES, pageFromPath, type PageId } from './data'
 import { About } from './pages/About'
@@ -137,6 +138,7 @@ export default function App() {
     <HelmetProvider>
       <BrowserRouter>
         <AuthProvider>
+          <PostHogPageview />
           <Shell />
         </AuthProvider>
       </BrowserRouter>

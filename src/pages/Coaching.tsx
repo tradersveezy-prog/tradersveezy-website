@@ -7,6 +7,7 @@ import {
   startCoachingCheckout,
   type CoachingPackageId,
 } from '../lib/coaching'
+import { track } from '../lib/analytics'
 import { supabase, supabaseConfigured } from '../lib/supabase'
 
 const TOPICS = [
@@ -53,10 +54,12 @@ export function Coaching() {
       if (!supabaseConfigured) {
         throw new Error('Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env first.')
       }
+      track('checkout_started', { product: 'coaching', package_id: packageId })
       const { data: session } = supabase ? await supabase.auth.getSession() : { data: { session: null } }
       const url = await startCoachingCheckout(packageId, email, session.session?.access_token)
       window.location.href = url
     } catch (err) {
+      track('checkout_failed', { product: 'coaching', package_id: packageId })
       setPayError(err instanceof Error ? err.message : 'Could not start payment.')
       setPayBusy(null)
     }

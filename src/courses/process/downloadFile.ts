@@ -1,3 +1,5 @@
+import { track } from '../../lib/analytics'
+
 /** Fetch a static asset and save it with an explicit filename (avoids SPA 404.html saves). */
 export async function downloadFile(path: string, filename: string) {
   const url = `${path}${path.includes('?') ? '&' : '?'}v=20261015`
@@ -17,6 +19,7 @@ export async function downloadFile(path: string, filename: string) {
   a.click()
   a.remove()
   URL.revokeObjectURL(objectUrl)
+  track('file_downloaded', { filename })
 }
 
 export function filenameFromPath(path: string) {

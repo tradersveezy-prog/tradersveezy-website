@@ -22,6 +22,7 @@ import {
 } from '../courses/process/data'
 import { ResourcePack } from '../courses/process/ResourcePack'
 import { RiskLab } from '../courses/risk/RiskLab'
+import { track } from '../lib/analytics'
 import '../courses/market-structure/market-structure.css'
 
 function stepFromParam(raw: string | null): StepId {
@@ -43,6 +44,7 @@ export function ProcessReview() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    track('course_step', { course: '05', step })
   }, [step])
 
   function go(id: StepId) {

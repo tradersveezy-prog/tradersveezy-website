@@ -24,6 +24,7 @@ import {
 } from '../courses/risk/data'
 import { RiskLab } from '../courses/risk/RiskLab'
 import { PositionCalculator } from '../components/PositionCalculator'
+import { track } from '../lib/analytics'
 import '../courses/market-structure/market-structure.css'
 
 function stepFromParam(raw: string | null): StepId {
@@ -45,6 +46,7 @@ export function RiskPositionSizing() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    track('course_step', { course: '04', step })
   }, [step])
 
   function go(id: StepId) {

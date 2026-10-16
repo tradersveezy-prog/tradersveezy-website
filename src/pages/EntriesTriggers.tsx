@@ -24,6 +24,7 @@ import { CourseFinish } from '../courses/market-structure/CourseFinish'
 import { StructureGate } from '../courses/market-structure/StructureGate'
 import { TeachFigure } from '../courses/market-structure/TeachFigure'
 import { TipFigure } from '../courses/market-structure/TipFigure'
+import { track } from '../lib/analytics'
 import '../courses/market-structure/market-structure.css'
 
 function stepFromParam(raw: string | null): StepId {
@@ -39,6 +40,7 @@ export function EntriesTriggers() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    track('course_step', { course: '03', step })
   }, [step])
 
   function go(id: StepId) {

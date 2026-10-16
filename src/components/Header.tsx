@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { LINKS, PAGE_LABELS, PAGES, pageHref, type PageId } from '../data'
+import { track } from '../lib/analytics'
 
 type Props = {
   page: PageId
@@ -79,6 +80,7 @@ export function Header({ page }: Props) {
               color: isActive ? (mintMode ? 'var(--mint)' : 'var(--gold)') : 'var(--soft)',
               borderBottomColor: isActive ? (mintMode ? 'var(--mint)' : 'var(--gold)') : 'transparent',
             })}
+            onClick={() => track('cta_clicked', { cta: user ? 'account' : 'sign_in', surface: 'header' })}
           >
             {user ? 'Account' : 'Sign in'}
           </NavLink>
@@ -86,7 +88,10 @@ export function Header({ page }: Props) {
             to={LINKS.booking}
             className={`btn btn-primary${breathe ? ' btn-book-breathe' : ''}`}
             style={{ padding: '11px 16px', fontSize: 11, flexShrink: 0 }}
-            onClick={stopBreathe}
+            onClick={() => {
+              stopBreathe()
+              track('cta_clicked', { cta: 'book_1on1', surface: 'header' })
+            }}
           >
             Book 1-on-1
           </Link>

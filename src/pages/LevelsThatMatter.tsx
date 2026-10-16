@@ -28,6 +28,7 @@ import { MultiTouchChart } from '../courses/diagrams/MultiTouchChart'
 import { ValueProfileChart } from '../courses/diagrams/ValueProfileChart'
 import { VwapMagnetChart } from '../courses/diagrams/VwapMagnetChart'
 import { WickHalfMagnetChart } from '../courses/diagrams/WickHalfMagnetChart'
+import { track } from '../lib/analytics'
 import '../courses/market-structure/market-structure.css'
 
 function stepFromParam(raw: string | null): StepId {
@@ -43,6 +44,7 @@ export function LevelsThatMatter() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    track('course_step', { course: '02', step })
   }, [step])
 
   function go(id: StepId) {

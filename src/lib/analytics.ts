@@ -1,9 +1,9 @@
 import posthog from 'posthog-js'
 
 const key = (import.meta.env.VITE_POSTHOG_KEY as string | undefined)?.trim() || ''
-/** EU cloud default — override with VITE_POSTHOG_HOST if you use US. */
+/** US cloud default — override with VITE_POSTHOG_HOST if you use EU. */
 const host =
-  (import.meta.env.VITE_POSTHOG_HOST as string | undefined)?.trim() || 'https://eu.i.posthog.com'
+  (import.meta.env.VITE_POSTHOG_HOST as string | undefined)?.trim() || 'https://us.i.posthog.com'
 
 export const analyticsEnabled = Boolean(key)
 

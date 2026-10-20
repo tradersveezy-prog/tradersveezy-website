@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { usePlaybookAccess } from '../auth/usePlaybookAccess'
+import { DeskResources } from '../courses/process/DeskResources'
 import { COURSES } from '../data'
 import { track } from '../lib/analytics'
 import { PLAYBOOK_PRICE_USD, startPlaybookCheckout } from '../lib/playbook'
@@ -510,6 +511,25 @@ export function Courses() {
           ))}
         </div>
       </section>
+
+      {hasPlaybook ? (
+        <section
+          id="desk-pack"
+          className="shell"
+          style={{ paddingTop: 'clamp(56px, 8vw, 96px)', paddingBottom: 'clamp(64px, 9vw, 110px)' }}
+          aria-labelledby="desk-pack-heading"
+        >
+          <p className="eyebrow">Member downloads</p>
+          <h2
+            id="desk-pack-heading"
+            className="display"
+            style={{ fontSize: 'clamp(28px, 3.5vw, 42px)', marginTop: 14, marginBottom: 8 }}
+          >
+            Desk pack.
+          </h2>
+          <DeskResources compact />
+        </section>
+      ) : null}
 
       <section
         id="waitlist"

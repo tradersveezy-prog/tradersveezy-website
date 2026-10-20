@@ -76,7 +76,7 @@ export const RESOURCES: ResourceFile[] = [
     id: 'daily',
     n: '02',
     title: 'Daily P&L tracker',
-    blurb: 'Balance, % goal, daily P&L, beat-by — with auto formulas.',
+    blurb: 'Balance, % goal, daily P&L — plus a Risk calculator tab for position size.',
     file: '/curriculum/05/daily-pnl-tracker.xlsx',
     kind: 'XLSX',
   },

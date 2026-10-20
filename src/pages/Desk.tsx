@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { usePlaybookAccess } from '../auth/usePlaybookAccess'
+import { DeskResources } from '../courses/process/DeskResources'
 import { COURSES, LINKS } from '../data'
 import { track } from '../lib/analytics'
 import { fetchCoachingSessions } from '../lib/coaching'
@@ -101,11 +102,46 @@ export function Desk() {
               <Link to="/courses/process-review" className="btn btn-primary">
                 Open module
               </Link>
-              <Link to="/courses#waitlist" className="btn btn-ghost" style={{ fontSize: 12, padding: '14px 18px' }}>
-                {hasPlaybook ? 'Playbook' : 'Waitlist · $250'}
-              </Link>
+              <a href="#desk-pack" className="btn btn-ghost" style={{ fontSize: 12, padding: '14px 18px' }}>
+                Desk files
+              </a>
             </div>
           </div>
+        </section>
+
+        <section className="desk-section" id="desk-pack" aria-labelledby="desk-files">
+          <div className="desk-section-head">
+            <h2 id="desk-files">Desk files</h2>
+            <span className="eyebrow" style={{ margin: 0 }}>
+              Course 05 pack
+            </span>
+          </div>
+          {hasPlaybook ? (
+            <DeskResources compact />
+          ) : (
+            <div className="desk-continue" style={{ gridTemplateColumns: '1fr auto' }}>
+              <div>
+                <span className="eyebrow">Playbook unlock</span>
+                <h3>Checklist, P&amp;L, risk size, log</h3>
+                <p>
+                  The branded Excel desk pack opens with playbook access — no need to walk the Course 05
+                  module first.
+                </p>
+              </div>
+              <div className="desk-continue-cta">
+                <Link to="/courses#waitlist" className="btn btn-primary">
+                  Unlock · $250
+                </Link>
+                <Link
+                  to="/account?stay=1"
+                  className="btn btn-ghost"
+                  style={{ fontSize: 12, padding: '14px 18px' }}
+                >
+                  Have a promo?
+                </Link>
+              </div>
+            </div>
+          )}
         </section>
 
         <section className="desk-section" aria-labelledby="desk-playbook">

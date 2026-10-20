@@ -45,6 +45,8 @@ Also run SQL migration `supabase/migrations/20261014150000_coaching_credits.sql`
 
 Promo unlocks (e.g. `FAM`): run `supabase/migrations/20261020110000_playbook_promo_codes.sql` in the SQL Editor. That seeds code `FAM` and the `redeem_playbook_promo` RPC.
 
+If you see `policy "promo_redemptions: read own" already exists`, run the short fix instead: `supabase/migrations/20261020111500_playbook_promo_codes_fix.sql`.
+
 `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected automatically on hosted functions.
 
 **Waitlist = pay $250 now** (Course 01 start today; full playbook opens soon).  

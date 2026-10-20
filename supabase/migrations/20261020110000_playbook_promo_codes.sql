@@ -48,6 +48,7 @@ create index if not exists promo_redemptions_user_idx on public.promo_redemption
 
 alter table public.promo_redemptions enable row level security;
 
+drop policy if exists "promo_redemptions: read own" on public.promo_redemptions;
 create policy "promo_redemptions: read own"
   on public.promo_redemptions for select
   using (auth.uid() = user_id);

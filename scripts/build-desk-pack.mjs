@@ -514,6 +514,314 @@ async function buildDailyTracker(wb) {
   }
 }
 
+/** Position / risk sizing desk — account $, risk %, entry / stop / target. */
+async function buildRiskCalculator(wb) {
+  const sheet = wb.addWorksheet('Risk calculator', { properties: { defaultRowHeight: 22 } })
+  sheet.properties.tabColor = { argb: `FF${GOLD}` }
+  sheet.views = [{ state: 'frozen', ySplit: 2, activeCell: 'C5', showGridLines: false }]
+
+  const labelFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${INK}` } }
+  const valueFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${BONE}` } }
+  const goldFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${GOLD}` } }
+  const panelFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${PANEL}` } }
+  const greenFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${LONG}` } }
+  const redFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${SHORT}` } }
+
+  setWidths(sheet, [22, 16, 3, 22, 16, 3, 18, 14, 14, 14])
+
+  styleTitle(sheet.getRow(1), 10, 'COURSE 05 · RISK & POSITION SIZE')
+  styleBanner(
+    sheet.getRow(2),
+    10,
+    'Gold cells = edit · Size from dollars you can lose · Educational only · Not financial advice · @tradersveezy',
+  )
+  try {
+    sheet.mergeCells(1, 2, 1, 10)
+    sheet.mergeCells(2, 1, 2, 10)
+  } catch {
+    /* ok */
+  }
+
+  function inkLabel(r, c, text) {
+    const cell = sheet.getCell(r, c)
+    cell.value = text
+    cell.font = { name: 'Arial', size: 9, bold: true, color: { argb: `FF${GOLD}` } }
+    cell.fill = labelFill
+    cell.border = thinBorder(GOLD)
+    cell.alignment = { vertical: 'middle', horizontal: 'left', indent: 1 }
+  }
+  function editCell(r, c, value, numFmt) {
+    const cell = sheet.getCell(r, c)
+    cell.value = value
+    cell.font = { name: 'Arial', size: 13, bold: true, color: { argb: `FF${INK}` } }
+    cell.fill = goldFill
+    cell.border = thinBorder(INK)
+    cell.alignment = { vertical: 'middle', horizontal: 'center' }
+    if (numFmt) cell.numFmt = numFmt
+  }
+  function outCell(r, c, value, numFmt, fill = valueFill, fontColor = INK) {
+    const cell = sheet.getCell(r, c)
+    cell.value = value
+    cell.font = { name: 'Arial', size: 12, bold: true, color: { argb: `FF${fontColor}` } }
+    cell.fill = fill
+    cell.border = thinBorder(DEEP)
+    cell.alignment = { vertical: 'middle', horizontal: 'center' }
+    if (numFmt) cell.numFmt = numFmt
+  }
+  function sectionHead(r, c1, c2, text) {
+    sheet.mergeCells(r, c1, r, c2)
+    const cell = sheet.getCell(r, c1)
+    cell.value = text
+    cell.font = { name: 'Arial Black', size: 11, color: { argb: `FF${INK}` } }
+    cell.fill = goldFill
+    cell.border = thinBorder(INK)
+    cell.alignment = { vertical: 'middle', horizontal: 'center' }
+    for (let c = c1; c <= c2; c++) {
+      sheet.getCell(r, c).fill = goldFill
+      sheet.getCell(r, c).border = thinBorder(INK)
+    }
+    sheet.getRow(r).height = 26
+  }
+  function hint(r, c1, c2, text) {
+    sheet.mergeCells(r, c1, r, c2)
+    const cell = sheet.getCell(r, c1)
+    cell.value = text
+    cell.font = { name: 'Arial', size: 9, italic: true, color: { argb: `FF${MUTED}` } }
+    cell.fill = panelFill
+    cell.alignment = { vertical: 'middle', horizontal: 'left', indent: 1 }
+  }
+
+  // —— ACCOUNT ——
+  sectionHead(4, 1, 2, '01 · ACCOUNT')
+  inkLabel(5, 1, 'Account size $')
+  // Pull from Daily P&L settings when present; else 10_000
+  editCell(5, 2, { formula: "IFERROR(IF('Daily P&L'!$L$3=\"\",10000,'Daily P&L'!$L$3),10000)" }, '"$"#,##0.00')
+  inkLabel(6, 1, 'Risk per trade %')
+  editCell(6, 2, 0.01, '0.00%')
+  inkLabel(7, 1, 'Max daily loss %')
+  editCell(7, 2, 0.03, '0.00%')
+  hint(8, 1, 2, 'Playbook default: ~1% risk · hard stop before you size')
+
+  // —— LEVELS ——
+  sectionHead(4, 4, 5, '02 · LEVELS')
+  inkLabel(5, 4, 'Direction')
+  editCell(5, 5, 'LONG')
+  sheet.getCell(5, 5).dataValidation = {
+    type: 'list',
+    allowBlank: false,
+    formulae: ['"LONG,SHORT"'],
+    showErrorMessage: true,
+    errorTitle: 'Direction',
+    error: 'Pick LONG or SHORT.',
+  }
+  inkLabel(6, 4, 'Entry')
+  editCell(6, 5, 100, '0.00')
+  inkLabel(7, 4, 'Stop (invalidation)')
+  editCell(7, 5, 97, '0.00')
+  inkLabel(8, 4, 'Target')
+  editCell(8, 5, 106, '0.00')
+  hint(9, 4, 5, 'Stop past the level that kills the idea — not a random %')
+
+  // —— OUTPUTS ——
+  sectionHead(11, 1, 2, '03 · RISK BUDGET')
+  inkLabel(12, 1, 'Dollars at risk')
+  outCell(12, 2, { formula: 'IFERROR($B$5*$B$6,0)' }, '"$"#,##0.00', greenFill)
+  inkLabel(13, 1, 'Max daily loss $')
+  outCell(13, 2, { formula: 'IFERROR($B$5*$B$7,0)' }, '"$"#,##0.00', redFill, BONE)
+  sheet.getCell(13, 2).font = { name: 'Arial', size: 12, bold: true, color: { argb: `FF${BONE}` } }
+  inkLabel(14, 1, 'Trades left today @ risk')
+  outCell(14, 2, { formula: 'IFERROR(INT($B$7/$B$6),0)' }, '0')
+  hint(15, 1, 2, 'Hit max daily loss → stop trading. Process over vibes.')
+
+  sectionHead(11, 4, 5, '04 · POSITION')
+  inkLabel(12, 4, 'Stop distance')
+  outCell(12, 5, { formula: 'IFERROR(ABS($E$6-$E$7),0)' }, '0.0000')
+  inkLabel(13, 4, 'Stop distance %')
+  outCell(13, 5, { formula: 'IFERROR(ABS($E$6-$E$7)/$E$6,0)' }, '0.00%')
+  inkLabel(14, 4, 'Position size (units)')
+  outCell(
+    14,
+    5,
+    { formula: 'IFERROR(IF(ABS($E$6-$E$7)=0,"",($B$5*$B$6)/ABS($E$6-$E$7)),"")' },
+    '#,##0.0000',
+    goldFill,
+  )
+  inkLabel(15, 4, 'Notional $')
+  outCell(15, 5, { formula: 'IFERROR(E14*$E$6,"")' }, '"$"#,##0.00')
+  inkLabel(16, 4, 'Reward distance')
+  outCell(16, 5, { formula: 'IFERROR(ABS($E$8-$E$6),0)' }, '0.0000')
+  inkLabel(17, 4, 'R : R')
+  outCell(
+    17,
+    5,
+    { formula: 'IFERROR(IF(ABS($E$6-$E$7)=0,"",ABS($E$8-$E$6)/ABS($E$6-$E$7)),"")' },
+    '0.00',
+    greenFill,
+  )
+  inkLabel(18, 4, 'Reward $ if hit')
+  outCell(18, 5, { formula: 'IFERROR(($B$5*$B$6)*E17,"")' }, '"$"#,##0.00', greenFill)
+  inkLabel(19, 4, 'Verdict')
+  outCell(
+    19,
+    5,
+    {
+      formula:
+        'IF(E17="","Enter levels",IF(E17<1.5,"Usually a pass",IF(E17<2,"Borderline",IF(E17>=3,"Strong asymmetry","Worth a look"))))',
+    },
+    undefined,
+    valueFill,
+  )
+
+  // Direction sanity
+  sectionHead(21, 1, 5, '05 · LEVEL CHECK')
+  sheet.mergeCells(22, 1, 22, 5)
+  sheet.getCell(22, 1).value = {
+    formula:
+      'IF(OR($E$6="",$E$7="",$E$8=""),"Fill entry, stop, target",IF(AND(UPPER($E$5)="LONG",$E$7<$E$6,$E$8>$E$6),"LONG levels look consistent",IF(AND(UPPER($E$5)="SHORT",$E$7>$E$6,$E$8<$E$6),"SHORT levels look consistent","CHECK LEVELS — stop/target side does not match direction")))',
+  }
+  sheet.getCell(22, 1).font = { name: 'Arial', size: 11, bold: true, color: { argb: `FF${BONE}` } }
+  sheet.getCell(22, 1).fill = labelFill
+  sheet.getCell(22, 1).border = thinBorder(GOLD)
+  sheet.getCell(22, 1).alignment = { vertical: 'middle', horizontal: 'center' }
+  sheet.getRow(22).height = 28
+
+  // —— RISK LADDER ——
+  sectionHead(24, 1, 5, '06 · RISK LADDER · same stop, different risk %')
+  const ladderHeaders = ['Risk %', '$ at risk', 'Position size', 'Notional $', 'If target hits']
+  ladderHeaders.forEach((h, i) => {
+    const cell = sheet.getCell(25, i + 1)
+    cell.value = h
+    cell.font = { name: 'Arial', size: 9, bold: true, color: { argb: `FF${INK}` } }
+    cell.fill = goldFill
+    cell.border = thinBorder(INK)
+    cell.alignment = { horizontal: 'center', vertical: 'middle' }
+  })
+
+  const risks = [0.005, 0.01, 0.015, 0.02, 0.025]
+  risks.forEach((pct, i) => {
+    const r = 26 + i
+    const stripe = i % 2 === 0
+    for (let c = 1; c <= 5; c++) {
+      const cell = sheet.getCell(r, c)
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: stripe ? `FF${BONE}` : 'FFFFFFFF' },
+      }
+      cell.border = thinBorder('D9D4C8')
+      cell.font = { name: 'Arial', size: 10, color: { argb: `FF${INK}` } }
+      cell.alignment = { horizontal: 'center', vertical: 'middle' }
+    }
+    sheet.getCell(r, 1).value = pct
+    sheet.getCell(r, 1).numFmt = '0.00%'
+    sheet.getCell(r, 1).font = { name: 'Arial', size: 10, bold: true, color: { argb: `FF${DEEP}` } }
+    sheet.getCell(r, 2).value = { formula: `$B$5*A${r}` }
+    sheet.getCell(r, 2).numFmt = '"$"#,##0.00'
+    sheet.getCell(r, 3).value = { formula: `IFERROR(IF(ABS($E$6-$E$7)=0,"",($B$5*A${r})/ABS($E$6-$E$7)),"")` }
+    sheet.getCell(r, 3).numFmt = '#,##0.0000'
+    sheet.getCell(r, 4).value = { formula: `IFERROR(C${r}*$E$6,"")` }
+    sheet.getCell(r, 4).numFmt = '"$"#,##0.00'
+    sheet.getCell(r, 5).value = { formula: `IFERROR(B${r}*$E$17,"")` }
+    sheet.getCell(r, 5).numFmt = '"$"#,##0.00'
+    sheet.getRow(r).height = 24
+    // highlight row matching selected risk
+  })
+
+  sheet.addConditionalFormatting({
+    ref: 'A26:E30',
+    rules: [
+      {
+        type: 'expression',
+        formulae: ['$A26=$B$6'],
+        style: {
+          fill: { type: 'pattern', pattern: 'solid', bgColor: { argb: 'FFE8D5A0' } },
+          font: { bold: true },
+        },
+      },
+    ],
+  })
+
+  // —— QUICK PRESETS ——
+  sectionHead(32, 1, 5, '07 · QUICK PRESETS · tap a risk %, then size updates above')
+  const presets = [
+    [0.005, 'Half percent — tight days'],
+    [0.01, 'Standard playbook'],
+    [0.015, 'High conviction only'],
+    [0.02, 'Stretch — rare'],
+  ]
+  presets.forEach((p, i) => {
+    const c = 1 + i
+    const cell = sheet.getCell(33, c)
+    cell.value = p[0]
+    cell.numFmt = '0.0%'
+    cell.font = { name: 'Arial', size: 12, bold: true, color: { argb: `FF${INK}` } }
+    cell.fill = goldFill
+    cell.border = thinBorder(INK)
+    cell.alignment = { horizontal: 'center', vertical: 'middle' }
+    sheet.getRow(33).height = 26
+    const note = sheet.getCell(34, c)
+    note.value = p[1]
+    note.font = { name: 'Arial', size: 8, color: { argb: `FF${MUTED}` } }
+    note.fill = labelFill
+    note.border = thinBorder(DEEP)
+    note.alignment = { horizontal: 'center', wrapText: true, vertical: 'middle' }
+    sheet.getRow(34).height = 32
+  })
+  sheet.mergeCells(35, 1, 35, 5)
+  sheet.getCell(35, 1).value =
+    'Copy a preset % into B6 (Risk per trade). Size, notional, and ladder highlight follow.'
+  sheet.getCell(35, 1).font = { name: 'Arial', size: 9, italic: true, color: { argb: `FF${SOFT}` } }
+  sheet.getCell(35, 1).fill = panelFill
+
+  // —— SIDE PANEL: formula card ——
+  sectionHead(4, 7, 10, 'THE MATH')
+  const mathLines = [
+    ['Risk $', 'Account × Risk %'],
+    ['Stop dist', '|Entry − Stop|'],
+    ['Size', 'Risk $ ÷ Stop dist'],
+    ['R:R', 'Reward dist ÷ Stop dist'],
+    ['Reward $', 'Risk $ × R:R'],
+  ]
+  mathLines.forEach((row, i) => {
+    const r = 5 + i
+    inkLabel(r, 7, row[0])
+    sheet.mergeCells(r, 8, r, 10)
+    const cell = sheet.getCell(r, 8)
+    cell.value = row[1]
+    cell.font = { name: 'Arial', size: 10, color: { argb: `FF${BONE}` } }
+    cell.fill = labelFill
+    cell.border = thinBorder(DEEP)
+    cell.alignment = { vertical: 'middle', horizontal: 'left', indent: 1 }
+  })
+
+  sectionHead(11, 7, 10, 'DESK RULES')
+  const rules = [
+    'Size from dollars you can lose — never from “how many coins feel right.”',
+    'Under ~1.5R is usually a pass unless the playbook says otherwise.',
+    'Widen the stop → shrink size. Never widen the stop to keep size.',
+    'Max daily loss ends the session. No revenge trades.',
+    `Line: ${PHRASE}`,
+  ]
+  rules.forEach((text, i) => {
+    const r = 12 + i
+    sheet.mergeCells(r, 7, r, 10)
+    const cell = sheet.getCell(r, 7)
+    cell.value = `${String(i + 1).padStart(2, '0')}  ${text}`
+    cell.font = { name: 'Arial', size: 9, color: { argb: `FF${SOFT}` } }
+    cell.fill = i % 2 ? labelFill : panelFill
+    cell.border = thinBorder(DEEP)
+    cell.alignment = { vertical: 'middle', wrapText: true, indent: 1 }
+    sheet.getRow(r).height = 36
+  })
+
+  // Example fill note
+  sheet.mergeCells(37, 1, 37, 5)
+  sheet.getCell(37, 1).value =
+    'Example levels pre-filled (100 → 97 stop → 106 target). Replace with your trade. Account pulls from Daily P&L starting balance when that tab exists.'
+  sheet.getCell(37, 1).font = { name: 'Arial', size: 9, color: { argb: `FF${MUTED}` } }
+  sheet.getCell(37, 1).fill = panelFill
+}
+
 async function buildBlankLog(wb, name, subtitle, headers, widths, yesCols = [], blankRows = 14, tab = LONG) {
   const sheet = wb.addWorksheet(name, { properties: { defaultRowHeight: 20 } })
   decorateSheet(sheet, tab)
@@ -550,6 +858,7 @@ fs.mkdirSync(outDir, { recursive: true })
 await writeWorkbook('desk-pack.xlsx', async (wb) => {
   await buildChecklist(wb)
   await buildDailyTracker(wb)
+  await buildRiskCalculator(wb)
   await buildBlankLog(
     wb,
     'Trade log',
@@ -627,6 +936,7 @@ await writeWorkbook('playbook-rules.xlsx', async (wb) => {
 })
 await writeWorkbook('daily-pnl-tracker.xlsx', async (wb) => {
   await buildDailyTracker(wb)
+  await buildRiskCalculator(wb)
 })
 
 fs.writeFileSync(
@@ -649,7 +959,7 @@ Open the .xlsx directly. Header row is frozen. Yes/No columns have dropdowns.
 
 Tabs
 ----
-Checklist · Daily P&L · Trade log · Loss review · Weekly · Rules
+Checklist · Daily P&L · Risk calculator · Trade log · Loss review · Weekly · Rules
 
 Daily P&L
 ---------
@@ -657,6 +967,13 @@ Daily P&L
 - Each day: enter Date + Ending balance (gold column)
 - Starting balance, goals, P&L %, beat-by auto-calculate
 - Right side: totals + 20-day expected compound path
+
+Risk calculator
+---------------
+- Gold cells: account, risk %, entry / stop / target
+- Account size pulls from Daily P&L starting balance when linked
+- Outputs: $ risk, position size, notional, R:R, verdict
+- Risk ladder compares 0.5%–2.5% on the same stop
 
 Educational only - Not financial advice
 @tradersveezy

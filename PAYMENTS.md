@@ -43,6 +43,8 @@ npx supabase secrets set NOTIFY_EMAIL=you@yourdomain.com
 
 Also run SQL migration `supabase/migrations/20261014150000_coaching_credits.sql` in the SQL Editor.
 
+Promo unlocks (e.g. `FAM`): run `supabase/migrations/20261020110000_playbook_promo_codes.sql` in the SQL Editor. That seeds code `FAM` and the `redeem_playbook_promo` RPC.
+
 `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected automatically on hosted functions.
 
 **Waitlist = pay $250 now** (Course 01 start today; full playbook opens soon).  

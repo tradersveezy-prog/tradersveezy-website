@@ -3,6 +3,8 @@ import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { usePlaybookAccess } from '../auth/usePlaybookAccess'
 import { fetchCoachingSessions } from '../lib/coaching'
+import { track } from '../lib/analytics'
+import { redeemPlaybookPromo, stashPendingPromo } from '../lib/playbook'
 import './account.css'
 
 type Mode = 'signin' | 'signup' | 'forgot'
@@ -20,7 +22,7 @@ export function Account() {
     requestPasswordReset,
     updatePassword,
   } = useAuth()
-  const { access: hasPlaybook } = usePlaybookAccess()
+  const { access: hasPlaybook, refresh: refreshPlaybook } = usePlaybookAccess()
   const [coachingSessions, setCoachingSessions] = useState(0)
   const [params] = useSearchParams()
   const navigate = useNavigate()
@@ -44,6 +46,7 @@ export function Account() {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [promoCode, setPromoCode] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -51,8 +54,20 @@ export function Account() {
   const [nameDraft, setNameDraft] = useState('')
   const [nameBusy, setNameBusy] = useState(false)
   const [nameMsg, setNameMsg] = useState('')
+  const [promoBusy, setPromoBusy] = useState(false)
+  const [promoMsg, setPromoMsg] = useState('')
+  const [promoErr, setPromoErr] = useState('')
+  const [showPromoStep, setShowPromoStep] = useState(false)
 
-  if (!loading && user && !passwordRecovery && params.get('stay') !== '1') {
+  async function applyPromo(code: string) {
+    const res = await redeemPlaybookPromo(code)
+    if (!res.ok) return res
+    track('promo_redeemed', { code: code.trim().toUpperCase(), already: Boolean(res.already) })
+    await refreshPlaybook()
+    return res
+  }
+
+  if (!loading && user && !passwordRecovery && params.get('stay') !== '1' && !showPromoStep) {
     return <Navigate to={next} replace />
   }
 
@@ -72,17 +87,29 @@ export function Account() {
         return
       }
       if (mode === 'signup') {
+        if (promoCode.trim()) stashPendingPromo(promoCode)
         const res = await signUp(email, password, displayName)
         if (res.error) {
           setError(res.error)
           return
         }
         if (res.needsConfirm) {
-          setInfo('Check your email to confirm, then sign in.')
+          setInfo('Check your email to confirm, then sign in. Your promo code will apply after you sign in.')
           setMode('signin')
           return
         }
-        navigate(next, { replace: true })
+        if (promoCode.trim()) {
+          const promo = await applyPromo(promoCode)
+          if (!promo.ok) {
+            setPromoErr(promo.error || 'Could not apply promo.')
+            setShowPromoStep(true)
+            return
+          }
+          setPromoMsg(promo.already ? 'Playbook already unlocked.' : 'Playbook unlocked with your code.')
+          setShowPromoStep(true)
+          return
+        }
+        setShowPromoStep(true)
         return
       }
       const res = await signIn(email, password)
@@ -93,6 +120,24 @@ export function Account() {
       navigate(next, { replace: true })
     } finally {
       setBusy(false)
+    }
+  }
+
+  async function onRedeemPromo(e: FormEvent) {
+    e.preventDefault()
+    setPromoErr('')
+    setPromoMsg('')
+    setPromoBusy(true)
+    try {
+      const res = await applyPromo(promoCode)
+      if (!res.ok) {
+        setPromoErr(res.error || 'Could not apply promo.')
+        return
+      }
+      setPromoMsg(res.already ? 'Playbook already unlocked.' : 'Playbook unlocked. Courses 02–05 are open.')
+      setPromoCode('')
+    } finally {
+      setPromoBusy(false)
     }
   }
 
@@ -184,6 +229,66 @@ export function Account() {
     )
   }
 
+  if (user && showPromoStep) {
+    return (
+      <main className="account-page">
+        <div className="shell account-shell">
+          <p className="eyebrow">Account created</p>
+          <h1 className="display account-title">
+            Got a
+            <br />
+            <span className="gold">promo code?</span>
+          </h1>
+          <p className="account-lede">
+            Optional. A valid code unlocks Courses 02–05 without paying the waitlist.
+          </p>
+          {promoMsg ? (
+            <p className="account-info" role="status" style={{ marginTop: 24 }}>
+              {promoMsg}
+            </p>
+          ) : null}
+          {!hasPlaybook ? (
+            <form className="account-form" onSubmit={onRedeemPromo} style={{ marginTop: 28 }}>
+              <label className="field">
+                <span>Promo code</span>
+                <input
+                  type="text"
+                  autoComplete="off"
+                  autoCapitalize="characters"
+                  spellCheck={false}
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                  placeholder="e.g. FAM"
+                />
+              </label>
+              {promoErr ? (
+                <p className="account-error" role="alert">
+                  {promoErr}
+                </p>
+              ) : null}
+              <button type="submit" className="btn btn-primary" disabled={promoBusy || !promoCode.trim()}>
+                {promoBusy ? 'Checking…' : 'Apply code'}
+              </button>
+            </form>
+          ) : null}
+          <div className="account-actions" style={{ marginTop: 28 }}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => {
+                setShowPromoStep(false)
+                navigate(next, { replace: true })
+              }}
+            >
+              {hasPlaybook ? 'Open desk' : 'Skip for now'}
+            </button>
+          </div>
+          <p className="account-foot mono">Educational only · Not financial advice</p>
+        </div>
+      </main>
+    )
+  }
+
   if (user) {
     return (
       <main className="account-page">
@@ -205,6 +310,36 @@ export function Account() {
               Local account on this browser only. Add Supabase keys for real cloud accounts.
             </p>
           )}
+
+          {!hasPlaybook ? (
+            <form className="account-form" onSubmit={onRedeemPromo} style={{ marginTop: 28 }}>
+              <label className="field">
+                <span>Promo code</span>
+                <input
+                  type="text"
+                  autoComplete="off"
+                  autoCapitalize="characters"
+                  spellCheck={false}
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                  placeholder="e.g. FAM"
+                />
+              </label>
+              {promoErr ? (
+                <p className="account-error" role="alert">
+                  {promoErr}
+                </p>
+              ) : null}
+              {promoMsg ? (
+                <p className="account-info" role="status">
+                  {promoMsg}
+                </p>
+              ) : null}
+              <button type="submit" className="btn btn-ghost" disabled={promoBusy || !promoCode.trim()}>
+                {promoBusy ? 'Checking…' : 'Unlock with code'}
+              </button>
+            </form>
+          ) : null}
 
           <form className="account-form account-name-form" onSubmit={onSaveName}>
             <label className="field">
@@ -363,6 +498,20 @@ export function Account() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Min. 6 characters"
+              />
+            </label>
+          ) : null}
+          {mode === 'signup' ? (
+            <label className="field">
+              <span>Promo code (optional)</span>
+              <input
+                type="text"
+                autoComplete="off"
+                autoCapitalize="characters"
+                spellCheck={false}
+                value={promoCode}
+                onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                placeholder="Have a code? Enter it here"
               />
             </label>
           ) : null}

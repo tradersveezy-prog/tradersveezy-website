@@ -16,7 +16,7 @@ Open the .xlsx directly. Header row is frozen. Yes/No columns have dropdowns.
 
 Tabs
 ----
-Checklist · Daily P&L · Trade log · Loss review · Weekly · Rules
+Checklist · Daily P&L · Risk calculator · Trade log · Loss review · Weekly · Rules
 
 Daily P&L
 ---------
@@ -24,6 +24,13 @@ Daily P&L
 - Each day: enter Date + Ending balance (gold column)
 - Starting balance, goals, P&L %, beat-by auto-calculate
 - Right side: totals + 20-day expected compound path
+
+Risk calculator
+---------------
+- Gold cells: account, risk %, entry / stop / target
+- Account size pulls from Daily P&L starting balance when linked
+- Outputs: $ risk, position size, notional, R:R, verdict
+- Risk ladder compares 0.5%–2.5% on the same stop
 
 Educational only - Not financial advice
 @tradersveezy

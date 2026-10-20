@@ -47,6 +47,9 @@ Promo unlocks (e.g. `FAM`): run `supabase/migrations/20261020110000_playbook_pro
 
 If you see `policy "promo_redemptions: read own" already exists`, run the short fix instead: `supabase/migrations/20261020111500_playbook_promo_codes_fix.sql`.
 
+Founder dash (`/founder`, emails `tradersveezy@gmail.com` / `sumant.vasan@gmail.com`): run
+`supabase/migrations/20261020140000_founder_dashboard.sql` in the SQL Editor.
+
 `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected automatically on hosted functions.
 
 **Waitlist = pay $250 now** (Course 01 start today; full playbook opens soon).  

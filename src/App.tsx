@@ -3,6 +3,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthContext'
 import { RequireAuth } from './auth/RequireAuth'
+import { RequireFounder } from './auth/RequireFounder'
 import { RequirePlaybook } from './auth/RequirePlaybook'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
@@ -17,6 +18,7 @@ import { Coaching } from './pages/Coaching'
 import { Collabs } from './pages/Collabs'
 import { Courses } from './pages/Courses'
 import { Desk } from './pages/Desk'
+import { Founder } from './pages/Founder'
 import { Home } from './pages/Home'
 import { EntriesTriggers } from './pages/EntriesTriggers'
 import { LevelsThatMatter } from './pages/LevelsThatMatter'
@@ -117,6 +119,14 @@ function Shell() {
             <RequireAuth>
               <Desk />
             </RequireAuth>
+          }
+        />
+        <Route
+          path="/founder"
+          element={
+            <RequireFounder>
+              <Founder />
+            </RequireFounder>
           }
         />
         <Route path="/account" element={<Account />} />

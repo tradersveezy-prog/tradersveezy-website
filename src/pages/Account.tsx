@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthContext'
 import { usePlaybookAccess } from '../auth/usePlaybookAccess'
 import { fetchCoachingSessions } from '../lib/coaching'
 import { track } from '../lib/analytics'
+import { isFounderEmail } from '../lib/founder'
 import { redeemPlaybookPromo, stashPendingPromo } from '../lib/playbook'
 import './account.css'
 
@@ -367,6 +368,11 @@ export function Account() {
             <Link to="/desk" className="btn btn-primary">
               Open desk
             </Link>
+            {isFounderEmail(user.email) ? (
+              <Link to="/founder" className="btn btn-ghost">
+                Founder dash
+              </Link>
+            ) : null}
             <button type="button" className="btn btn-ghost" onClick={() => signOut()}>
               Sign out
             </button>

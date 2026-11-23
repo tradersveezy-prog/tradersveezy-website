@@ -7,6 +7,9 @@ export type BlogPost = {
   excerpt: string
   tags: string[]
   draft: boolean
+  /** Site-relative hero chart / cover, e.g. `/blog/foo.jpg` */
+  image: string | null
+  imageAlt: string
   body: string
   html: string
 }
@@ -68,6 +71,9 @@ function loadPosts(): BlogPost[] {
     const excerpt = String(meta.excerpt || '')
     const tags = Array.isArray(meta.tags) ? (meta.tags as string[]) : []
     const draft = Boolean(meta.draft)
+    const imageRaw = String(meta.image || '').trim()
+    const image = imageRaw ? (imageRaw.startsWith('/') ? imageRaw : `/${imageRaw}`) : null
+    const imageAlt = String(meta.imageAlt || meta.image_alt || title)
     const html = marked.parse(body) as string
 
     posts.push({
@@ -77,6 +83,8 @@ function loadPosts(): BlogPost[] {
       excerpt,
       tags,
       draft,
+      image,
+      imageAlt,
       body,
       html,
     })

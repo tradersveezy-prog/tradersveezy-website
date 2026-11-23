@@ -2,6 +2,8 @@
 title: The range I’m watching after the weekend bounce
 date: 2026-11-23
 excerpt: Upper GP near $62.5K–$64.1K, lower GP near $56.6K–$57.8K, and a mid-range magnet. Big impulse first — acceptance before I call the next trend.
+image: /blog/btc-range-upper-lower-gp.jpg
+imageAlt: BTC · upper GP / lower GP / mid imbalance. Educational only.
 tags:
   - btc
   - levels
@@ -13,10 +15,6 @@ That was a strong reversal after a bloody week. Now I want to see how much of it
 The bounce happened over the weekend, with U.S. spot ETF share trading closed. My guess is Asia played a decent part, though the chart alone can’t tell us who was buying. What matters now is whether that demand carries through into the week.
 
 I’ve mapped out golden pockets in both directions, overlapping with naked value levels. There’s liquidity on either side, and I wouldn’t be surprised if we take both before a cleaner trend develops. A push up gets everyone bullish, a flush down gets everyone bearish, and anyone chasing gets chopped up.
-
-![BTC range — upper and lower golden pockets marked, mid imbalance boxed, value POCs between](/blog/btc-range-upper-lower-gp.jpg)
-
-*BTC · upper GP / lower GP / mid imbalance. Educational only.*
 
 The upper area I’m watching is roughly **$62.5K–$64.1K**. That’s the upper golden pocket and an area where I’d look for a reaction after a run higher. If we take nearby highs into that zone, I want to see whether buyers can hold it or whether we reject back below.
 

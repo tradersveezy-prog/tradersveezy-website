@@ -10,6 +10,8 @@
 title: Your title here
 date: 2026-10-10
 excerpt: One or two sentences for the index card.
+image: /blog/your-chart.jpg
+imageAlt: Short caption under the hero chart.
 tags:
   - process
   - risk
@@ -18,6 +20,7 @@ tags:
 ## Opening
 
 Body in plain Markdown. Use **bold**, lists, and `code` for levels.
+Put charts in `public/blog/` and set `image:` so they sit under the title.
 
 Educational only · Not financial advice — keep that energy.
 ```

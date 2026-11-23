@@ -1125,6 +1125,33 @@ img {
   margin: 2.2em 0;
 }
 
+.blog-prose img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1.6em 0 0.5em;
+  border: 1px solid rgba(242, 241, 238, 0.12);
+}
+
+.blog-prose em:has(+ br),
+.blog-prose p > em:only-child {
+  display: block;
+}
+
+.blog-prose blockquote {
+  margin: 1.6em 0;
+  padding: 18px 20px;
+  border-left: 3px solid var(--gold);
+  background: rgba(227, 180, 74, 0.06);
+  color: var(--bone);
+  font-size: 1.02em;
+  line-height: 1.55;
+}
+
+.blog-prose blockquote p {
+  margin: 0;
+}
+
 @media (max-width: 900px) {
   .blog-row-link {
     grid-template-columns: 72px minmax(0, 1fr) !important;

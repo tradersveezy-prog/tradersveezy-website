@@ -1,11 +1,61 @@
+import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { ExpandableImage } from '../components/ExpandableImage'
 import { formatPostDate, getPostBySlug } from '../lib/blog'
 import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl } from '../seo'
 
 export function BlogPost() {
   const { slug = '' } = useParams()
   const post = getPostBySlug(slug)
+  const proseRef = useRef<HTMLDivElement>(null)
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null)
+
+  useEffect(() => {
+    const root = proseRef.current
+    if (!root) return
+
+    const imgs = Array.from(root.querySelectorAll('img'))
+    const cleanups: Array<() => void> = []
+
+    for (const img of imgs) {
+      img.classList.add('blog-prose-expandable')
+      img.setAttribute('tabindex', '0')
+      img.setAttribute('role', 'button')
+      img.setAttribute('aria-label', `Expand chart: ${img.alt || 'chart'}`)
+      const open = () => setLightbox({ src: img.currentSrc || img.src, alt: img.alt || 'Chart' })
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          open()
+        }
+      }
+      img.addEventListener('click', open)
+      img.addEventListener('keydown', onKey)
+      cleanups.push(() => {
+        img.removeEventListener('click', open)
+        img.removeEventListener('keydown', onKey)
+      })
+    }
+
+    return () => {
+      for (const fn of cleanups) fn()
+    }
+  }, [post?.slug, post?.html])
+
+  useEffect(() => {
+    if (!lightbox) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightbox(null)
+    }
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prev
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [lightbox])
 
   if (!post || post.draft) {
     return <Navigate to="/blog" replace />
@@ -53,15 +103,18 @@ export function BlogPost() {
           </div>
 
           {post.image ? (
-            <figure className="shell blog-post-hero">
-              <img src={post.image} alt={post.imageAlt} />
-              <figcaption className="mono">{post.imageAlt}</figcaption>
-            </figure>
+            <div className="shell blog-post-hero">
+              <ExpandableImage src={post.image} alt={post.imageAlt} caption={post.imageAlt} />
+            </div>
           ) : null}
         </header>
 
         <div className="shell blog-post-body">
-          <div className="blog-prose" dangerouslySetInnerHTML={{ __html: post.html }} />
+          <div
+            ref={proseRef}
+            className="blog-prose"
+            dangerouslySetInnerHTML={{ __html: post.html }}
+          />
           <div className="blog-post-foot">
             <Link to="/blog" className="btn btn-ghost" style={{ fontSize: 13, padding: '14px 22px' }}>
               All notes
@@ -72,6 +125,31 @@ export function BlogPost() {
           </div>
         </div>
       </article>
+
+      {lightbox ? (
+        <div
+          className="expandable-image-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={lightbox.alt}
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            type="button"
+            className="expandable-image-close mono"
+            onClick={() => setLightbox(null)}
+            aria-label="Close"
+          >
+            Close · Esc
+          </button>
+          <img
+            src={lightbox.src}
+            alt={lightbox.alt}
+            className="expandable-image-full"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      ) : null}
     </main>
   )
 }

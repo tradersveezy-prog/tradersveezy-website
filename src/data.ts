@@ -42,6 +42,11 @@ export const LINKS = {
   courses: '/courses',
   /** FormSubmit inbox for playbook waitlist. Leave '' for UI-only until set. */
   courseWaitlistEmail: (import.meta.env.VITE_WAITLIST_EMAIL as string | undefined)?.trim() || '',
+  /** FormSubmit inbox for /partners pitches. Defaults to founder Gmail if unset. */
+  partnersEmail:
+    (import.meta.env.VITE_PARTNERS_EMAIL as string | undefined)?.trim() ||
+    (import.meta.env.VITE_WAITLIST_EMAIL as string | undefined)?.trim() ||
+    'tradersveezy@gmail.com',
   discord: 'https://build.mintscript.io/join',
   mintscript: 'https://build.mintscript.io/join',
   mintscriptPlans: 'https://mintscript.io/#plans',

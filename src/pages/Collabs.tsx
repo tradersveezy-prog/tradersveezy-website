@@ -1,4 +1,6 @@
 import { useState, type FormEvent } from 'react'
+import { LINKS } from '../data'
+import { track } from '../lib/analytics'
 
 const FIT = [
   {
@@ -39,10 +41,61 @@ const WHY = [
 
 export function Collabs() {
   const [sent, setSent] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setSent(true)
+    setError('')
+    const form = e.currentTarget
+    const data = new FormData(form)
+    const name = String(data.get('name') || '').trim()
+    const brand = String(data.get('brand') || '').trim()
+    const contact = String(data.get('contact') || '').trim()
+    const type = String(data.get('type') || '').trim()
+    const idea = String(data.get('idea') || '').trim()
+
+    const inbox = LINKS.partnersEmail
+    if (!inbox || inbox.includes('yourdomain')) {
+      setError('Partnership inbox is not configured yet. Email tradersveezy@gmail.com or DM @tradersveezy.')
+      return
+    }
+
+    setBusy(true)
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(inbox)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: `TraderSveezy partnership · ${brand || name}`,
+          _template: 'table',
+          _captcha: 'false',
+          name,
+          brand,
+          contact,
+          type,
+          idea: idea || '(no details)',
+          replyto: contact.includes('@') ? contact : undefined,
+          message: `${name} (${brand}) pitched: ${type}. Contact: ${contact}`,
+        }),
+      })
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error(text || `Send failed (${res.status})`)
+      }
+      track('partner_pitch_sent', { type })
+      setSent(true)
+      form.reset()
+    } catch (err) {
+      track('partner_pitch_failed', { type })
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Could not send. Email tradersveezy@gmail.com or DM @tradersveezy on X.',
+      )
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -304,9 +357,25 @@ export function Collabs() {
                   placeholder="Product, campaign window, referral or promo angle, assets you can share…"
                 />
               </label>
-              <button type="submit" className="btn btn-primary" style={{ marginTop: 6, border: 'none' }}>
-                Send partnership request
+              {error ? (
+                <p role="alert" style={{ margin: 0, color: 'var(--short)', fontSize: 15, lineHeight: 1.45 }}>
+                  {error}
+                </p>
+              ) : null}
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{ marginTop: 6, border: 'none' }}
+                disabled={busy}
+              >
+                {busy ? 'Sending…' : 'Send partnership request'}
               </button>
+              <p className="mono" style={{ margin: 0, fontSize: 11, letterSpacing: '0.08em', color: 'var(--muted)' }}>
+                Goes to {LINKS.partnersEmail} · Or DM{' '}
+                <a href={LINKS.x} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold)' }}>
+                  @tradersveezy
+                </a>
+              </p>
             </form>
           )}
         </div>

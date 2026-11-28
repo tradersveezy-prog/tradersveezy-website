@@ -111,7 +111,7 @@ export async function startPlaybookCheckout(email: string, accessToken?: string 
     const msg = error.message || 'Could not reach checkout.'
     if (/edge function|failed to send|fetch/i.test(msg)) {
       throw new Error(
-        'Checkout is temporarily offline (database waking up or function down). Try again in a few minutes, or unlock with promo code FAM / MINT on Account.',
+        'Checkout is temporarily offline (database waking up or function down). Try again in a few minutes, or unlock with a promo code on Account.',
       )
     }
     throw new Error(msg)

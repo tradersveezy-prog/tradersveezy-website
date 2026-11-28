@@ -69,7 +69,7 @@ export async function redeemPlaybookPromo(code: string): Promise<RedeemPromoResu
   if (!normalized) return { ok: false, error: 'Enter a promo code.' }
 
   if (!supabaseConfigured || !supabase) {
-    if (normalized === 'FAM') {
+    if (normalized === 'FAM' || normalized === 'MINT') {
       setLocalPlaybookAccess(true)
       return { ok: true }
     }
@@ -107,7 +107,15 @@ export async function startPlaybookCheckout(email: string, accessToken?: string 
     headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
   })
 
-  if (error) throw new Error(error.message)
+  if (error) {
+    const msg = error.message || 'Could not reach checkout.'
+    if (/edge function|failed to send|fetch/i.test(msg)) {
+      throw new Error(
+        'Checkout is temporarily offline (database waking up or function down). Try again in a few minutes, or unlock with promo code FAM / MINT on Account.',
+      )
+    }
+    throw new Error(msg)
+  }
   if (data?.error) throw new Error(String(data.error))
   if (!data?.url) throw new Error('Could not start payment.')
   return String(data.url)

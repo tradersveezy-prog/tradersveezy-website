@@ -43,7 +43,7 @@ npx supabase secrets set NOTIFY_EMAIL=you@yourdomain.com
 
 Also run SQL migration `supabase/migrations/20261014150000_coaching_credits.sql` in the SQL Editor.
 
-Promo unlocks (e.g. `FAM`): run `supabase/migrations/20261020110000_playbook_promo_codes.sql` in the SQL Editor. That seeds code `FAM` and the `redeem_playbook_promo` RPC.
+Promo unlocks (e.g. `FAM`, `MINT` for MintScript members): run `supabase/migrations/20261020110000_playbook_promo_codes.sql` then `supabase/migrations/20261128180000_mint_promo_code.sql` in the SQL Editor.
 
 If you see `policy "promo_redemptions: read own" already exists`, run the short fix instead: `supabase/migrations/20261020111500_playbook_promo_codes_fix.sql`.
 

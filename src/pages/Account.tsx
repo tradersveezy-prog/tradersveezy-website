@@ -259,7 +259,7 @@ export function Account() {
                   spellCheck={false}
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                  placeholder="e.g. FAM"
+                  placeholder="e.g. FAM or MINT"
                 />
               </label>
               {promoErr ? (
@@ -323,7 +323,7 @@ export function Account() {
                   spellCheck={false}
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                  placeholder="e.g. FAM"
+                  placeholder="e.g. FAM or MINT"
                 />
               </label>
               {promoErr ? (
@@ -517,7 +517,7 @@ export function Account() {
                 spellCheck={false}
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                placeholder="Have a code? Enter it here"
+                placeholder="FAM · MINT · or your code"
               />
             </label>
           ) : null}
